@@ -9,7 +9,7 @@ public class InstantCommand extends Command {
     }
 
     @Override
-    public void start(double time) {
+    public void start() {
         action.run();   // execute the passed lambda
         done = true;
         finished = true;

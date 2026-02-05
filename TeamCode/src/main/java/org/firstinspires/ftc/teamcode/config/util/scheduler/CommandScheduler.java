@@ -7,7 +7,7 @@ import java.util.List;
 public class CommandScheduler {
     private final List<Command> commands = new ArrayList<>();
     public void schedule(Command cmd, double time) {
-        cmd.start(time);
+        cmd.start();
         cmd.started = true;
         commands.add(cmd);
     }
@@ -19,7 +19,7 @@ public class CommandScheduler {
             while (it.hasNext()) {
                 Command cmd = it.next();
                 if (!cmd.started) {
-                    cmd.start(time);
+                    cmd.start();
                     cmd.started = true;
                 }
                 cmd.update(time);

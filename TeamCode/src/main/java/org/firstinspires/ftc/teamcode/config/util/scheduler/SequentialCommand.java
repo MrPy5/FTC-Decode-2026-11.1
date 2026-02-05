@@ -12,9 +12,9 @@ public class SequentialCommand extends Command {
     }
 
     @Override
-    public void start(double time) {
+    public void start() {
         if (!commands.isEmpty()) {
-            commands.get(0).start(time);
+            commands.get(0).start();
             commands.get(0).started = true;
         }
     }
@@ -33,7 +33,7 @@ public class SequentialCommand extends Command {
             cmd.reset();
             current++;
             if (current < commands.size()) {
-                commands.get(current).start(time);
+                commands.get(current).start();
                 commands.get(current).started = true;
             } else {
                 finished = true;
