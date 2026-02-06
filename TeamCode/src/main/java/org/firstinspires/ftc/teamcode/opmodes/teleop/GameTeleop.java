@@ -61,7 +61,7 @@ public class GameTeleop extends LinearOpMode {
                     //Shoot
                 if (c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.getRobotState() != RobotState.SHOOT) {
                     robot.scheduler.clear();
-
+                    robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.SHOOT);
 
 
@@ -69,6 +69,7 @@ public class GameTeleop extends LinearOpMode {
                     //Intake
                 else if (c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
+                    robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
 
                 }
@@ -76,6 +77,10 @@ public class GameTeleop extends LinearOpMode {
                 //Motif mode activation
                 if (c2.shareWasPressed()) {
                     motifMode = !motifMode;
+
+                    if (motifMode) {
+                        robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
+                    }
                 }
 
                 //RPM addition
@@ -90,9 +95,15 @@ public class GameTeleop extends LinearOpMode {
                 if (robot.getRobotState() == RobotState.SHOOT) {
                     robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range());
 
-                    if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.scheduler.isIdle()) {
-
+                    if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                        if (robot.scheduler.isIdle()) {
+                            robot.transfer.intake();
+                        }
                     }
+                    else {
+                        robot.transfer.stop();
+                    }
+
                 }
 
                 //Driving code
@@ -131,11 +142,6 @@ public class GameTeleop extends LinearOpMode {
                 if (c2.circleWasPressed()) {
                     robot.classifier.reset();
                     gamepad2.rumble(1000);
-                }
-
-                if (c2.touchpadWasPressed()) {
-                    robot.follower.setPose(new Pose(robot.follower.getPose().getX(),robot.follower.getPose().getY(),0));
-
                 }
 
                 //update everything

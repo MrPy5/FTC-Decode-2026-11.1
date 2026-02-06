@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Chassis;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.config.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.config.subsystems.field.Classifier;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
@@ -49,6 +50,7 @@ public class Robot {
 
     public Shooter shooter;
     public Lindexer lindexer;
+    public Transfer transfer;
     public Intake intake;
     public Chassis chassis;
     public Follower follower;
@@ -103,6 +105,7 @@ public class Robot {
 
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
+        transfer = new Transfer(hardwareMap);
         lindexer = new Lindexer(hardwareMap);
         chassis = new Chassis(hardwareMap);
 
@@ -131,7 +134,6 @@ public class Robot {
         }
 
         if (scanMotif) {
-
             tagCamera.processDetections(tagCamera.getDetections(), this);
 
             setMotifByTag(tagCamera.getMostPopularMotifTag());
@@ -141,12 +143,9 @@ public class Robot {
         if (getMotif() != null) {
             telemetry.addData("motif", getMotif().toString());
         }
-        if (getAlliance() == Alliance.BLUE) {
-            telemetry.addData("Alliance: ", getAlliance());
-        }
-        if (getAlliance() == Alliance.RED) {
-            telemetry.addData("Alliance: ", getAlliance());
-        }
+
+        telemetry.addData("Alliance: ", getAlliance());
+
         telemetry.addData("Tag FPS: ", tagCamera.getFPS());
 
 
@@ -161,16 +160,15 @@ public class Robot {
     }
 
     public void initTeleop() {
-        follower.update();
         breakFollowing();
+        follower.update();
+
     }
     public void breakFollowing() {
         follower.breakFollowing();
         follower.setMaxPower(1);
     }
     public void initLoopTeleop() {
-        breakFollowing();
-        follower.update();
         updateGamepads();
 
         if (c1.triangleWasPressed()) {
@@ -193,7 +191,6 @@ public class Robot {
 
     public void startTeleopPositions() {
 
-        intake.intake();
         robotState = RobotState.INTAKE;
         scheduler.schedule(commands.startIntaking, getMilliseconds());
     }
@@ -221,6 +218,7 @@ public class Robot {
 
     public void update() {
         shooter.update(this);
+        lindexer.update();
         follower.update();
 
         tagCamera.processDetections(tagCamera.getDetections(), this);

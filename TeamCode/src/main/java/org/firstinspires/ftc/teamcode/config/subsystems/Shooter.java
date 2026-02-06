@@ -48,7 +48,7 @@ public class Shooter {
 
         shooterMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
-        blocker = hardwareMap.get(Servo.class, ConfigConstants.BLOCKER);
+        blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
 
 
     }
@@ -98,10 +98,10 @@ public class Shooter {
     }
 
     public void block() {
-        blocker.setPosition(ConfigConstants.BLOCKER_BLOCK);
+        blocker.setPosition(ConfigConstants.SHOOTER_BLOCK);
     }
     public void unblock() {
-        blocker.setPosition(ConfigConstants.BLOCKER_UNBLOCK);
+        blocker.setPosition(ConfigConstants.SHOOTER_UNBLOCK);
     }
 
     public CachedMotor getShooterMotor() {

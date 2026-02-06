@@ -30,11 +30,15 @@ public class ConfigConstants {
     public static final String FRONT_RIGHT = "FR";
     public static final String PINPOINT = "pinpoint";
     public static final String SHOOTER = "shooter";
-    public static final String BLOCKER = "blocker";
+    public static final String SHOOTER_BLOCKER = "shooter blocker";
     public static final String LEFT_LINDEXER = "left lindexer";
     public static final String RIGHT_LINDEXER = "right lindexer";
     public static final String INTAKE = "intake";
+    public static final String SPINDLE = "spindel";
+    public static final String GREEN_WHEEL = "green wheel";
     public static final String ARDUCAM = "ardu cam";
+    public static final String INTAKE_BLOCKER = "intake blocker";
+    public static final String TRANSFER_BLOCKER = "transfer blocker";
 
     //Game
         //Defaults
@@ -90,7 +94,20 @@ public class ConfigConstants {
     public static final double RIGHT_LIN_IN = 0;
     public static final double RIGHT_LIN_OUT = 0;
 
-        //Shooter
+        //Lindexer Blocker
+    public static final double LINDEX_BLOCK = 0.8;
+    public static final double LINDEX_UNBLOCK = 1;
+
+        //Transfer
+    public static final double SPINDLE_INTAKE_POWER = 1;
+    public static final double GREEN_WHEEL_INTAKE_POWER = -1;
+
+        //Transfer Blocker
+    public static final double TRANSFER_BLOCK = 0.8;
+    public static final double TRANSFER_UNBLOCK = 1;
+
+
+    //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(100, 0, 1, 14);
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 200; //
@@ -118,9 +135,9 @@ public class ConfigConstants {
     public static final double RPM_ADJUST_AMOUNT = 25;
     public static final double SHOOTER_CPR = 28.0; //ticks per revolution
 
-        //Blocker
-    public static final double BLOCKER_BLOCK = 0.8;
-    public static final double BLOCKER_UNBLOCK = 1;
+        //Shooter Blocker
+    public static final double SHOOTER_BLOCK = 0.8;
+    public static final double SHOOTER_UNBLOCK = 1;
 
 
     //Vision
