@@ -1,24 +1,32 @@
 package org.firstinspires.ftc.teamcode.config.subsystems.field;
 
+import org.firstinspires.ftc.teamcode.config.util.Color;
+import org.firstinspires.ftc.teamcode.config.util.Motif;
+import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
+
 public class Classifier {
 
-    double ballsOnClassifier = 0;
+    int ballsInClassifier = 0;
     public Classifier() {
 
     }
     public void reset() {
-        ballsOnClassifier = 0;
+        ballsInClassifier = 0;
     }
     public void addBall() {
-        ballsOnClassifier += 1;
+        ballsInClassifier += 1;
     }
     public void subtractBall() {
-        if (ballsOnClassifier > 0) {
-            ballsOnClassifier -= 1;
+        if (ballsInClassifier > 0) {
+            ballsInClassifier -= 1;
         }
     }
 
     public double getBallsOnClassifier() {
-        return ballsOnClassifier;
+        return ballsInClassifier;
+    }
+
+    public Color getNextColor(Motif motif) {
+        return ConfigConstants.MOFIT_COLOR_MAP.get(motif)[ballsInClassifier % 3];
     }
 }

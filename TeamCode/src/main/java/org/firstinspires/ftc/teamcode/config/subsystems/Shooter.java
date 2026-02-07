@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.config.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -23,7 +24,8 @@ public class Shooter {
 
 
     HardwareMap hardwareMap;
-    CachedMotor shooterMotor;
+    CachedMotor shooterMotorLeft;
+    CachedMotor shooterMotorRight;
     Servo blocker;
 
     double targetShooterRPM = 0;
@@ -38,15 +40,23 @@ public class Shooter {
     public Shooter(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
 
-        shooterMotor = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER), ConfigConstants.SHOOTER_CPR);
-        shooterMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
+        shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
 
-        shooterMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
 
-        shooterMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        shooterMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
+        shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
+
+        shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
+        shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+
+        shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+
+        shooterMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
 
@@ -55,7 +65,7 @@ public class Shooter {
 
     //Util functions
     public void update(Robot robot) {
-        shooterRPM.add(robot.shooter.getShooterMotor().getRPM(), robot.getMilliseconds());
+        shooterRPM.add(robot.shooter.shooterMotorLeft.getRPM(), robot.getMilliseconds());
 
         setShooterState(getShooterReady(robot.shooter.getTargetShooterRPM()));
     }
@@ -82,7 +92,8 @@ public class Shooter {
 
     public void updatePower() {
 
-        shooterMotor.setRPM(targetShooterRPM);
+        shooterMotorLeft.setRPM(targetShooterRPM);
+        shooterMotorRight.setRPM(targetShooterRPM);
     }
 
     public double getTargetShooterRPM() {
@@ -105,7 +116,7 @@ public class Shooter {
     }
 
     public CachedMotor getShooterMotor() {
-        return shooterMotor;
+        return shooterMotorLeft;
     }
 
     public void increaseManualRPMAdjustment() {

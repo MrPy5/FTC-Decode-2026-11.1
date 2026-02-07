@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.CommandScheduler;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 //http://192.168.43.1:8080/dash  -- ftc dash
@@ -55,7 +57,7 @@ public class Robot {
     public Chassis chassis;
     public Follower follower;
 
-    public TagCamera tagCamera;
+   // public TagCamera tagCamera;
 
 
     private Alliance alliance;
@@ -109,17 +111,23 @@ public class Robot {
         lindexer = new Lindexer(hardwareMap);
         chassis = new Chassis(hardwareMap);
 
-        tagCamera = new TagCamera(hardwareMap);
+      //  tagCamera = new TagCamera(hardwareMap);
 
         commands = new Commands(this);
 
         classifier = new Classifier();
+
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
     }
 
     public void initAutoPositions() {
 
         shooter.unblock();
-        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+        //tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
     }
     public void initLoopAuto(Runnable useBluePaths, Runnable useRedPaths, boolean scanMotif) {
         updateGamepads();
@@ -134,9 +142,9 @@ public class Robot {
         }
 
         if (scanMotif) {
-            tagCamera.processDetections(tagCamera.getDetections(), this);
+         //   tagCamera.processDetections(tagCamera.getDetections(), this);
 
-            setMotifByTag(tagCamera.getMostPopularMotifTag());
+         //   setMotifByTag(tagCamera.getMostPopularMotifTag());
         }
     }
     public void initLoopTelemetry() {
@@ -146,12 +154,12 @@ public class Robot {
 
         telemetry.addData("Alliance: ", getAlliance());
 
-        telemetry.addData("Tag FPS: ", tagCamera.getFPS());
+      //  telemetry.addData("Tag FPS: ", tagCamera.getFPS());
 
 
     }
     public void startAuto(Consumer<Robot> buildPaths, Pose startPose) {
-        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+     //   tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
         follower.setStartingPose(startPose);
 
         buildPaths.accept(this);
@@ -198,7 +206,7 @@ public class Robot {
     public void startTeleop() {
         gameTimer.reset();
         follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
-        tagCamera.setCurrentMode(TagCamera.TagMode.GOAL);
+     //   tagCamera.setCurrentMode(TagCamera.TagMode.GOAL);
 
         startTeleopPositions();
     }
@@ -218,10 +226,10 @@ public class Robot {
 
     public void update() {
         shooter.update(this);
-        lindexer.update();
+        lindexer.update(c2);
         follower.update();
 
-        tagCamera.processDetections(tagCamera.getDetections(), this);
+    //    tagCamera.processDetections(tagCamera.getDetections(), this);
 
         scheduler.update(getMilliseconds());
     }
@@ -229,6 +237,7 @@ public class Robot {
     public void updateHardware() {
         shooter.updatePower();
         intake.updatePower();
+        transfer.updatePower();
     }
 
 

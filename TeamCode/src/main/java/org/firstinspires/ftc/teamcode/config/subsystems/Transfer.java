@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.config.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -13,58 +14,46 @@ public class Transfer {
 
 
     HardwareMap hardwareMap;
-    CachedMotor spindleMotor;
-    CachedMotor greenWheelMotor;
+    CachedMotor transferMotor;
     Servo transferBlocker;
 
-    double spindlePower = 0;
-    double greenWheelPower = 0;
+    double transferRPM = 0;
 
 
     public Transfer(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
 
-        spindleMotor = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SPINDLE));
-        spindleMotor.setDirection(DcMotorEx.Direction.REVERSE); //intake with positive value
 
-        spindleMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        transferMotor = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.GREEN_WHEEL), ConfigConstants.TRANSFER_CPR);
+        transferMotor.setDirection(DcMotorEx.Direction.FORWARD); //intake with positive value
 
-        spindleMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        transferMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        greenWheelMotor = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.GREEN_WHEEL));
-        greenWheelMotor.setDirection(DcMotorEx.Direction.REVERSE); //intake with positive value
-
-        greenWheelMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-
-        greenWheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
     }
 
     public void updatePower() {
-        spindleMotor.setPower(spindlePower);
-        greenWheelMotor.setPower(greenWheelPower);
+
+        transferMotor.setRPM(transferRPM);
     }
 
     //Additional functions
-    public void intake() {
-        setSpindlePower(0);
-        setGreenWheelPower(0);
+    public void intakeTransfer() {
+        setTransferRPM(ConfigConstants.TRANSFER_INTAKE_RPM);
     }
-    public void outtake() {
-        setSpindlePower(0);
-        setGreenWheelPower(0);
+
+    public void outtakeTransfer() {
+        setTransferRPM(ConfigConstants.TRANSFER_OUTTAKE_RPM);
     }
     public void stop() {
-        setSpindlePower(0);
-        setGreenWheelPower(0);
+        setTransferRPM(0);
     }
-    public void setSpindlePower(double power) {
-        spindlePower = power;
-    }
-    public void setGreenWheelPower(double power) {
-        greenWheelPower = power;
+
+    public void setTransferRPM(double rpm) {
+        transferRPM = rpm;
     }
 
     public void block() {

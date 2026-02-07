@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.config.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -42,9 +43,14 @@ public class Lindexer {
     }
 
     //Util functions
-    public void update() {
+    public void update(Gamepad c2) {
         if (lindexerState == LindexerState.INDEX) {
-
+            if (c2.leftBumperWasPressed()) {
+                rightCenter();
+            }
+            if (c2.rightBumperWasPressed()) {
+                clear();
+            }
         }
     }
 
@@ -56,10 +62,10 @@ public class Lindexer {
         leftLindexer.setPosition(ConfigConstants.LEFT_LIN_OUT);
     }
     public void rightIn() {
-        leftLindexer.setPosition(ConfigConstants.RIGHT_LIN_IN);
+        rightLindexer.setPosition(ConfigConstants.RIGHT_LIN_IN);
     }
     public void rightOut() {
-        leftLindexer.setPosition(ConfigConstants.RIGHT_LIN_OUT);
+        rightLindexer.setPosition(ConfigConstants.RIGHT_LIN_OUT);
     }
     public void leftCenter() {
         leftIn();
@@ -94,20 +100,47 @@ public class Lindexer {
 
     public void moveToNextBall(Color desiredColor) {
         if (matchesColor(leftBall, desiredColor)) {
+            leftBall = Color.EMPTY;
             leftCenter();
 
         }
         else if (matchesColor(rightBall, desiredColor)) {
+            rightBall = Color.EMPTY;
             rightCenter();
         }
         else if (matchesColor(centerBall, desiredColor)){
+            centerBall = Color.EMPTY;
             clear();
             unblock();
-
         }
+
     }
 
     public void setLindexerState(LindexerState lindexerState) {
         this.lindexerState = lindexerState;
+    }
+
+    public void setLeftBall(Color leftBall) {
+        this.leftBall = leftBall;
+    }
+
+    public void setRightBall(Color rightBall) {
+        this.rightBall = rightBall;
+    }
+
+    public void setCenterBall(Color centerBall) {
+        this.centerBall = centerBall;
+    }
+
+    public Color getLeftBall() {
+        return leftBall;
+    }
+
+    public Color getRightBall() {
+        return rightBall;
+    }
+
+    public Color getCenterBall() {
+        return centerBall;
     }
 }

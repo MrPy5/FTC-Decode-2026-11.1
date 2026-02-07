@@ -15,7 +15,12 @@ public class Storage {
     }
 
     public static Follower getStoredFollower() {
-        return storedFollower;
+        if (storedFollower != null) {
+            return storedFollower;
+        }
+        else {
+            return null;
+        }
     }
 
     public static void setStoredAlliance(Alliance storedAlliance) {
@@ -23,15 +28,28 @@ public class Storage {
     }
 
     public static Alliance getStoredAlliance() {
-        return storedAlliance;
+        if (storedAlliance != null) {
+            return storedAlliance;
+        }
+        else {
+            return null;
+        }
     }
 
     public static void setStoredMotif(Motif storedMotif) {
+
         Storage.storedMotif = storedMotif;
+
+
     }
 
     public static Motif getStoredMotif() {
-        return storedMotif;
+        if (storedMotif != null) {
+            return storedMotif;
+        }
+        else {
+            return null;
+        }
     }
 
     public static void cleanup(Alliance storedAlliance, Motif storedMotif, Follower storedFollower) {
