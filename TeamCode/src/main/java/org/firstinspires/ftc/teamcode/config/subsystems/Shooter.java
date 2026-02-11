@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
-@Config
 public class Shooter {
 
     public enum ShooterState {
@@ -42,20 +41,14 @@ public class Shooter {
 
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
         shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
-
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-
         shooterMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
         shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
-
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-
         shooterMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
@@ -67,14 +60,17 @@ public class Shooter {
     public void update(Robot robot) {
         shooterRPM.add(robot.shooter.shooterMotorLeft.getRPM(), robot.getMilliseconds());
 
-        setShooterState(getShooterReady(robot.shooter.getTargetShooterRPM()));
+        setShooterState(getShooterReady());
+
+        //setPower((kV * targetShooterRPM) + (kP * (targetShooterRPM - shooterMotorLeft.getRPM())) + kS);
+
     }
-    public Shooter.ShooterState getShooterReady(double currentShooterTargetRPM) {
+    public Shooter.ShooterState getShooterReady() {
         if (shooterRPM.getValues().size() < shooterRPM.getMaxSize()) {
             return Shooter.ShooterState.NOTREADY;
         }
         else {
-            if (Math.abs(shooterRPM.averageROC()) < ConfigConstants.RPM_ROC_BOUND && Math.abs(shooterRPM.average() - currentShooterTargetRPM) < ConfigConstants.RPM_DISTANCE_BOUND) {
+            if (Math.abs(shooterRPM.averageROC()) < ConfigConstants.RPM_ROC_BOUND && Math.abs(shooterRPM.average() - targetShooterRPM) < ConfigConstants.RPM_DISTANCE_BOUND) {
                 return Shooter.ShooterState.READY;
             } else {
                 return Shooter.ShooterState.NOTREADY;
@@ -125,14 +121,14 @@ public class Shooter {
     public void decreaseManualRPMAdjustment() {
         manualAdjustment -= ConfigConstants.RPM_ADJUST_AMOUNT;
     }
+
+
     public void spinAtCalculatedSpeed(double range) {
         setRPM(calculateRPM(range));
     }
     public double calculateRPM(double range) {
-        double rpm = 0;
-        rpm = multiRPM(range) + manualAdjustment;
+        return multiRPM(range) + manualAdjustment;
 
-        return rpm;
     }
     public double multiRPM(double range) {
 

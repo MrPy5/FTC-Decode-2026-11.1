@@ -1,35 +1,55 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
+import org.firstinspires.ftc.teamcode.config.util.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
-@Config
 public class Lindexer {
 
     public enum LindexerState {
-        INDEX,
-        NONINDEX
+        READY,
+        NOTREADY,
+        WAITING
     }
+    public enum LindexerPosition {
+        LEFT,
+        CLEAR,
+        RIGHT
+    }
+
+    ElapsedTime moveTime = new ElapsedTime();
+
+    boolean index = false;
+
 
     HardwareMap hardwareMap;
     Servo leftLindexer;
     Servo rightLindexer;
     Servo intakeBlocker;
 
+    ArtifactSensor lindexerColor;
+
     Color leftBall = Color.EMPTY;
     Color centerBall = Color.EMPTY;
     Color rightBall = Color.EMPTY;
 
+    int green = 400000000;
+    int purple = 100000000;
 
-    LindexerState lindexerState = LindexerState.NONINDEX;
+
+    LindexerState lindexerState = LindexerState.READY;
+    LindexerPosition lindexerPosition = LindexerPosition.LEFT;
 
     public Lindexer(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -39,45 +59,71 @@ public class Lindexer {
 
         intakeBlocker = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_BLOCKER);
 
+        lindexerColor = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT), hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT));
+
 
     }
 
     //Util functions
-    public void update(Gamepad c2) {
-        if (lindexerState == LindexerState.INDEX) {
-            if (c2.leftBumperWasPressed()) {
-                rightCenter();
+    public void update(RobotState state) {
+        if (lindexerState == LindexerState.READY) {
+            if (index && state == RobotState.INTAKE) {
+
+                Color ballColor = lindexerColor.getBall();
+
+                if (ballColor != Color.EMPTY) {
+                    if (lindexerPosition == LindexerPosition.LEFT) {
+                        leftBall = ballColor;
+                        rightCenter();
+                    } else {
+                        rightBall = ballColor;
+                    }
+                }
+
+
             }
-            if (c2.rightBumperWasPressed()) {
-                clear();
-            }
+        }
+        else if (lindexerState == LindexerState.NOTREADY) {
+            moveTime.reset();
+            lindexerState = LindexerState.WAITING;
+        }
+        else if (lindexerState == LindexerState.WAITING && moveTime.milliseconds() > ConfigConstants.MOVE_MILLISECONDS)  {
+            lindexerState = LindexerState.READY;
         }
     }
 
 
-    public void leftIn() {
+    private void leftIn() {
         leftLindexer.setPosition(ConfigConstants.LEFT_LIN_IN);
     }
-    public void leftOut() {
+    private void leftOut() {
         leftLindexer.setPosition(ConfigConstants.LEFT_LIN_OUT);
     }
-    public void rightIn() {
+    private void rightIn() {
         rightLindexer.setPosition(ConfigConstants.RIGHT_LIN_IN);
     }
-    public void rightOut() {
+    private void rightOut() {
         rightLindexer.setPosition(ConfigConstants.RIGHT_LIN_OUT);
     }
+
+
     public void leftCenter() {
         leftIn();
         rightOut();
+        lindexerPosition = LindexerPosition.LEFT;
+        lindexerState = LindexerState.NOTREADY;
     }
     public void rightCenter() {
         rightIn();
         leftOut();
+        lindexerPosition = LindexerPosition.RIGHT;
+        lindexerState = LindexerState.NOTREADY;
     }
     public void clear() {
         leftOut();
         rightOut();
+        lindexerPosition = LindexerPosition.CLEAR;
+        lindexerState = LindexerState.NOTREADY;
     }
 
     public void block() {
@@ -142,5 +188,13 @@ public class Lindexer {
 
     public Color getCenterBall() {
         return centerBall;
+    }
+
+    public ArtifactSensor getLindexerColor() {
+        return lindexerColor;
+    }
+
+    public void setIndex(boolean index) {
+        this.index = index;
     }
 }

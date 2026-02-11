@@ -57,7 +57,7 @@ public class Robot {
     public Chassis chassis;
     public Follower follower;
 
-   // public TagCamera tagCamera;
+    public TagCamera tagCamera;
 
 
     private Alliance alliance;
@@ -111,7 +111,7 @@ public class Robot {
         lindexer = new Lindexer(hardwareMap);
         chassis = new Chassis(hardwareMap);
 
-      //  tagCamera = new TagCamera(hardwareMap);
+        tagCamera = new TagCamera(hardwareMap);
 
         commands = new Commands(this);
 
@@ -127,7 +127,7 @@ public class Robot {
     public void initAutoPositions() {
 
         shooter.unblock();
-        //tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
     }
     public void initLoopAuto(Runnable useBluePaths, Runnable useRedPaths, boolean scanMotif) {
         updateGamepads();
@@ -142,9 +142,9 @@ public class Robot {
         }
 
         if (scanMotif) {
-         //   tagCamera.processDetections(tagCamera.getDetections(), this);
+           tagCamera.processDetections(tagCamera.getDetections(), this);
 
-         //   setMotifByTag(tagCamera.getMostPopularMotifTag());
+           setMotifByTag(tagCamera.getMostPopularMotifTag());
         }
     }
     public void initLoopTelemetry() {
@@ -154,12 +154,12 @@ public class Robot {
 
         telemetry.addData("Alliance: ", getAlliance());
 
-      //  telemetry.addData("Tag FPS: ", tagCamera.getFPS());
+        telemetry.addData("Tag FPS: ", tagCamera.getFPS());
 
 
     }
     public void startAuto(Consumer<Robot> buildPaths, Pose startPose) {
-     //   tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+       tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
         follower.setStartingPose(startPose);
 
         buildPaths.accept(this);
@@ -206,7 +206,7 @@ public class Robot {
     public void startTeleop() {
         gameTimer.reset();
         follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
-     //   tagCamera.setCurrentMode(TagCamera.TagMode.GOAL);
+        tagCamera.setCurrentMode(TagCamera.TagMode.GOAL);
 
         startTeleopPositions();
     }
@@ -226,10 +226,10 @@ public class Robot {
 
     public void update() {
         shooter.update(this);
-        lindexer.update(c2);
+        lindexer.update(getRobotState());
         follower.update();
-
-    //    tagCamera.processDetections(tagCamera.getDetections(), this);
+        transfer.update(getRobotState());
+        tagCamera.processDetections(tagCamera.getDetections(), this);
 
         scheduler.update(getMilliseconds());
     }
@@ -291,6 +291,9 @@ public class Robot {
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
         packet.put("min", 0);
+        packet.put("color", lindexer.getLindexerColor().getColor());
+        packet.put("dist", lindexer.getLindexerColor().getDistance());
+        packet.put("volt", transfer.getTransferMotor().getCurrent());
 
     }
 

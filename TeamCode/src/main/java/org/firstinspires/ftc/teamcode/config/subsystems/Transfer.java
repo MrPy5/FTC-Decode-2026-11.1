@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
@@ -29,20 +30,27 @@ public class Transfer {
 
         transferMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        transferMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
     }
-
+    public void update(Robot.RobotState robotState) {
+        if (robotState == Robot.RobotState.INTAKE && transferMotor.getCurrent() > 4) {
+            stop();
+        }
+    }
     public void updatePower() {
 
         transferMotor.setRPM(transferRPM);
     }
 
-    //Additional functions
     public void intakeTransfer() {
         setTransferRPM(ConfigConstants.TRANSFER_INTAKE_RPM);
+    }
+
+    public void intakeTransferSlow() {
+        setTransferRPM(ConfigConstants.TRANSFER_INTAKE_SLOW_RPM);
     }
 
     public void outtakeTransfer() {
@@ -63,7 +71,7 @@ public class Transfer {
         transferBlocker.setPosition(ConfigConstants.TRANSFER_UNBLOCK);
     }
 
-
-
-
+    public CachedMotor getTransferMotor() {
+        return transferMotor;
+    }
 }

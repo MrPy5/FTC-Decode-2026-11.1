@@ -1,46 +1,40 @@
 package org.firstinspires.ftc.teamcode.config;
 
-import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
-import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
 public class Commands {
 
-    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shoot, shootLindexing, startLindexingDuringIntake, startIntakingLindex;
+    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing;
 
 
     public Commands(Robot robot) {
 
         stopEverything = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.stop()),
-                new InstantCommand(() -> robot.intake.stopIntake()));
+                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.intake.stopIntake()),
+                new InstantCommand(() -> robot.intake.lift()),
+                new InstantCommand(() -> robot.lindexer.unblock()),
+                new InstantCommand(() -> robot.transfer.unblock()),
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new InstantCommand(() -> robot.lindexer.leftCenter()));
 
 
         stopIntaking = new SequentialCommand(
-
-                new InstantCommand(() -> robot.intake.intake()),
-              //  new InstantCommand(() -> robot.transfer.stopIntakeSpindle()),
-                new InstantCommand(() -> robot.shooter.unblock()),
-                new InstantCommand(() -> robot.lindexer.setLindexerState(Lindexer.LindexerState.NONINDEX)));
+                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.transfer.unblock()),
+                new InstantCommand(() -> robot.intake.lift()),
+                new InstantCommand(() -> robot.shooter.unblock()));
 
         startIntaking = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.stop()),
-                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.transfer.intakeTransferSlow()),
+                new InstantCommand(() -> robot.shooter.block()),
                 new InstantCommand(() -> robot.intake.intake()),
+                new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()));
-        startIntakingLindex = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.stop()),
-                new InstantCommand(() -> robot.transfer.stop()),
-                new InstantCommand(() -> robot.intake.intake()),
-                new InstantCommand(() -> robot.lindexer.leftCenter()),
-                new InstantCommand(() -> robot.lindexer.setLindexerState(Lindexer.LindexerState.INDEX)));
-
-        startLindexingDuringIntake = new SequentialCommand(
-                new InstantCommand(() -> robot.transfer.block()),
-                new InstantCommand(() -> robot.lindexer.leftCenter()),
-                new InstantCommand(() -> robot.lindexer.setLindexerState(Lindexer.LindexerState.INDEX)));
 
         shootLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.stopIntake()),
@@ -52,10 +46,6 @@ public class Commands {
                 new InstantCommand(() -> robot.classifier.addBall())
         );
 
-
-
-        shoot = new SequentialCommand( // teleop: no sort, shoot balls, do not look for next ball
-        );
 
 
 

@@ -23,6 +23,7 @@ public class Intake {
 
     HardwareMap hardwareMap;
     CachedMotor intakeMotor;
+    Servo intakeLifter;
 
     double intakePower = 0;
 
@@ -35,8 +36,9 @@ public class Intake {
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE); //intake with positive value
 
         intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        intakeLifter = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_LIFTER);
 
     }
 
@@ -68,6 +70,13 @@ public class Intake {
 
     public CachedMotor getIntakeMotor() {
         return intakeMotor;
+    }
+
+    public void lift() {
+        intakeLifter.setPosition(ConfigConstants.INTAKE_LIFT);
+    }
+    public void drop() {
+        intakeLifter.setPosition(ConfigConstants.INTAKE_DROP);
     }
 
 

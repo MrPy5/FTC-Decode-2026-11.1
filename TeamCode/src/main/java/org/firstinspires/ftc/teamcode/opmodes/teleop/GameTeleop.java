@@ -24,8 +24,6 @@ public class GameTeleop extends LinearOpMode {
 
         @Override
         public void runOpMode () {
-            ElapsedTime loopTimer = new ElapsedTime();
-            CyclingList timeList = new CyclingList(15);
 
             FtcDashboard dashboard = FtcDashboard.getInstance();
             dashboard.setTelemetryTransmissionInterval(50);
@@ -54,7 +52,6 @@ public class GameTeleop extends LinearOpMode {
             robot.startTeleop();
 
             while (opModeIsActive()) {
-              //  loopTimer.reset();
                 //Pull new gamepad values and freeze state
                 robot.updateGamepads();
                 c1 = robot.getC1();
@@ -75,13 +72,12 @@ public class GameTeleop extends LinearOpMode {
                     //Intake
                 else if (c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
-                    if (motifMode) {
-                        robot.scheduler.schedule(robot.commands.startIntakingLindex, robot.getMilliseconds());
-                    }
-                    else {
-                        robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
-                    }
+                    robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
+
+                    if (motifMode) {
+                        robot.transfer.block();
+                    }
 
                 }
 
@@ -90,9 +86,14 @@ public class GameTeleop extends LinearOpMode {
                     motifMode = !motifMode;
 
                     if (motifMode) {
-                        if (robot.getRobotState() == RobotState.INTAKE){
-                            robot.scheduler.schedule(robot.commands.startLindexingDuringIntake, robot.getMilliseconds());
+                        robot.lindexer.setIndex(true);
+
+                        if (robot.getRobotState() == RobotState.INTAKE) {
+                            robot.transfer.block();
                         }
+                    }
+                    else {
+                        robot.lindexer.setIndex(false);
                     }
                 }
 
@@ -104,9 +105,10 @@ public class GameTeleop extends LinearOpMode {
                     robot.shooter.increaseManualRPMAdjustment();
                 }
 
+
+                robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range());
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
-                    robot.shooter.spinAtCalculatedSpeed(/*robot.tagCamera.range()*/ 86);
 
                     if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
                         if (robot.scheduler.isIdle() && motifMode) {
@@ -162,35 +164,16 @@ public class GameTeleop extends LinearOpMode {
                     gamepad2.rumble(1000);
                 }
 
-                if (c1.rightBumperWasPressed()) {
-                    robot.lindexer.setCenterBall(Color.PURPLE);
-                }
-                if (c1.leftBumperWasPressed()) {
-                    robot.lindexer.setCenterBall(Color.GREEN);
-                }
-                if (c1.dpadLeftWasPressed()) {
-                    robot.lindexer.setLeftBall(Color.GREEN);
-                }
-                if (c1.dpadRightWasPressed()) {
-                    robot.lindexer.setLeftBall(Color.PURPLE);
-                }
-                if (c1.squareWasPressed()) {
-                    robot.lindexer.setRightBall(Color.PURPLE);
-                }
-                if (c1.circleWasPressed()) {
-                    robot.lindexer.setRightBall(Color.GREEN);
-                }
 
-                timeList.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
+                telemetry.addData("dist", robot.tagCamera.range());
                 telemetry.addData("left", robot.lindexer.getLeftBall());
                 telemetry.addData("center", robot.lindexer.getCenterBall());
                 telemetry.addData("right", robot.lindexer.getRightBall());
-          //      telemetry.addLine();
-             //   telemetry.addData("loop time", timeList.average());
                 telemetry.addLine();
+                telemetry.addData("ready", robot.shooter.getShooterState());
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addData("motifMode", motifMode);

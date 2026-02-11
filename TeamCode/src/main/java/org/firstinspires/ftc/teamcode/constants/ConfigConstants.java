@@ -13,11 +13,6 @@ import java.util.Map;
 
 @Config
 public class ConfigConstants {
-    //ENUMS
-    public enum ShooterMode {
-        TWO_RPM,
-        INTERPOLATE_RPM
-    }
     //DEBUG
     public static final boolean LOGGING = false;
     public static final boolean DRAWING = true;
@@ -28,6 +23,7 @@ public class ConfigConstants {
     public static final String BACK_RIGHT = "BR";
     public static final String FRONT_LEFT = "FL";
     public static final String FRONT_RIGHT = "FR";
+
     public static final String PINPOINT = "pinpoint";
     public static final String SHOOTER_LEFT = "shooter left";
     public static final String SHOOTER_RIGHT = "shooter right";
@@ -35,10 +31,14 @@ public class ConfigConstants {
     public static final String LEFT_LINDEXER = "left lindexer";
     public static final String RIGHT_LINDEXER = "right lindexer";
     public static final String INTAKE = "intake";
+    public static final String INTAKE_LIFTER = "intake lifter";
     public static final String GREEN_WHEEL = "green wheel";
     public static final String ARDUCAM = "ardu cam";
     public static final String INTAKE_BLOCKER = "intake blocker";
     public static final String TRANSFER_BLOCKER = "transfer blocker";
+
+    public static final String LINDEX_COLOR_LEFT = "lindex color left";
+    public static final String LINDEX_COLOR_RIGHT = "lindex color right";
 
     //Game
         //Defaults
@@ -87,12 +87,15 @@ public class ConfigConstants {
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
+    public static final double INTAKE_LIFT = 0.1;
+    public static final double INTAKE_DROP = 0.34;
 
         //Lindexer
     public static final double LEFT_LIN_IN = 0.37;
     public static final double LEFT_LIN_OUT = 0.625;
     public static final double RIGHT_LIN_IN = 0.695;
     public static final double RIGHT_LIN_OUT = 0.46;
+    public static final double MOVE_MILLISECONDS = 500;
 
         //Lindexer Blocker
     public static final double LINDEX_BLOCK = 0.8;
@@ -100,45 +103,49 @@ public class ConfigConstants {
 
         //Transfer
     public static final double TRANSFER_INTAKE_RPM = 1500;
+    public static final double TRANSFER_INTAKE_SLOW_RPM = 200;
     public static final double TRANSFER_OUTTAKE_RPM = -1500;
 
         //Transfer Blocker
     public static final double TRANSFER_CPR = 103.8;
-    public static final double TRANSFER_BLOCK = 0.8;
-    public static final double TRANSFER_UNBLOCK = 1;
+    public static final double TRANSFER_BLOCK = 0.515;
+    public static final double TRANSFER_UNBLOCK = 0.315;
 
 
     //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(90, 0, 1, 14);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(100, 0, 1, 14);
+    public static double kP = 0;
+    public static double kS = 0;
+    public static double kV = 0;
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 200; //
 
     public static final double FURTHEST_DIST = 124;
-    public static final double FURTHEST_RPM = 3400;
+    public static final double FURTHEST_RPM = 3300;
 
     public static final double BACK_TRIANGLE_DIST = 100;
-    public static final double BACK_TRIANGLE_RPM = 3350;
+    public static final double BACK_TRIANGLE_RPM = 3200;
 
     public static final double FAR_FRONT_TRAINGLE_DIST = 85;
-    public static final double FAR_FRONT_TRIANGLE_RPM = 2900;
+    public static final double FAR_FRONT_TRIANGLE_RPM = 2800;
 
     public static final double MID_FRONT_TRIANGLE_DIST = 70;
-    public static final double MID_FRONT_TRIANGLE_RPM = 2100;
+    public static final double MID_FRONT_TRIANGLE_RPM = 2500;
 
     public static final double FRONT_TRIANGLE_DIST = 50;
-    public static final double FRONT_TRIANGLE_RPM = 2100;
+    public static final double FRONT_TRIANGLE_RPM = 2300;
 
     public static final double CLOSEST_DIST = 0;
-    public static final double CLOSEST_RPM = 2000;
+    public static final double CLOSEST_RPM = 1900;
 
     public static final double DEFAULT_RPM = 3000;
 
-    public static final double RPM_ADJUST_AMOUNT = 25;
+    public static final double RPM_ADJUST_AMOUNT = 50;
     public static final double SHOOTER_CPR = 28.0; //ticks per revolution
 
         //Shooter Blocker
-    public static final double SHOOTER_BLOCK = 0.8;
-    public static final double SHOOTER_UNBLOCK = 1;
+    public static final double SHOOTER_BLOCK = 0.39;
+    public static final double SHOOTER_UNBLOCK = 0.61;
 
 
     //Vision
