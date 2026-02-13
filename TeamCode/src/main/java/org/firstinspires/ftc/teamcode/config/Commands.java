@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
 
 public class Commands {
 
-    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing;
+    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing;
 
 
     public Commands(Robot robot) {
@@ -16,7 +16,7 @@ public class Commands {
                 new InstantCommand(() -> robot.transfer.stop()),
                 new InstantCommand(() -> robot.intake.stopIntake()),
                 new InstantCommand(() -> robot.intake.lift()),
-                new InstantCommand(() -> robot.lindexer.unblock()),
+                new InstantCommand(() -> robot.intake.unblock()),
                 new InstantCommand(() -> robot.transfer.unblock()),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()));
@@ -34,7 +34,12 @@ public class Commands {
                 new InstantCommand(() -> robot.shooter.block()),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.intake.drop()),
+                new InstantCommand(() -> robot.intake.unblock()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()));
+        startLindexing = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.block()));
+        stopLindexing = new SequentialCommand(
+                new InstantCommand(() -> robot.intake.block()));
 
         shootLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.stopIntake()),

@@ -132,4 +132,26 @@ public class TagCamera {
         }
     }
 
+    public  double faceAngle() {
+        if (hasTag()) {
+            return tag.ftcPose.yaw;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public double degreesAway(double offset) {
+
+        if (hasTag()) {
+            return tag.ftcPose.bearing - offset;
+        }
+        else {
+            return 0;
+        }
+    }
+    public double combined() {
+        return degreesAway(0) - faceAngle();
+    }
+
 }

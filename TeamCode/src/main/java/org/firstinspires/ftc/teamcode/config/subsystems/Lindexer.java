@@ -9,11 +9,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
 import org.firstinspires.ftc.teamcode.config.util.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
+import org.opencv.ml.EM;
 
 public class Lindexer {
 
@@ -36,7 +38,6 @@ public class Lindexer {
     HardwareMap hardwareMap;
     Servo leftLindexer;
     Servo rightLindexer;
-    Servo intakeBlocker;
 
     ArtifactSensor lindexerColor;
 
@@ -57,7 +58,6 @@ public class Lindexer {
         leftLindexer = hardwareMap.get(Servo.class, ConfigConstants.LEFT_LINDEXER);
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
 
-        intakeBlocker = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_BLOCKER);
 
         lindexerColor = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT), hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT));
 
@@ -65,18 +65,35 @@ public class Lindexer {
     }
 
     //Util functions
-    public void update(RobotState state) {
+    public void update(Robot robot) {
         if (lindexerState == LindexerState.READY) {
-            if (index && state == RobotState.INTAKE) {
+            if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
 
                 Color ballColor = lindexerColor.getBall();
-
                 if (ballColor != Color.EMPTY) {
-                    if (lindexerPosition == LindexerPosition.LEFT) {
-                        leftBall = ballColor;
-                        rightCenter();
-                    } else {
-                        rightBall = ballColor;
+                    if (ballColor == robot.classifier.getNextColor(robot.getMotif()) && centerBall == Color.EMPTY) {
+                        robot.transfer.unblock();
+                        centerBall = ballColor;
+                        lindexerState = LindexerState.NOTREADY;
+                    }
+                    else if (ballColor != robot.classifier.getNextColor(robot.getMotif()) || centerBall != Color.EMPTY) {
+                        if (lindexerPosition == LindexerPosition.LEFT) {
+                            if (centerBall == Color.EMPTY && leftBall != Color.EMPTY) {
+                                clear();
+                            }
+                            else {
+                                rightCenter();
+                            }
+                            rightBall = ballColor;
+                        } else if (lindexerPosition == LindexerPosition.RIGHT) {
+                            if (centerBall == Color.EMPTY && rightBall != Color.EMPTY) {
+                                clear();
+                            }
+                            else {
+                                leftCenter();
+                            }
+                            leftBall = ballColor;
+                        }
                     }
                 }
 
@@ -126,12 +143,6 @@ public class Lindexer {
         lindexerState = LindexerState.NOTREADY;
     }
 
-    public void block() {
-        intakeBlocker.setPosition(ConfigConstants.LINDEX_BLOCK);
-    }
-    public void unblock() {
-        intakeBlocker.setPosition(ConfigConstants.LINDEX_UNBLOCK);
-    }
     public boolean matchesColor(Color ball, Color color) {
         if (ball.equals(color)) {
             return true;
@@ -157,7 +168,7 @@ public class Lindexer {
         else if (matchesColor(centerBall, desiredColor)){
             centerBall = Color.EMPTY;
             clear();
-            unblock();
+
         }
 
     }
@@ -196,5 +207,22 @@ public class Lindexer {
 
     public void setIndex(boolean index) {
         this.index = index;
+    }
+
+    public LindexerPosition getLindexerPosition() {
+        return lindexerPosition;
+    }
+    public int numOfBalls() {
+        int balls = 0;
+        if (leftBall != Color.EMPTY) {
+            balls += 1;
+        }
+        if (rightBall != Color.EMPTY) {
+            balls += 1;
+        }
+        if (centerBall != Color.EMPTY) {
+            balls += 1;
+        }
+        return balls;
     }
 }

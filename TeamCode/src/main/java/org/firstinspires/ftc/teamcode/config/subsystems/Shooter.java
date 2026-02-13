@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import static org.firstinspires.ftc.teamcode.constants.ConfigConstants.kS;
+import static org.firstinspires.ftc.teamcode.constants.ConfigConstants.kV;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -30,6 +33,9 @@ public class Shooter {
     double targetShooterRPM = 0;
     double lastRPM = ConfigConstants.DEFAULT_RPM;
     double manualAdjustment = 0;
+    public boolean droppedActivateBangBang;
+    boolean shooting;
+    public double power;
     CyclingList shooterRPM = new CyclingList(5);
 
 
@@ -42,14 +48,14 @@ public class Shooter {
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
         shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        shooterMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+       // shooterMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
         shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        shooterMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
+      //  shooterMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterMotorRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
 
@@ -62,7 +68,13 @@ public class Shooter {
 
         setShooterState(getShooterReady());
 
-        //setPower((kV * targetShooterRPM) + (kP * (targetShooterRPM - shooterMotorLeft.getRPM())) + kS);
+        if (shooterState == ShooterState.NOTREADY && shooting) {
+            droppedActivateBangBang = true;
+        }
+        else {
+            droppedActivateBangBang = false;
+        }
+
 
     }
     public Shooter.ShooterState getShooterReady() {
@@ -77,7 +89,12 @@ public class Shooter {
             }
         }
     }
+    public void setPower(double power) {
+       // shooterMotorLeft.setPower(power);
+       // shooterMotorRight.setPower(power);
 
+        this.power = power;
+    }
     public ShooterState getShooterState() {
         return shooterState;
     }
@@ -90,6 +107,12 @@ public class Shooter {
 
         shooterMotorLeft.setRPM(targetShooterRPM);
         shooterMotorRight.setRPM(targetShooterRPM);
+       /* if (droppedActivateBangBang) {
+            setPower(1);
+        }
+        else {
+            setPower((ConfigConstants.kV * targetShooterRPM) + (ConfigConstants.kP * (targetShooterRPM - shooterMotorLeft.getRPM())) + ConfigConstants.kS);
+        }*/
     }
 
     public double getTargetShooterRPM() {
@@ -164,5 +187,17 @@ public class Shooter {
 
     public double getManualAdjustment() {
         return manualAdjustment;
+    }
+
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
+    }
+
+    public CachedMotor getShooterMotorLeft() {
+        return shooterMotorLeft;
+    }
+
+    public CachedMotor getShooterMotorRight() {
+        return shooterMotorRight;
     }
 }

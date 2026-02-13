@@ -76,19 +76,23 @@ public class ConfigConstants {
     //Subsystems
         //Driving
     public static final double DRIVE_DAMPENING = 1; //slows the robot down for motors
-    public static final double STRAFE_DAMPENING = 0.7; //slows the robot down for motors
-    public static final double TURN_DAMPENING = 0.6; //slows the robot down for motors
+    public static final double STRAFE_DAMPENING = 1; //slows the robot down for motors
+    public static final double TURN_DAMPENING = 0.8; //slows the robot down for motors
     public static final boolean USE_BRAKE_MODE = true;
 
-    public static final double TURN_kP = 1.3;   // 0.01 – 0.025
-    public static final double TURN_kD = 0.13;   // 0.001 – 0.006
+    public static double TURN_kP = 1;   // 0.01 – 0.025
+    public static double TURN_kD = 0.12;   // 0.001 – 0.006
     public static final double BOOST_MULTIPLIER = 0;   // 0.001 – 0.006
 
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
     public static final double INTAKE_LIFT = 0.1;
-    public static final double INTAKE_DROP = 0.34;
+    public static final double INTAKE_DROP = 0.3;
+
+        //Intake Blocker
+    public static final double INTAKE_BLOCK = 0.4;
+    public static final double INTAKE_UNBLOCK = 0.22;
 
         //Lindexer
     public static final double LEFT_LIN_IN = 0.37;
@@ -97,14 +101,11 @@ public class ConfigConstants {
     public static final double RIGHT_LIN_OUT = 0.46;
     public static final double MOVE_MILLISECONDS = 500;
 
-        //Lindexer Blocker
-    public static final double LINDEX_BLOCK = 0.8;
-    public static final double LINDEX_UNBLOCK = 1;
 
         //Transfer
-    public static final double TRANSFER_INTAKE_RPM = 1500;
-    public static final double TRANSFER_INTAKE_SLOW_RPM = 200;
-    public static final double TRANSFER_OUTTAKE_RPM = -1500;
+    public static final double TRANSFER_INTAKE_RPM = 1;
+    public static final double TRANSFER_INTAKE_SLOW_RPM = 1;
+    public static final double TRANSFER_OUTTAKE_RPM = -1;
 
         //Transfer Blocker
     public static final double TRANSFER_CPR = 103.8;
@@ -114,29 +115,31 @@ public class ConfigConstants {
 
     //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(100, 0, 1, 14);
-    public static double kP = 0;
+    public static double kP = 0.007;
     public static double kS = 0;
-    public static double kV = 0;
+    public static double kV = 0.00035;
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
-    public static final double RPM_DISTANCE_BOUND = 200; //
+    public static final double RPM_DISTANCE_BOUND = 100; //
+
+    public static final double NEAR_VS_FAR = 90; //
 
     public static final double FURTHEST_DIST = 124;
-    public static final double FURTHEST_RPM = 3300;
+    public static final double FURTHEST_RPM = 3200;
 
     public static final double BACK_TRIANGLE_DIST = 100;
-    public static final double BACK_TRIANGLE_RPM = 3200;
+    public static final double BACK_TRIANGLE_RPM = 3100;
 
     public static final double FAR_FRONT_TRAINGLE_DIST = 85;
     public static final double FAR_FRONT_TRIANGLE_RPM = 2800;
 
     public static final double MID_FRONT_TRIANGLE_DIST = 70;
-    public static final double MID_FRONT_TRIANGLE_RPM = 2500;
+    public static final double MID_FRONT_TRIANGLE_RPM = 2600;
 
     public static final double FRONT_TRIANGLE_DIST = 50;
-    public static final double FRONT_TRIANGLE_RPM = 2300;
+    public static final double FRONT_TRIANGLE_RPM = 2500;
 
     public static final double CLOSEST_DIST = 0;
-    public static final double CLOSEST_RPM = 1900;
+    public static final double CLOSEST_RPM = 2400;
 
     public static final double DEFAULT_RPM = 3000;
 

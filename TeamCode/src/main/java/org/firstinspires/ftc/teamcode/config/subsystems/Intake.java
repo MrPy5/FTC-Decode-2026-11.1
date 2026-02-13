@@ -25,6 +25,8 @@ public class Intake {
     CachedMotor intakeMotor;
     Servo intakeLifter;
 
+    Servo intakeBlocker;
+
     double intakePower = 0;
 
     IntakeState intakeState = IntakeState.OFF;
@@ -39,6 +41,9 @@ public class Intake {
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         intakeLifter = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_LIFTER);
+
+
+        intakeBlocker = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_BLOCKER);
 
     }
 
@@ -78,7 +83,12 @@ public class Intake {
     public void drop() {
         intakeLifter.setPosition(ConfigConstants.INTAKE_DROP);
     }
-
+    public void block() {
+        intakeBlocker.setPosition(ConfigConstants.INTAKE_BLOCK);
+    }
+    public void unblock() {
+        intakeBlocker.setPosition(ConfigConstants.INTAKE_UNBLOCK);
+    }
 
 
 }

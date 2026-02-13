@@ -226,7 +226,7 @@ public class Robot {
 
     public void update() {
         shooter.update(this);
-        lindexer.update(getRobotState());
+        lindexer.update(this);
         follower.update();
         transfer.update(getRobotState());
         tagCamera.processDetections(tagCamera.getDetections(), this);
@@ -291,9 +291,18 @@ public class Robot {
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
         packet.put("min", 0);
-        packet.put("color", lindexer.getLindexerColor().getColor());
-        packet.put("dist", lindexer.getLindexerColor().getDistance());
-        packet.put("volt", transfer.getTransferMotor().getCurrent());
+        if (shooter.droppedActivateBangBang) {
+            packet.put("bang", 4000);
+        }
+        else {
+            packet.put("bang", 0);
+        }
+        packet.put("left", shooter.getShooterMotorLeft().getCurrent());
+        packet.put("right", shooter.getShooterMotorRight().getCurrent());
+        packet.put("colorg", lindexer.getLindexerColor().getColorGreen());
+        packet.put("colorr", lindexer.getLindexerColor().getColorRed());
+       // packet.put("dist", lindexer.getLindexerColor().getDistance());
+       // packet.put("volt", transfer.getTransferMotor().getCurrent());
 
     }
 

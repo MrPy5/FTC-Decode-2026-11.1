@@ -19,6 +19,7 @@ public class Transfer {
     Servo transferBlocker;
 
     double transferRPM = 0;
+    double transferPower = 0;
 
 
     public Transfer(HardwareMap hardwareMap) {
@@ -30,7 +31,7 @@ public class Transfer {
 
         transferMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        transferMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
@@ -42,26 +43,30 @@ public class Transfer {
     }
     public void updatePower() {
 
-        transferMotor.setRPM(transferRPM);
+        transferMotor.setPower(transferPower);
     }
 
     public void intakeTransfer() {
-        setTransferRPM(ConfigConstants.TRANSFER_INTAKE_RPM);
+        setTransferPower(ConfigConstants.TRANSFER_INTAKE_RPM);
     }
 
     public void intakeTransferSlow() {
-        setTransferRPM(ConfigConstants.TRANSFER_INTAKE_SLOW_RPM);
+        setTransferPower(ConfigConstants.TRANSFER_INTAKE_SLOW_RPM);
     }
 
     public void outtakeTransfer() {
-        setTransferRPM(ConfigConstants.TRANSFER_OUTTAKE_RPM);
+        setTransferPower(ConfigConstants.TRANSFER_OUTTAKE_RPM);
     }
     public void stop() {
-        setTransferRPM(0);
+        setTransferPower(0);
     }
 
     public void setTransferRPM(double rpm) {
         transferRPM = rpm;
+    }
+
+    public void setTransferPower(double transferPower) {
+        this.transferPower = transferPower;
     }
 
     public void block() {

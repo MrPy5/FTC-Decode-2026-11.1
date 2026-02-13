@@ -62,21 +62,28 @@ public class GameTeleop extends LinearOpMode {
 
                 //Switching modes between intake and shoot
                     //Shoot
-                if (c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.getRobotState() != RobotState.SHOOT) {
+                boolean psPressed = c1.psWasPressed();
+                if ((psPressed || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && robot.getRobotState() != RobotState.SHOOT) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.SHOOT);
 
+                    if (motifMode) {
+                        robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
+                    }
+
+                    robot.chassis.firstTurn = true;
+
 
                 }
                     //Intake
-                else if (c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY && robot.getRobotState() != RobotState.INTAKE) {
+                else if ((psPressed || c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
 
                     if (motifMode) {
-                        robot.transfer.block();
+                        robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
                     }
 
                 }
@@ -89,7 +96,7 @@ public class GameTeleop extends LinearOpMode {
                         robot.lindexer.setIndex(true);
 
                         if (robot.getRobotState() == RobotState.INTAKE) {
-                            robot.transfer.block();
+                            robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
                         }
                     }
                     else {
@@ -111,14 +118,17 @@ public class GameTeleop extends LinearOpMode {
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
                     if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
-                        if (robot.scheduler.isIdle() && motifMode) {
-                            robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
-                        }
-                        if (!motifMode) {
-                            robot.transfer.intakeTransfer();
+                        if (robot.scheduler.isIdle()) {
+                            if (motifMode) {
+                                robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
+                            } else {
+                                robot.transfer.intakeTransfer();
+                            }
+                            robot.shooter.setShooting(true);
                         }
                     }
                     else {
+                        robot.shooter.setShooting(false);
                         if (!motifMode) {
                             robot.transfer.stop();
                         }
@@ -128,7 +138,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 //Driving code
-                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING);
+                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
                 robot.follower.setTeleOpDrive(
                         drivePowers[0],
                         drivePowers[1],
@@ -164,11 +174,17 @@ public class GameTeleop extends LinearOpMode {
                     gamepad2.rumble(1000);
                 }
 
+                if (c1.triangleWasPressed()) {
+                    robot.lindexer.clear();
+                }
+
+
+
 
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
-                telemetry.addData("dist", robot.tagCamera.range());
+                telemetry.addData("position", robot.lindexer.getLindexerPosition());
                 telemetry.addData("left", robot.lindexer.getLeftBall());
                 telemetry.addData("center", robot.lindexer.getCenterBall());
                 telemetry.addData("right", robot.lindexer.getRightBall());

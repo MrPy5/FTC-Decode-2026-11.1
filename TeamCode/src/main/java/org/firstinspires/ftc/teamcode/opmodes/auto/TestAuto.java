@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
 
 @Autonomous(name = "Auto Far")
-@Disabled
 public class TestAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
 
 
