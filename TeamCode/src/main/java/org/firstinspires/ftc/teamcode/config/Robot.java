@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.config;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
@@ -287,21 +289,30 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-        packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+        /*packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
-        packet.put("min", 0);
-        if (shooter.droppedActivateBangBang) {
-            packet.put("bang", 4000);
+        packet.put("min", 0);*/
+        packet.put("distance", lindexer.getLindexerColor().distance);
+        if (lindexer.getLindexerColor().distance < 3.4) {
+            packet.put("dist", 1);
         }
         else {
-            packet.put("bang", 0);
+           packet.put("dist", 0);
         }
-
-     /*   packet.put("dist", lindexer.getLindexerColor().getDistance());
-        packet.put("hue", lindexer.getLindexerColor().getHue());*/
+        if (lindexer.getLindexerColor().hue > 180) {
+            packet.put("hue", 1);
+        }
+        else {
+            packet.put("hue", 0);
+        }
        // packet.put("volt", transfer.getTransferMotor().getCurrent());
 
+    }
+    public void log(String tag, String message) {
+        if (ConfigConstants.LOGGING) {
+            Log.d(tag, message);
+        }
     }
 
 

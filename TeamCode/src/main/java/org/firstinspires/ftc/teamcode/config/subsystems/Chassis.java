@@ -16,7 +16,9 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class Chassis {
 
@@ -60,6 +62,45 @@ public class Chassis {
 
         return values.get(idx);
     }
+    public static double getInterpolatedOffset(Map<Double, Double> angleMap, double inputAngle) {
+
+        if (angleMap == null || angleMap.size() < 2) {
+            throw new IllegalArgumentException("Map must contain at least two points.");
+        }
+
+        // Sort the angle keys
+        List<Double> angles = new ArrayList<>(angleMap.keySet());
+        Collections.sort(angles);
+
+        // Clamp if outside range
+        if (inputAngle <= angles.get(0)) {
+            return angleMap.get(angles.get(0));
+        }
+
+        if (inputAngle >= angles.get(angles.size() - 1)) {
+            return angleMap.get(angles.get(angles.size() - 1));
+        }
+
+        // Find surrounding angles
+        for (int i = 0; i < angles.size() - 1; i++) {
+            double lowerAngle = angles.get(i);
+            double upperAngle = angles.get(i + 1);
+
+            if (inputAngle >= lowerAngle && inputAngle <= upperAngle) {
+
+                double lowerOffset = angleMap.get(lowerAngle);
+                double upperOffset = angleMap.get(upperAngle);
+
+                // Linear interpolation
+                double t = (inputAngle - lowerAngle) / (upperAngle - lowerAngle);
+
+                return lowerOffset + t * (upperOffset - lowerOffset);
+            }
+        }
+
+        // Should never happen
+        return 0;
+    }
 
     public double calculateOffset(Robot robot, TagCamera tagCamera) {
 
@@ -68,28 +109,25 @@ public class Chassis {
         double offset;
         if (tagCamera.range() > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == Alliance.BLUE) {
-                List<Double> farValues = new ArrayList<>(ConfigConstants.FAR_OFFSET_MAP_BLUE.keySet());
 
-                offset = ConfigConstants.FAR_OFFSET_MAP_BLUE.get(getClosestVal(farValues, combined));
+                offset = getInterpolatedOffset(ConfigConstants.FAR_OFFSET_MAP_BLUE, combined);
             }
             else {
-                List<Double> farValues = new ArrayList<>(ConfigConstants.FAR_OFFSET_MAP_RED.keySet());
 
-                offset = ConfigConstants.FAR_OFFSET_MAP_RED.get(getClosestVal(farValues, combined));
+
+                offset = getInterpolatedOffset(ConfigConstants.FAR_OFFSET_MAP_RED, combined);
             }
 
 
         }
         else {
             if (robot.getAlliance() == Alliance.BLUE) {
-                List<Double> farValues = new ArrayList<>(ConfigConstants.CLOSE_OFFSET_MAP_BLUE.keySet());
 
-                offset = ConfigConstants.CLOSE_OFFSET_MAP_BLUE.get(getClosestVal(farValues, combined));
+                offset = getInterpolatedOffset(ConfigConstants.CLOSE_OFFSET_MAP_BLUE, combined);
             }
             else {
-                List<Double> farValues = new ArrayList<>(ConfigConstants.CLOSE_OFFSET_MAP_RED.keySet());
 
-                offset = ConfigConstants.CLOSE_OFFSET_MAP_RED.get(getClosestVal(farValues, combined));
+                offset = getInterpolatedOffset(ConfigConstants.CLOSE_OFFSET_MAP_RED, combined);
             }
 
 

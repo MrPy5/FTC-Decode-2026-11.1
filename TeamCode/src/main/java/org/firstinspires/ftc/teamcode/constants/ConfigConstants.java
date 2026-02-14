@@ -14,9 +14,9 @@ import java.util.Map;
 @Config
 public class ConfigConstants {
     //DEBUG
-    public static final boolean LOGGING = false;
+    public static final boolean LOGGING = true;
     public static final boolean DRAWING = true;
-    public static final boolean DASHBOARD = true;
+    public static final boolean DASHBOARD = false;
 
     //Names
     public static final String BACK_LEFT = "BL";
@@ -123,8 +123,8 @@ public class ConfigConstants {
 
     public static final double NEAR_VS_FAR = 100; //
 
-    public static final double FURTHEST_DIST = 124;
-    public static final double FURTHEST_RPM = 3200;
+    public static final double FURTHEST_DIST = 128;
+    public static final double FURTHEST_RPM = 3300;
 
     public static final double BACK_TRIANGLE_DIST = 100;
     public static final double BACK_TRIANGLE_RPM = 3100;
@@ -165,17 +165,17 @@ public class ConfigConstants {
     public static final Map<Double, Double> CLOSE_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
         put(7.0, 3.0); //-3
         put(0.0, 0.0); //-3
-        put(-17.0, 1.0); // 0
-        put(-28.0, -2.0); // 0
-        put(-36.0, -3.0); // 2
+        put(-17.0, -1.0); // 0
+        put(-28.0, -3.0); // 0
+        put(-36.0, -4.0); // 2
     }};
 
     public static final Map<Double, Double> FAR_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
-        put(-19.0, -2.5); //-2
-        put(-23.0, -2.5); //-2
-        put(-28.0, -2.5); // -1
+        put(-19.0, -1.5); //-2
+        put(-23.0, -0.5); //-2
+        put(-28.0, -2.0); // -1
         put(-34.0, -2.5); // -1
-        put(-38.0, -3.0); // -1.2
+        put(-38.0, -2.0); // -1.2
     }};
     public static final Map<Double, Double> FAR_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
         put(23.0, -0.5); //-2

@@ -30,16 +30,21 @@ public class Commands {
 
         startIntaking = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.stop()),
-                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new InstantCommand(() -> robot.transfer.unblock()),
+
                 new InstantCommand(() -> robot.shooter.block()),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.intake.unblock()),
-                new InstantCommand(() -> robot.lindexer.leftCenter()));
+                new InstantCommand(() -> robot.lindexer.leftCenter()),
+                new Wait(200),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()));
+
         startLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.block()));
         stopLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.block()),
+                new InstantCommand(() -> robot.transfer.unblock()),
                 new InstantCommand(() -> robot.lindexer.clear()));
 
         shootLindexing = new SequentialCommand(

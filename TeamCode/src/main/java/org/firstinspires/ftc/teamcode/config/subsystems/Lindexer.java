@@ -66,36 +66,40 @@ public class Lindexer {
 
     //Util functions
     public void update(Robot robot) {
-
+        //lindexerColor.update();
 
         if (lindexerState == LindexerState.READY) {
-            lindexerColor.update();
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
 
-                Color ballColor = lindexerColor.getBall();
+                Color ballColor = lindexerColor.getBall(robot);
                 if (ballColor != Color.EMPTY) {
                     if (ballColor == robot.classifier.getNextColor(robot.getMotif()) && centerBall == Color.EMPTY) {
                         robot.transfer.unblock();
                         centerBall = ballColor;
                         lindexerState = LindexerState.NOTREADY;
+                        robot.log("color", "moved ball to center");
                     }
                     else if (ballColor != robot.classifier.getNextColor(robot.getMotif()) || centerBall != Color.EMPTY) {
                         if (lindexerPosition == LindexerPosition.LEFT) {
                             if (centerBall == Color.EMPTY && leftBall != Color.EMPTY) {
                                 clear();
+                                robot.log("color", "cleared");
                             }
                             else {
                                 rightCenter();
+                                robot.log("color", "right");
                             }
-                            rightBall = ballColor;
+                            leftBall = ballColor;
                         } else if (lindexerPosition == LindexerPosition.RIGHT) {
                             if (centerBall == Color.EMPTY && rightBall != Color.EMPTY) {
                                 clear();
+                                robot.log("color", "cleared");
                             }
                             else {
                                 leftCenter();
+                                robot.log("color", "left");
                             }
-                            leftBall = ballColor;
+                            rightBall = ballColor;
                         }
                     }
                 }
@@ -159,7 +163,10 @@ public class Lindexer {
     }
 
     public void moveToNextBall(Color desiredColor) {
-        if (matchesColor(leftBall, desiredColor)) {
+        if (matchesColor(centerBall, desiredColor)){
+            centerBall = Color.EMPTY;
+        }
+        else if (matchesColor(leftBall, desiredColor)) {
             leftBall = Color.EMPTY;
             leftCenter();
 
@@ -167,9 +174,6 @@ public class Lindexer {
         else if (matchesColor(rightBall, desiredColor)) {
             rightBall = Color.EMPTY;
             rightCenter();
-        }
-        else if (matchesColor(centerBall, desiredColor)){
-            centerBall = Color.EMPTY;
         }
         else {
             if (matchesColor(leftBall, Color.BOTH)) {
