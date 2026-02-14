@@ -98,4 +98,7 @@ public class CyclingList {
             return totalTime;
         }
     }
+    public void reset() {
+        values.clear();
+    }
 }

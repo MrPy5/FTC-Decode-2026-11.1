@@ -297,11 +297,9 @@ public class Robot {
         else {
             packet.put("bang", 0);
         }
-        packet.put("left", shooter.getShooterMotorLeft().getCurrent());
-        packet.put("right", shooter.getShooterMotorRight().getCurrent());
-        packet.put("colorg", lindexer.getLindexerColor().getColorGreen());
-        packet.put("colorr", lindexer.getLindexerColor().getColorRed());
-       // packet.put("dist", lindexer.getLindexerColor().getDistance());
+
+     /*   packet.put("dist", lindexer.getLindexerColor().getDistance());
+        packet.put("hue", lindexer.getLindexerColor().getHue());*/
        // packet.put("volt", transfer.getTransferMotor().getCurrent());
 
     }

@@ -59,14 +59,17 @@ public class Lindexer {
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
 
 
-        lindexerColor = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT), hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT));
+        lindexerColor = new ArtifactSensor(null, hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT));
 
 
     }
 
     //Util functions
     public void update(Robot robot) {
+
+
         if (lindexerState == LindexerState.READY) {
+            lindexerColor.update();
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
 
                 Color ballColor = lindexerColor.getBall();
@@ -167,8 +170,17 @@ public class Lindexer {
         }
         else if (matchesColor(centerBall, desiredColor)){
             centerBall = Color.EMPTY;
-            clear();
+        }
+        else {
+            if (matchesColor(leftBall, Color.BOTH)) {
+                leftBall = Color.EMPTY;
+                leftCenter();
 
+            }
+            else {
+                rightBall = Color.EMPTY;
+                rightCenter();
+            }
         }
 
     }
@@ -224,5 +236,9 @@ public class Lindexer {
             balls += 1;
         }
         return balls;
+    }
+
+    public LindexerState getLindexerState() {
+        return lindexerState;
     }
 }

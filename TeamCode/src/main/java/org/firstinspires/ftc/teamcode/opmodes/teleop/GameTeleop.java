@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
 import org.firstinspires.ftc.teamcode.config.Storage;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
+import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
@@ -28,8 +29,11 @@ public class GameTeleop extends LinearOpMode {
             FtcDashboard dashboard = FtcDashboard.getInstance();
             dashboard.setTelemetryTransmissionInterval(50);
 
+            CyclingList loopTimes = new CyclingList(5);
+            ElapsedTime loopTimer = new ElapsedTime();
+
             //Create new robot instance
-            Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), Storage.getStoredFollower(), gamepad1, gamepad2, telemetry, dashboard);
+            Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), null, gamepad1, gamepad2, telemetry, dashboard);
 
             Gamepad c1, c2; // Creates gamepads
 
@@ -52,6 +56,7 @@ public class GameTeleop extends LinearOpMode {
             robot.startTeleop();
 
             while (opModeIsActive()) {
+                loopTimer.reset();
                 //Pull new gamepad values and freeze state
                 robot.updateGamepads();
                 c1 = robot.getC1();
@@ -84,6 +89,9 @@ public class GameTeleop extends LinearOpMode {
 
                     if (motifMode) {
                         robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
+                    }
+                    else {
+                        robot.transfer.unblock();
                     }
 
                 }
@@ -119,16 +127,15 @@ public class GameTeleop extends LinearOpMode {
 
                     if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
                         if (robot.scheduler.isIdle()) {
-                            if (motifMode) {
+                            if (motifMode && robot.lindexer.numOfBalls() > 0) {
                                 robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
-                            } else {
+                            }
+                            if (!motifMode) {
                                 robot.transfer.intakeTransfer();
                             }
-                            robot.shooter.setShooting(true);
                         }
                     }
                     else {
-                        robot.shooter.setShooting(false);
                         if (!motifMode) {
                             robot.transfer.stop();
                         }
@@ -184,7 +191,14 @@ public class GameTeleop extends LinearOpMode {
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
-                telemetry.addData("position", robot.lindexer.getLindexerPosition());
+                loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
+
+
+                telemetry.addData("loopTime", loopTimes.average());
+                telemetry.addData("c", robot.tagCamera.combined());
+                telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
+               /* telemetry.addData("nextBall", robot.classifier.getNextColor(robot.getMotif()));
+                telemetry.addData("motifMode", motifMode);
                 telemetry.addData("left", robot.lindexer.getLeftBall());
                 telemetry.addData("center", robot.lindexer.getCenterBall());
                 telemetry.addData("right", robot.lindexer.getRightBall());
@@ -192,9 +206,8 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("ready", robot.shooter.getShooterState());
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
-                telemetry.addData("motifMode", motifMode);
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
 
                 telemetry.update();
 

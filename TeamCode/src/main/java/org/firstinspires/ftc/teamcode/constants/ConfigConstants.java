@@ -99,7 +99,7 @@ public class ConfigConstants {
     public static final double LEFT_LIN_OUT = 0.625;
     public static final double RIGHT_LIN_IN = 0.695;
     public static final double RIGHT_LIN_OUT = 0.46;
-    public static final double MOVE_MILLISECONDS = 500;
+    public static final double MOVE_MILLISECONDS = 300;
 
 
         //Transfer
@@ -121,7 +121,7 @@ public class ConfigConstants {
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
-    public static final double NEAR_VS_FAR = 90; //
+    public static final double NEAR_VS_FAR = 100; //
 
     public static final double FURTHEST_DIST = 124;
     public static final double FURTHEST_RPM = 3200;
@@ -130,10 +130,10 @@ public class ConfigConstants {
     public static final double BACK_TRIANGLE_RPM = 3100;
 
     public static final double FAR_FRONT_TRAINGLE_DIST = 85;
-    public static final double FAR_FRONT_TRIANGLE_RPM = 2800;
+    public static final double FAR_FRONT_TRIANGLE_RPM = 2700;
 
     public static final double MID_FRONT_TRIANGLE_DIST = 70;
-    public static final double MID_FRONT_TRIANGLE_RPM = 2600;
+    public static final double MID_FRONT_TRIANGLE_RPM = 2650;
 
     public static final double FRONT_TRIANGLE_DIST = 50;
     public static final double FRONT_TRIANGLE_RPM = 2500;
@@ -156,16 +156,16 @@ public class ConfigConstants {
     public static final double TAG_DEGREE_TOLERANCE = 0.7; //aligns to april tag within .7 degrees
 
     public static final Map<Double, Double> CLOSE_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
-        put(-7.0, -3.0); //-3
-        put(0.0, -1.5); //-3
-        put(17.0, 0.0); // 0
-        put(28.0, 1.0); // 0
-        put(36.0, 2.0); // 2
+        put(-7.0, -1.0); //-3
+        put(0.0, 0.0); //-3
+        put(17.0, 0.5); // 0
+        put(28.0, 2.0); // 0
+        put(36.0, 4.0); // 2
     }};
     public static final Map<Double, Double> CLOSE_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
         put(7.0, 3.0); //-3
         put(0.0, 0.0); //-3
-        put(-17.0, -1.0); // 0
+        put(-17.0, 1.0); // 0
         put(-28.0, -2.0); // 0
         put(-36.0, -3.0); // 2
     }};

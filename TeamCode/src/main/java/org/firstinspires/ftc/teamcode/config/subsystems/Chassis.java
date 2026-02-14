@@ -116,13 +116,13 @@ public class Chassis {
 
                     firstTurn = false;
                     if (noSticks) {
-                        if (turnCompleted && turnTimer.milliseconds() > 200) {
+                        if (turnCompleted && turnTimer.milliseconds() > 0) {
                             targetHeading = robot.follower.getHeading() + Math.toRadians(degrees);
                             turnCompleted = false;
                             turnTimer.reset();
                         }
                     } else {
-                        targetHeading = robot.follower.getHeading() + Math.toRadians(degrees);
+                        targetHeading = robot.follower.getHeading() + (Math.toRadians(degrees) * 1.3);
                     }
 
 
