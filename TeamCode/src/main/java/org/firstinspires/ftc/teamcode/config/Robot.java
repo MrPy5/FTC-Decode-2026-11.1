@@ -161,7 +161,7 @@ public class Robot {
 
     }
     public void startAuto(Consumer<Robot> buildPaths, Pose startPose) {
-       tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
         follower.setStartingPose(startPose);
 
         buildPaths.accept(this);

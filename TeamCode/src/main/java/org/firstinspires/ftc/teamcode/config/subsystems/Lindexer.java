@@ -81,7 +81,7 @@ public class Lindexer {
                     }
                     else if (ballColor != robot.classifier.getNextColor(robot.getMotif()) || centerBall != Color.EMPTY) {
                         if (lindexerPosition == LindexerPosition.LEFT) {
-                            if (centerBall == Color.EMPTY && leftBall != Color.EMPTY) {
+                            if (rightBall != Color.EMPTY) {
                                 clear();
                                 robot.log("color", "cleared");
                             }
@@ -91,7 +91,7 @@ public class Lindexer {
                             }
                             leftBall = ballColor;
                         } else if (lindexerPosition == LindexerPosition.RIGHT) {
-                            if (centerBall == Color.EMPTY && rightBall != Color.EMPTY) {
+                            if (leftBall != Color.EMPTY) {
                                 clear();
                                 robot.log("color", "cleared");
                             }

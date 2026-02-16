@@ -145,7 +145,7 @@ class LocalizationTest extends OpMode {
 
     @Override
     public void start() {
-        follower.startTeleopDrive();
+        //follower.startTeleopDrive();
         follower.update();
     }
 
@@ -155,7 +155,7 @@ class LocalizationTest extends OpMode {
      */
     @Override
     public void loop() {
-        follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+       // follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
         follower.update();
 
         telemetryM.debug("x:" + follower.getPose().getX());

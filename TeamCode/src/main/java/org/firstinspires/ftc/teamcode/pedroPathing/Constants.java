@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
@@ -14,28 +16,29 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
-
+@Configurable
+@Config
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(8.754)
-            .forwardZeroPowerAcceleration(-58.26890)
-            .lateralZeroPowerAcceleration(-34.39833)
+            .mass(10.9)
+            .forwardZeroPowerAcceleration(-25.74251)
+            .lateralZeroPowerAcceleration(-59.60297)
 
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.06, 0, 0.01, 0.05))
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.09, 0, 0.005, 0.05))
-            .useSecondaryTranslationalPIDF(true)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0, 0.01, 0.01))
+           // .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.09, 0, 0.005, 0.05))
+           // .useSecondaryTranslationalPIDF(true)
 
-            .headingPIDFCoefficients(new PIDFCoefficients(0.7, 0, 0.005, 0.08))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.025, 0.07))
-            .useSecondaryHeadingPIDF(true)
+            .headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.08, 0.01))
+           // .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.025, 0.07))
+           // .useSecondaryHeadingPIDF(true)
 
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025, 0, 0.00001, 0.6, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015, 0, 0.00001, 0.6, 0.01))
 
             .automaticHoldEnd(true)
             .turnHeadingErrorThreshold(0.02)
-            .centripetalScaling(0.0007);
+            .centripetalScaling(0.0000000005);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.9, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .useBrakeModeInTeleOp(ConfigConstants.USE_BRAKE_MODE)
@@ -48,8 +51,10 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(71.18228)
-            .yVelocity(84.98774);
+            .xVelocity(86.60169)
+
+            .yVelocity(68.28731);
+
 
 
     public static PinpointConstants localizerConstants = new PinpointConstants()

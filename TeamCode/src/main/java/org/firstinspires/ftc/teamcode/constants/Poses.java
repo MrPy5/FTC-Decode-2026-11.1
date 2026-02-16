@@ -5,26 +5,27 @@ import com.pedropathing.geometry.Pose;
 public class Poses {
     public static final Pose startPoseBlueFar = new Pose(-67, 14.5, 0); // Start Pose of our robot.
     public static final Pose startPoseRedFar = new Pose(-66.6, -15.7, 0); // Start Pose of our robot.
-    public static final Pose startPoseBlueClose = new Pose(37.75, 56, Math.toRadians(0)); // Start Pose of our robot.
+    public static final Pose startPoseBlueClose = new Pose(122.14, 114.2, (0.896)); // Start Pose of our robot.
     public static final Pose startPoseRedClose = new Pose(39.5, -54, Math.toRadians(0)); // Start Pose of our robot.
 
-    public static final Pose detectPoseBlue = new Pose(25, 25.5, Math.toRadians(-23)); // Start Pose of our robot.
+    public static final Pose detectPoseBlue = new Pose(80, 90, Math.toRadians(-15)); // Start Pose of our robot.
     public static final Pose detectPoseRed = new Pose(23, -25.6, Math.toRadians(23)); // Start Pose of our robot.
 
     public static final Pose shootPoseRedFar = new Pose(-60, -16, Math.toRadians(-20)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose shootPoseBlueFar = new Pose(-60, 16, Math.toRadians(20)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose shootPoseBlueClose = new Pose(9.2, 13, Math.toRadians(46));
+    public static final Pose shootPoseBlueClose = new Pose(77.81, 74.55, 0.85);
+    public static final Pose parkPoseBlueClose = new Pose(95, 83, Math.toRadians(0)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose shootPoseRedClose = new Pose(16, -15.5, Math.toRadians(-46));
 
-    public static final Pose endShootPoseBlue = new Pose(25, 9, Math.toRadians(54));
+    public static final Pose endShootPoseBlue = new Pose(80, 74.55, 0.92);
     public static final Pose endShootPoseRed = new Pose(25, -9, Math.toRadians(-54));
 
 
     public static final Pose gateTurn1Red = new Pose(-2, -45, Math.toRadians(0));
     public static final Pose gatePush1Red = new Pose(-2, -57, Math.toRadians(0));
 
-    public static final Pose gateTurn1Blue = new Pose(-1, 45, Math.toRadians(0));
-    public static final Pose gatePush1Blue = new Pose(-1, 57, Math.toRadians(0));
+    public static final Pose gateTurn1Blue = new Pose(70, 120, Math.toRadians(0));
+    public static final Pose gatePush1Blue = new Pose(70, 130, Math.toRadians(0));
 
     public static final Pose gateTurn2Red = new Pose(-2, -45, Math.toRadians(180));
     public static final Pose gatePush2Red = new Pose(-2, -57, Math.toRadians(180));
@@ -33,15 +34,15 @@ public class Poses {
     public static final Pose gatePush2Blue = new Pose(-2, 57, Math.toRadians(180));
 
     //close
-    public static final Pose spike1PoseBlue = new Pose(7.5, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike1EndPoseBlue = new Pose(7.5, 53, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike1PoseBlue = new Pose(78.78, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike1EndPoseBlue = new Pose(78.78, 125, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose spike2PoseBlue = new Pose(-16.5, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike2EndPoseBlue = new Pose(-16.5, 53, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike2PoseBlue = new Pose(54, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike2EndPoseBlue = new Pose(54, 123, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose spike2BezierPoseBlue = new Pose(-25, 0, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose spike3PoseBlue = new Pose(-41, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike3EndPoseBlue = new Pose(-41, 53, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike3PoseBlue = new Pose(31, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike3EndPoseBlue = new Pose(31, 123, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose tunnelPoseBlue = new Pose(-22, 61, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose tunnelPoseRed = new Pose(-22, -61, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
@@ -84,7 +85,6 @@ public class Poses {
     public static final Pose parkPoseBlueFar = new Pose(-52, 22, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose parkPoseRedFar = new Pose(-50, -23, Math.toRadians(-90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose parkPoseRedClose = new Pose(30, -12, Math.toRadians(-54)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose parkPoseBlueClose = new Pose(32, 16, Math.toRadians(54)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
     public static final Pose hpPoseRed = new Pose(-66.8, -60, Math.toRadians(-90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose hpPoseBlue = new Pose(-66.5, 59.5, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.

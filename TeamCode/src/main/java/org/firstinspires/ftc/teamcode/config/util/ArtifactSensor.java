@@ -31,7 +31,7 @@ public class ArtifactSensor {
     }
     public void update() {
        // hue = getHue();
-       distance = getDistance();
+       //distance = getDistance();
     }
     public double getDistance() {
         return colorSensorTwo.getDistance(DistanceUnit.CM);
@@ -54,7 +54,7 @@ public class ArtifactSensor {
 
         distance = getDistance();
 
-        if (distance < 3.4 && (ballTimer.milliseconds() > 50  || !ballTimerStarted)) {
+        if (distance < 3 && (ballTimer.milliseconds() > 50  || !ballTimerStarted)) {
             if (!ballTimerStarted) {
                 ballTimer.reset();
                 ballTimerStarted = true;

@@ -16,7 +16,7 @@ public class ConfigConstants {
     //DEBUG
     public static final boolean LOGGING = true;
     public static final boolean DRAWING = true;
-    public static final boolean DASHBOARD = false;
+    public static final boolean DASHBOARD = true;
 
     //Names
     public static final String BACK_LEFT = "BL";

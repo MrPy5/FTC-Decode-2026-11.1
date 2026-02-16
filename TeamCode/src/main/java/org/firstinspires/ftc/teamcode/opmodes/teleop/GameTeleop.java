@@ -33,11 +33,12 @@ public class GameTeleop extends LinearOpMode {
             ElapsedTime loopTimer = new ElapsedTime();
 
             //Create new robot instance
-            Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), null, gamepad1, gamepad2, telemetry, dashboard);
+            Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), Storage.getStoredFollower(), gamepad1, gamepad2, telemetry, dashboard);
 
             Gamepad c1, c2; // Creates gamepads
 
             boolean motifMode = false;
+            boolean holdPoint = false;
 
 
             //reset follower back to full speed
@@ -128,7 +129,7 @@ public class GameTeleop extends LinearOpMode {
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if (c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                    if (c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
                                 robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
@@ -147,14 +148,24 @@ public class GameTeleop extends LinearOpMode {
 
                 }
 
+                if (c1.touchpadWasPressed()) {
+                    holdPoint = !holdPoint;
+
+                    if (holdPoint) {
+                        robot.follower.holdPoint(robot.follower.getPose());
+                    }
+                }
                 //Driving code
-                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
-                robot.follower.setTeleOpDrive(
-                        drivePowers[0],
-                        drivePowers[1],
-                        drivePowers[2],
-                        true // Robot Centric NOT field centric
-                );
+                if (!holdPoint) {
+                    double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
+                    robot.follower.setTeleOpDrive(
+                            drivePowers[0],
+                            drivePowers[1],
+                            drivePowers[2],
+                            true // Robot Centric NOT field centric
+                    );
+                }
+
 
                 //Manual Stuff for Controller 2
                 if (c2.dpadDownWasPressed()) {
