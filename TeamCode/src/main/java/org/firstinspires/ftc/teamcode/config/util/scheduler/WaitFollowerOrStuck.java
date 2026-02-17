@@ -16,7 +16,7 @@ public class WaitFollowerOrStuck extends Command {
 
     @Override
     public void update(double time) {
-        if (!follower.isBusy() || follower.isRobotStuck() || (follower.getVelocity().getXComponent() < 0.25 && follower.getVelocity().getYComponent() < 0.25)) finished = true;
+        if (!follower.isBusy() || follower.isRobotStuck() || (follower.getVelocity().getXComponent() < 0.05 && follower.getVelocity().getYComponent() < 0.05)) finished = true;
     }
 
     @Override

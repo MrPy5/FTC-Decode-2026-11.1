@@ -111,6 +111,11 @@ public class ClosePaths {
         driveToSpike2 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, spike2Pose))
                 .setConstantHeadingInterpolation(spike2Pose.getHeading())
+               /* .setHeadingInterpolation(HeadingInterpolator.piecewise(
+                        new HeadingInterpolator.PiecewiseNode(0, 0.5, HeadingInterpolator.tangent),
+                        new HeadingInterpolator.PiecewiseNode(0.5, 1, HeadingInterpolator.constant(spike2Pose.getHeading()))
+                ))
+                              */
                 .setTValueConstraint(0.8)
                 .build();
 
@@ -143,6 +148,7 @@ public class ClosePaths {
         spike1ToGateTurn = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike1EndPose, gateTurn1Pose))
                 .setLinearHeadingInterpolation(spike1EndPose.getHeading(), gateTurn1Pose.getHeading())
+                .setTValueConstraint(0.8)
                 .build();
         gateTurnToGatePush1 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(gateTurn1Pose, gatePush1Pose))

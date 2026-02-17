@@ -195,6 +195,55 @@ public class Chassis {
         }
 
     }
+    public double inchesAwayPinpoint(Robot robot) {
+        double x = robot.follower.getPose().getX();
+        double y = robot.follower.getPose().getY();
+        return Math.sqrt((((140 - x) * (140 - x))   + ((140 - y) * (140 - y))));
+    }
+    public double degreesAwayPinpoint(Robot robot) {
+        double x = robot.follower.getPose().getX();
+        double y = robot.follower.getPose().getY();
+        return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+    }
+    public double turnPowerWithPinpoint(Robot robot) {
+
+
+        if (!justLetGoOfStick) {
+            double degrees = degreesAwayPinpoint(robot);
+
+
+            targetHeading = Math.toRadians(degrees);
+
+
+
+
+
+
+            double error = getHeadingError(robot);
+            double sign = error / Math.abs(error);
+            double kd = ConfigConstants.TURN_kD;
+            double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
+            double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
+            powerError += boost;
+            double degreeError = Math.toDegrees(error);
+            double clampedPowerError = clamp(powerError, -0.8, 0.8);
+            if (Math.abs(clampedPowerError) < 0.07) {
+                clampedPowerError = 0.07 * sign;
+            }
+
+            if (Math.abs(degreeError) < 0.5) {
+                return 0;
+            }
+            else {
+                return clampedPowerError * getVoltageMultiplier();
+            }
+        }
+        else {
+            return 0;
+        }
+
+    }
+
     public double getHeadingError(Robot robot) {
         double headingError = MathFunctions.getTurnDirection(robot.follower.getPose().getHeading(), targetHeading) * MathFunctions.getSmallestAngleDifference(robot.follower.getPose().getHeading(), targetHeading);
         return headingError;
@@ -239,8 +288,12 @@ public class Chassis {
         if (robot.getRobotState() == Robot.RobotState.SHOOT) {
 
             if (Math.abs(c1.right_stick_x) <= ConfigConstants.STICK_AT_ZERO_DISTANCE) {
-
-                turnPower = turnPower(robot, robot.tagCamera);
+                if (robot.usePinpoint) {
+                    turnPower = turnPowerWithPinpoint(robot);
+                }
+                else {
+                    turnPower = turnPower(robot, robot.tagCamera);
+                }
 
             }
         }

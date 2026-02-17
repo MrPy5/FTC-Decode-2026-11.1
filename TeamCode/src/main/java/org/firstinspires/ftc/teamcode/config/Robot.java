@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.CommandScheduler;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -72,6 +73,7 @@ public class Robot {
 
     private RobotState robotState;
     private ElapsedTime gameTimer = new ElapsedTime();
+    public boolean usePinpoint = false;
 
     public Robot(HardwareMap hardwareMap, Gamepad g1, Gamepad g2) {
         this(hardwareMap, OpMode.TELEOP, null, null, null, g1, g2, null, null);
@@ -113,7 +115,7 @@ public class Robot {
         lindexer = new Lindexer(hardwareMap);
         chassis = new Chassis(hardwareMap);
 
-        tagCamera = new TagCamera(hardwareMap);
+
 
         commands = new Commands(this);
 
@@ -123,6 +125,36 @@ public class Robot {
 
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
+        tagCamera = new TagCamera(hardwareMap);
+        while (tagCamera.getVisionPortal().getCameraState() != VisionPortal.CameraState.STREAMING || !tagCamera.getVisionPortal().getProcessorEnabled(tagCamera.getAprilTag())) {
+
+            telemetry.addData("waiting", "...");
+            telemetry.update();
+
+        }
+
+        ElapsedTime fpsWaitTimer = new ElapsedTime();
+        while (fpsWaitTimer.milliseconds() < 500) {
+            telemetry.addData("Waiting for frames", "%.1f ms", fpsWaitTimer.milliseconds());
+            telemetry.update();
+        }
+
+        if (tagCamera.getFPS() == 0) {
+            telemetry.addData("FPS Issue", "Reinstalling camera...");
+            telemetry.update();
+
+            tagCamera.getVisionPortal().close();
+
+            ElapsedTime reinstallTimer = new ElapsedTime();
+            while (reinstallTimer.milliseconds() < 500) {
+                // Just wait, but don't burn CPU
+                telemetry.addData("Closing", "%.1f ms", reinstallTimer.milliseconds());
+                telemetry.update();
+            }
+
+            tagCamera.reinstall();
         }
     }
 
@@ -157,6 +189,9 @@ public class Robot {
         telemetry.addData("Alliance: ", getAlliance());
 
         telemetry.addData("Tag FPS: ", tagCamera.getFPS());
+        telemetry.addData("state", tagCamera.getState());
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
 
 
     }
@@ -229,6 +264,7 @@ public class Robot {
     public void update() {
         shooter.update(this);
         lindexer.update(this);
+        intake.update(this);
         follower.update();
         transfer.update(getRobotState());
         tagCamera.processDetections(tagCamera.getDetections(), this);
@@ -313,6 +349,11 @@ public class Robot {
         if (ConfigConstants.LOGGING) {
             Log.d(tag, message);
         }
+    }
+
+    public void stop() {
+        tagCamera.getVisionPortal().close();
+        Storage.cleanup(alliance, motif, follower);
     }
 
 

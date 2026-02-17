@@ -50,6 +50,7 @@ public class TagCamera {
                 .setDrawTagOutline(ConfigConstants.DRAWING)
                 .setDrawAxes(ConfigConstants.DRAWING)
                 .setDrawCubeProjection(ConfigConstants.DRAWING)
+
                 .build();
 
         visionPortal = new VisionPortal.Builder()
@@ -59,6 +60,33 @@ public class TagCamera {
                 .addProcessor(aprilTag)
                 .enableLiveView(false)
                 .setShowStatsOverlay(false)
+                .setAutoStopLiveView(true)
+                .build();
+    }
+    public void reinstall() {
+        Position cameraPosition = new Position(DistanceUnit.INCH,
+                0, 0, 0, 0);
+        YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
+                0, -73.3, 0, 0);
+        aprilTag = new AprilTagProcessor.Builder()
+                .setCameraPose(cameraPosition, cameraOrientation)
+                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+                .setLensIntrinsics(902.235, 902.235, 633.041, 378.356)
+                .setDrawTagID(ConfigConstants.DRAWING)
+                .setDrawTagOutline(ConfigConstants.DRAWING)
+                .setDrawAxes(ConfigConstants.DRAWING)
+                .setDrawCubeProjection(ConfigConstants.DRAWING)
+
+                .build();
+
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, ConfigConstants.ARDUCAM))
+                .setCameraResolution(new Size(1280, 720))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .addProcessor(aprilTag)
+                .enableLiveView(false)
+                .setShowStatsOverlay(false)
+                .setAutoStopLiveView(true)
                 .build();
     }
 
@@ -154,4 +182,7 @@ public class TagCamera {
         return degreesAway(0) - faceAngle();
     }
 
+    public AprilTagProcessor getAprilTag() {
+        return aprilTag;
+    }
 }

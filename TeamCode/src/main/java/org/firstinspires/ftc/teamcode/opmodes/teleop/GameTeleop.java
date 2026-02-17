@@ -13,12 +13,16 @@ import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
 import org.firstinspires.ftc.teamcode.config.Storage;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
+import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
+//shooting
+//turn button
+//turning could be faster
 
 @TeleOp(name="Game Teleop")
 public class GameTeleop extends LinearOpMode {
@@ -38,7 +42,7 @@ public class GameTeleop extends LinearOpMode {
             Gamepad c1, c2; // Creates gamepads
 
             boolean motifMode = false;
-            boolean holdPoint = false;
+            boolean startedShooting = false;
 
 
             //reset follower back to full speed
@@ -69,6 +73,10 @@ public class GameTeleop extends LinearOpMode {
                 //Switching modes between intake and shoot
                     //Shoot
                 boolean psPressed = c1.psWasPressed();
+                if (c1.rightTriggerWasPressed()) {
+                    robot.intake.lift();
+                    robot.shooter.unblock();
+                }
                 if ((psPressed || c1.rightBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
@@ -124,12 +132,17 @@ public class GameTeleop extends LinearOpMode {
                     robot.shooter.increaseManualRPMAdjustment();
                 }
 
-
-                robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range());
+                if (robot.usePinpoint) {
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot));
+                }
+                else {
+                    robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range());
+                }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if (c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting)) {
+                        startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
                                 robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
@@ -140,6 +153,7 @@ public class GameTeleop extends LinearOpMode {
                         }
                     }
                     else {
+                        startedShooting = false;
                         if (!motifMode) {
                             robot.transfer.stop();
                         }
@@ -148,23 +162,16 @@ public class GameTeleop extends LinearOpMode {
 
                 }
 
-                if (c1.touchpadWasPressed()) {
-                    holdPoint = !holdPoint;
 
-                    if (holdPoint) {
-                        robot.follower.holdPoint(robot.follower.getPose());
-                    }
-                }
                 //Driving code
-                if (!holdPoint) {
-                    double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
-                    robot.follower.setTeleOpDrive(
-                            drivePowers[0],
-                            drivePowers[1],
-                            drivePowers[2],
-                            true // Robot Centric NOT field centric
-                    );
-                }
+
+                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
+                robot.follower.setTeleOpDrive(
+                        drivePowers[0],
+                        drivePowers[1],
+                        drivePowers[2],
+                        true // Robot Centric NOT field centric
+                );
 
 
                 //Manual Stuff for Controller 2
@@ -199,6 +206,10 @@ public class GameTeleop extends LinearOpMode {
                     robot.lindexer.clear();
                 }
 
+                if (c1.touchpadWasPressed()) {
+                    robot.usePinpoint = !robot.usePinpoint;
+                }
+
 
 
 
@@ -208,28 +219,33 @@ public class GameTeleop extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
 
 
-                telemetry.addData("loopTime", loopTimes.average());
+
+                telemetry.addData("x", robot.follower.getPose().getX());
+                telemetry.addData("y", robot.follower.getPose().getY());
+                telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
+                telemetry.addData("ardu", robot.tagCamera.range());
+                telemetry.addData("pinpoint", robot.chassis.inchesAwayPinpoint(robot));
               //  telemetry.addData("@", Math.toDegrees(robot.chassis.getHeadingError(robot)));
                // telemetry.addData("ready", robot.lindexer.getLindexerState());
                 //telemetry.addData("c", robot.tagCamera.combined());
                 //telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
-                telemetry.addData("nextBall", robot.classifier.getNextColor(robot.getMotif()));
-               // telemetry.addData("motifMode", motifMode);
-                telemetry.addData("left", robot.lindexer.getLeftBall());
-                telemetry.addData("center", robot.lindexer.getCenterBall());
-                telemetry.addData("right", robot.lindexer.getRightBall());
-               /* telemetry.addLine();
+            //    telemetry.addData("nextBall", robot.classifier.getNextColor(robot.getMotif()));
+                telemetry.addData("motifMode", motifMode);
+             //   telemetry.addData("left", robot.lindexer.getLeftBall());
+             //   telemetry.addData("center", robot.lindexer.getCenterBall());
+             //   telemetry.addData("right", robot.lindexer.getRightBall());
+               /* telemetry.addLine();*/
                 telemetry.addData("ready", robot.shooter.getShooterState());
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
 
                 telemetry.update();
 
             }
 
-            Storage.cleanup(robot.getAlliance(), robot.getMotif(), robot.getFollower());
+            robot.stop();
 
         }
 }

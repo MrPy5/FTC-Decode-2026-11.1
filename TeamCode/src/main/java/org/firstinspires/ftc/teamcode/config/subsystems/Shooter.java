@@ -163,6 +163,10 @@ public class Shooter {
             lastRPM = ConfigConstants.BACK_TRIANGLE_RPM;
             return ConfigConstants.BACK_TRIANGLE_RPM;
         }
+        else if (range > ConfigConstants.FARTHEST_FRONT_DIST) {
+            lastRPM = ConfigConstants.FARTHERST_FRONT_RPM;
+            return ConfigConstants.FARTHERST_FRONT_RPM;
+        }
         else if (range > ConfigConstants.FAR_FRONT_TRAINGLE_DIST) {
             lastRPM = ConfigConstants.FAR_FRONT_TRIANGLE_RPM;
             return ConfigConstants.FAR_FRONT_TRIANGLE_RPM;

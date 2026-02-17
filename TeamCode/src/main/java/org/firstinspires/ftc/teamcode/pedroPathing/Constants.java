@@ -24,7 +24,7 @@ public class Constants {
             .forwardZeroPowerAcceleration(-25.74251)
             .lateralZeroPowerAcceleration(-59.60297)
 
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0, 0.01, 0.01))
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0, 0.015, 0.01))
            // .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.09, 0, 0.005, 0.05))
            // .useSecondaryTranslationalPIDF(true)
 
@@ -32,7 +32,7 @@ public class Constants {
            // .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.025, 0.07))
            // .useSecondaryHeadingPIDF(true)
 
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015, 0, 0.00001, 0.6, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.00001, 0.6, 0.01))
 
             .automaticHoldEnd(true)
             .turnHeadingErrorThreshold(0.02)
@@ -52,7 +52,6 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(86.60169)
-
             .yVelocity(68.28731);
 
 

@@ -88,7 +88,7 @@ public class ConfigConstants {
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
     public static final double INTAKE_LIFT = 0.1;
-    public static final double INTAKE_DROP = 0.3;
+    public static final double INTAKE_DROP = 0.5;
 
         //Intake Blocker
     public static final double INTAKE_BLOCK = 0.4;
@@ -97,8 +97,8 @@ public class ConfigConstants {
         //Lindexer
     public static final double LEFT_LIN_IN = 0.37;
     public static final double LEFT_LIN_OUT = 0.625;
-    public static final double RIGHT_LIN_IN = 0.695;
-    public static final double RIGHT_LIN_OUT = 0.46;
+    public static final double RIGHT_LIN_IN = 0.65;
+    public static final double RIGHT_LIN_OUT = 0.355;
     public static final double MOVE_MILLISECONDS = 300;
 
 
@@ -121,13 +121,16 @@ public class ConfigConstants {
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
-    public static final double NEAR_VS_FAR = 100; //
+    public static final double NEAR_VS_FAR = 110; //
 
     public static final double FURTHEST_DIST = 128;
-    public static final double FURTHEST_RPM = 3300;
+    public static final double FURTHEST_RPM = 3200;
 
-    public static final double BACK_TRIANGLE_DIST = 100;
+    public static final double BACK_TRIANGLE_DIST = 110;
     public static final double BACK_TRIANGLE_RPM = 3100;
+
+    public static final double FARTHEST_FRONT_DIST = 95;
+    public static final double FARTHERST_FRONT_RPM = 2800;
 
     public static final double FAR_FRONT_TRAINGLE_DIST = 85;
     public static final double FAR_FRONT_TRIANGLE_RPM = 2700;
@@ -173,7 +176,7 @@ public class ConfigConstants {
     public static final Map<Double, Double> FAR_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
         put(-19.0, -1.5); //-2
         put(-23.0, -0.5); //-2
-        put(-28.0, -2.0); // -1
+        put(-28.0, -1.0); // -1
         put(-34.0, -2.5); // -1
         put(-38.0, -2.0); // -1.2
     }};
