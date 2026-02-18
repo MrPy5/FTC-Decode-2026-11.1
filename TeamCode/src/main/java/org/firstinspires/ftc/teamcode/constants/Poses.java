@@ -25,7 +25,7 @@ public class Poses {
     public static final Pose gatePush1Red = new Pose(-2, -57, Math.toRadians(0));
 
     public static final Pose gateTurn1Blue = new Pose(69, 118, Math.toRadians(0));
-    public static final Pose gatePush1Blue = new Pose(69, 125, Math.toRadians(0));
+    public static final Pose gatePush1Blue = new Pose(69, 127, Math.toRadians(0));
 
     public static final Pose gateTurn2Red = new Pose(-2, -45, Math.toRadians(180));
     public static final Pose gatePush2Red = new Pose(-2, -57, Math.toRadians(180));
@@ -35,10 +35,10 @@ public class Poses {
 
     //close
     public static final Pose spike1PoseBlue = new Pose(78.78, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike1EndPoseBlue = new Pose(78.78, 125, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike1EndPoseBlue = new Pose(78.78, 120, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose spike2PoseBlue = new Pose(55, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike2EndPoseBlue = new Pose(55, 125, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike2EndPoseBlue = new Pose(55, 127, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose spike2BezierPoseBlue = new Pose(-25, 0, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose spike3PoseBlue = new Pose(31, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.

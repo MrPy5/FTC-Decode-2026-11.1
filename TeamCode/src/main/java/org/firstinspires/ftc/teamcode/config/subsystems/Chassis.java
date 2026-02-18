@@ -150,20 +150,18 @@ public class Chassis {
                 }
             }
 
-            if (tagCamera.hasTag()) {
+            if (tagCamera.hasTag() && tagCamera.tagValid(robot)) {
 
-                    firstTurn = false;
-                    if (noSticks) {
-                        if (turnCompleted && turnTimer.milliseconds() > 0) {
-                            targetHeading = robot.follower.getHeading() + Math.toRadians(degrees);
-                            turnCompleted = false;
-                            turnTimer.reset();
-                        }
-                    } else {
-                        targetHeading = robot.follower.getHeading() + (Math.toRadians(degrees) * 1.3);
+                firstTurn = false;
+                if (noSticks) {
+                    if (turnCompleted && turnTimer.milliseconds() > 0) {
+                        targetHeading = robot.follower.getHeading() + Math.toRadians(degrees);
+                        turnCompleted = false;
+                        turnTimer.reset();
                     }
-
-
+                } else {
+                    targetHeading = robot.follower.getHeading() + (Math.toRadians(degrees) * 1.3);
+                }
             }
 
             double error = getHeadingError(robot);
@@ -173,9 +171,9 @@ public class Chassis {
             double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
             powerError += boost;
             double degreeError = Math.toDegrees(error);
-            double clampedPowerError = clamp(powerError, -0.8, 0.8);
-            if (Math.abs(clampedPowerError) < 0.07) {
-                clampedPowerError = 0.07 * sign;
+            double clampedPowerError = clamp(powerError, -1, 1);
+            if (Math.abs(clampedPowerError) < 0.06) {
+                clampedPowerError = 0.06 * sign;
             }
 
             if (Math.abs(degreeError) < 1 && !turnCompleted) {
@@ -187,7 +185,7 @@ public class Chassis {
                 return 0;
             }
             else {
-                return clampedPowerError * getVoltageMultiplier();
+                return clampedPowerError;
             }
         }
         else {
@@ -235,7 +233,7 @@ public class Chassis {
                 return 0;
             }
             else {
-                return clampedPowerError * getVoltageMultiplier();
+                return clampedPowerError;
             }
         }
         else {
@@ -278,7 +276,7 @@ public class Chassis {
             noSticks = false;
         }
 
-        if (justLetGoOfStick && justLetGoOfStickTimer.milliseconds() > 200) {
+        if (justLetGoOfStick && justLetGoOfStickTimer.milliseconds() > 0) {
             justLetGoOfStick = false;
             turnCompleted = true;
         }

@@ -17,6 +17,11 @@ import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 public class Shooter {
 
     public enum ShooterState {
@@ -154,7 +159,7 @@ public class Shooter {
 
     }
     public double multiRPM(double range) {
-
+        /*
         if (range > ConfigConstants.FURTHEST_DIST) {
             lastRPM = ConfigConstants.FURTHEST_RPM;
             return ConfigConstants.FURTHEST_RPM;
@@ -185,6 +190,20 @@ public class Shooter {
         }
         else {
             return lastRPM;
+        }*/
+
+        if (range == -1) {
+            return lastRPM;
+        }
+        if (range > ConfigConstants.NEAR_VS_FAR) {
+            double rpm = getInterpolatedOffset(ConfigConstants.RPM_MAP_FAR, range);
+            lastRPM = rpm;
+            return rpm;
+        }
+        else {
+            double rpm = getInterpolatedOffset(ConfigConstants.RPM_MAP_CLOSE, range);
+            lastRPM = rpm;
+            return rpm;
         }
 
     }
@@ -203,5 +222,44 @@ public class Shooter {
 
     public CachedMotor getShooterMotorRight() {
         return shooterMotorRight;
+    }
+    public static double getInterpolatedOffset(Map<Double, Double> angleMap, double inputAngle) {
+
+        if (angleMap == null || angleMap.size() < 2) {
+            throw new IllegalArgumentException("Map must contain at least two points.");
+        }
+
+        // Sort the angle keys
+        List<Double> angles = new ArrayList<>(angleMap.keySet());
+        Collections.sort(angles);
+
+        // Clamp if outside range
+        if (inputAngle <= angles.get(0)) {
+            return angleMap.get(angles.get(0));
+        }
+
+        if (inputAngle >= angles.get(angles.size() - 1)) {
+            return angleMap.get(angles.get(angles.size() - 1));
+        }
+
+        // Find surrounding angles
+        for (int i = 0; i < angles.size() - 1; i++) {
+            double lowerAngle = angles.get(i);
+            double upperAngle = angles.get(i + 1);
+
+            if (inputAngle >= lowerAngle && inputAngle <= upperAngle) {
+
+                double lowerOffset = angleMap.get(lowerAngle);
+                double upperOffset = angleMap.get(upperAngle);
+
+                // Linear interpolation
+                double t = (inputAngle - lowerAngle) / (upperAngle - lowerAngle);
+
+                return lowerOffset + t * (upperOffset - lowerOffset);
+            }
+        }
+
+        // Should never happen
+        return 0;
     }
 }

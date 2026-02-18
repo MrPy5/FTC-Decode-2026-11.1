@@ -80,9 +80,9 @@ public class ConfigConstants {
     public static final double TURN_DAMPENING = 0.8; //slows the robot down for motors
     public static final boolean USE_BRAKE_MODE = true;
 
-    public static double TURN_kP = 1;   // 0.01 – 0.025
-    public static double TURN_kD = 0.12;   // 0.001 – 0.006
-    public static final double BOOST_MULTIPLIER = 0;   // 0.001 – 0.006
+    public static double TURN_kP = 1.3;   // 0.01 – 0.025
+    public static double TURN_kD = 0.15;   // 0.001 – 0.006
+    public static final double BOOST_MULTIPLIER = 0.15;   // 0.001 – 0.006
 
         //Intake
     public static final double INTAKE_POWER = 1;
@@ -114,14 +114,14 @@ public class ConfigConstants {
 
 
     //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(100, 0, 1, 14);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(130, 0, 1, 14);
     public static double kP = 0.007;
     public static double kS = 0;
     public static double kV = 0.00035;
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
-    public static final double NEAR_VS_FAR = 110; //
+    public static final double NEAR_VS_FAR = 115; //
 
     public static final double FURTHEST_DIST = 128;
     public static final double FURTHEST_RPM = 3200;
@@ -153,6 +153,19 @@ public class ConfigConstants {
     public static final double SHOOTER_BLOCK = 0.39;
     public static final double SHOOTER_UNBLOCK = 0.61;
 
+    public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
+        put(0.0, 2400.0);
+        put(50.0, 2500.0);
+        put(70.0, 2600.0);
+        put(85.0, 2700.0);
+        put(95.0, 2800.0);
+    }};
+    public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
+
+        put(105.0, 3100.0);
+        put(128.0, 3180.0);
+        put(135.0, 3300.0);
+    }};
 
     //Vision
         //Tag Camera
@@ -174,11 +187,12 @@ public class ConfigConstants {
     }};
 
     public static final Map<Double, Double> FAR_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
+        //Negative is left
         put(-19.0, -1.5); //-2
         put(-23.0, -0.5); //-2
-        put(-28.0, -1.0); // -1
-        put(-34.0, -2.5); // -1
-        put(-38.0, -2.0); // -1.2
+        put(-28.0, -2.0); // -1
+        put(-34.0, -2.0); // -1
+        put(-38.0, -3.0); // -1.2
     }};
     public static final Map<Double, Double> FAR_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
         put(23.0, -0.5); //-2

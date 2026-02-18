@@ -91,7 +91,7 @@ public class ClosePaths {
 
         shootPreload = robot.follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
-                .setConstantHeadingInterpolation(shootPose.getHeading())
+                .setConstantHeadingInterpolation(startPose.getHeading())
                 .build();
         driveToSpike1 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, spike1Pose))

@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 //shooting
 //turn button
 //turning could be faster
+//take out reset pose button in robot
 
 @TeleOp(name="Game Teleop")
 public class GameTeleop extends LinearOpMode {
@@ -73,7 +74,7 @@ public class GameTeleop extends LinearOpMode {
                 //Switching modes between intake and shoot
                     //Shoot
                 boolean psPressed = c1.psWasPressed();
-                if (c1.rightTriggerWasPressed()) {
+                if (c1.rightTriggerWasPressed() && robot.getRobotState() == RobotState.INTAKE) {
                     robot.intake.lift();
                     robot.shooter.unblock();
                 }
@@ -86,7 +87,7 @@ public class GameTeleop extends LinearOpMode {
                         robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
                     }
 
-                    robot.chassis.firstTurn = true;
+                    robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint(robot));
 
 
                 }
@@ -211,24 +212,22 @@ public class GameTeleop extends LinearOpMode {
                 }
 
 
-
-
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
 
 
-
-                telemetry.addData("x", robot.follower.getPose().getX());
-                telemetry.addData("y", robot.follower.getPose().getY());
+                telemetry.addData("targetHEading", robot.chassis.degreesAwayPinpoint(robot));
+                telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
                 telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
-                telemetry.addData("ardu", robot.tagCamera.range());
-                telemetry.addData("pinpoint", robot.chassis.inchesAwayPinpoint(robot));
+                telemetry.addData("dist", robot.tagCamera.range());
+                telemetry.addData("c", robot.tagCamera.combined());
+                telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
+              //  telemetry.addData("pinpoint", robot.chassis.inchesAwayPinpoint(robot));
               //  telemetry.addData("@", Math.toDegrees(robot.chassis.getHeadingError(robot)));
                // telemetry.addData("ready", robot.lindexer.getLindexerState());
                 //telemetry.addData("c", robot.tagCamera.combined());
-                //telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
             //    telemetry.addData("nextBall", robot.classifier.getNextColor(robot.getMotif()));
                 telemetry.addData("motifMode", motifMode);
              //   telemetry.addData("left", robot.lindexer.getLeftBall());

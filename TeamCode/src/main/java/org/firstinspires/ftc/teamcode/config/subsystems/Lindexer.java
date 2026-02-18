@@ -102,6 +102,7 @@ public class Lindexer {
                             rightBall = ballColor;
                         }
                     }
+
                 }
 
 
@@ -113,6 +114,9 @@ public class Lindexer {
         }
         else if (lindexerState == LindexerState.WAITING && moveTime.milliseconds() > ConfigConstants.MOVE_MILLISECONDS)  {
             lindexerState = LindexerState.READY;
+            if (centerBall != Color.EMPTY && robot.getRobotState() == RobotState.INTAKE) {
+                robot.transfer.block();
+            }
         }
     }
 

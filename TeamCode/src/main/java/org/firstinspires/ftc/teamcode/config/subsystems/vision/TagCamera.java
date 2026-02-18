@@ -185,4 +185,20 @@ public class TagCamera {
     public AprilTagProcessor getAprilTag() {
         return aprilTag;
     }
+    public boolean tagValid(Robot robot) {
+        if (range() < ConfigConstants.NEAR_VS_FAR) {
+            return true;
+        }
+        else {
+            if (combined() > -42 && robot.getAlliance() == Alliance.BLUE) {
+                return true;
+            }
+            else if (combined() < 42 && robot.getAlliance() == Alliance.RED) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
 }

@@ -182,6 +182,11 @@ public class Robot {
         }
     }
     public void initLoopTelemetry() {
+        if (tagCamera.getFPS() == 0) {
+            telemetry.addData("ERROR", "ARDUCAM ERROR");
+            telemetry.addLine();
+            telemetry.addLine();
+        }
         if (getMotif() != null) {
             telemetry.addData("motif", getMotif().toString());
         }
@@ -190,8 +195,6 @@ public class Robot {
 
         telemetry.addData("Tag FPS: ", tagCamera.getFPS());
         telemetry.addData("state", tagCamera.getState());
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
 
 
     }
@@ -231,6 +234,10 @@ public class Robot {
         }
         if (c1.dpadDownWasPressed()) {
             setMotif(Motif.GPP);
+        }
+
+        if (c1.psWasPressed()) {
+            follower.setPose(new Pose(72,72,0));
         }
     }
 
@@ -325,11 +332,11 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-        /*packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+        packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
-        packet.put("min", 0);*/
-        packet.put("distance", lindexer.getLindexerColor().distance);
+        packet.put("min", 0);
+        /*packet.put("distance", lindexer.getLindexerColor().distance);
         if (lindexer.getLindexerColor().distance < 3.4) {
             packet.put("dist", 1);
         }
@@ -341,7 +348,7 @@ public class Robot {
         }
         else {
             packet.put("hue", 0);
-        }
+        }*/
        // packet.put("volt", transfer.getTransferMotor().getCurrent());
 
     }
