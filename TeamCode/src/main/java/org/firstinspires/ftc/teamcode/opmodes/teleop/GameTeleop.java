@@ -133,16 +133,13 @@ public class GameTeleop extends LinearOpMode {
                     robot.shooter.increaseManualRPMAdjustment();
                 }
 
-                if (robot.usePinpoint) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot), robot);
-                }
-                else {
-                    robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range(), robot);
-                }
+
+                robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range(), robot);
+
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting) && Math.abs(Math.toDegrees(robot.chassis.getHeadingError(robot))) < 1) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting) && Math.abs(Math.toDegrees(robot.chassis.getHeadingError(robot))) < 10) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -218,12 +215,13 @@ public class GameTeleop extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
 
 
-                telemetry.addData("targetHEading", robot.chassis.degreesAwayPinpoint(robot));
+               // telemetry.addData("away", robot.tagCamera.degreesAway(robot.chassis.calculateOffset(robot, robot.tagCamera)));
+                telemetry.addData("target", robot.chassis.targetHeading);
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
-                telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
-                telemetry.addData("dist", robot.tagCamera.range());
-                telemetry.addData("c", robot.tagCamera.combined());
-                telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
+            //    telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
+             //   telemetry.addData("dist", robot.tagCamera.range());
+             //   telemetry.addData("c", robot.tagCamera.combined());
+             //   telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
               //  telemetry.addData("pinpoint", robot.chassis.inchesAwayPinpoint(robot));
               //  telemetry.addData("@", Math.toDegrees(robot.chassis.getHeadingError(robot)));
                // telemetry.addData("ready", robot.lindexer.getLindexerState());

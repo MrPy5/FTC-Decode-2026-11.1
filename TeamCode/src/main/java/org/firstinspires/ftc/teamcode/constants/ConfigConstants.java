@@ -147,8 +147,8 @@ public class ConfigConstants {
     }};
     public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
 
-        put(105.0, 3100.0);
-        put(128.0, 3180.0);
+        put(105.0, 3050.0);
+        put(130.0, 3150.0);
         put(135.0, 3300.0);
     }};
 
@@ -164,7 +164,7 @@ public class ConfigConstants {
         put(36.0, 4.0); // 2
     }};
     public static final Map<Double, Double> CLOSE_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
-        put(7.0, 3.0); //-3
+        put(7.0, 0.0); //-3
         put(0.0, 0.0); //-3
         put(-17.0, -1.0); // 0
         put(-28.0, -3.0); // 0
@@ -183,7 +183,7 @@ public class ConfigConstants {
         put(23.0, -0.5); //-2
         put(28.0, 1.0); // -1
         put(34.0, 1.0); // -1
-        put(38.0, 1.0); // -1.2
+        put(38.0, 0.0); // -1.2
     }};
 
     Pose redFieldReset = new Pose(1.5, 11.5, 0);

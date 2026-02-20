@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import static org.firstinspires.ftc.teamcode.config.util.Alliance.BLUE;
+import static org.firstinspires.ftc.teamcode.config.util.Alliance.RED;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -46,7 +49,7 @@ public class Chassis {
 
 
     public double getVoltage() {
-        return voltageSensor.getVoltage();
+        return clamp(voltageSensor.getVoltage(), 12, 13.5);
     }
 
     public double getClosestVal(List<Double> values, double inputVal) {
@@ -108,7 +111,7 @@ public class Chassis {
 
         double offset;
         if (tagCamera.range() > ConfigConstants.NEAR_VS_FAR) {
-            if (robot.getAlliance() == Alliance.BLUE) {
+            if (robot.getAlliance() == BLUE) {
 
                 offset = getInterpolatedOffset(ConfigConstants.FAR_OFFSET_MAP_BLUE, combined);
             }
@@ -121,7 +124,7 @@ public class Chassis {
 
         }
         else {
-            if (robot.getAlliance() == Alliance.BLUE) {
+            if (robot.getAlliance() == BLUE) {
 
                 offset = getInterpolatedOffset(ConfigConstants.CLOSE_OFFSET_MAP_BLUE, combined);
             }
@@ -141,14 +144,6 @@ public class Chassis {
 
         if (!justLetGoOfStick) {
             double degrees = tagCamera.degreesAway(calculateOffset(robot, tagCamera));
-
-            if (firstTurn) {
-                if (robot.getAlliance() == Alliance.BLUE) {
-                    targetHeading = Math.toRadians(35);
-                } else {
-                    targetHeading = Math.toRadians(-35);
-                }
-            }
 
             if (tagCamera.hasTag() && tagCamera.tagValid(robot)) {
 
@@ -170,13 +165,13 @@ public class Chassis {
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd);
 
             double degreeError = Math.toDegrees(error);
-           /* if (Math.abs(powerError) < 5) {
-                double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error)) / 12;
+            if (Math.abs(degreeError) < 5) {
+                double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
                 powerError += boost;
-            }*/
+            }
             double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.06) {
-                clampedPowerError = 0.06 * sign;
+            if (Math.abs(clampedPowerError) < 0.055 * getVoltageMultiplier()) {
+                clampedPowerError = 0.055 * sign * getVoltageMultiplier();
             }
 
             if (Math.abs(degreeError) < 1 && !turnCompleted) {
@@ -205,7 +200,12 @@ public class Chassis {
     public double degreesAwayPinpoint(Robot robot) {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+        if (robot.getAlliance() == BLUE) {
+            return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+        }
+        else {
+            return Math.toDegrees(Math.atan(((y)) / (140 - x))) * -1;
+        }
     }
     public double turnPowerWithPinpoint(Robot robot) {
 
@@ -224,11 +224,11 @@ public class Chassis {
             double kd = ConfigConstants.TURN_kD;
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
             double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
-            powerError += boost;
+            //powerError += boost;
             double degreeError = Math.toDegrees(error);
-            double clampedPowerError = clamp(powerError, -0.8, 0.8);
-            if (Math.abs(clampedPowerError) < 0.07) {
-                clampedPowerError = 0.07 * sign;
+            double clampedPowerError = clamp(powerError, -1, 1);
+            if (Math.abs(clampedPowerError) < 0.03) {
+                clampedPowerError = 0.03 * sign * getVoltageMultiplier();
             }
 
             if (Math.abs(degreeError) < 0.5) {
@@ -252,7 +252,7 @@ public class Chassis {
         return Math.max(min, Math.min(max, value));
     }
     public double getVoltageMultiplier() {
-        return 12 / getVoltage();
+        return 14 / getVoltage();
     }
     public double[] calculateDrivePowers(Gamepad c1, double driveDampeneing, double strafeDampening, double turnDampening, Robot robot) {
         double drivePower;
@@ -288,12 +288,10 @@ public class Chassis {
         if (robot.getRobotState() == Robot.RobotState.SHOOT) {
 
             if (Math.abs(c1.right_stick_x) <= ConfigConstants.STICK_AT_ZERO_DISTANCE) {
-                if (robot.usePinpoint) {
-                    turnPower = turnPowerWithPinpoint(robot);
-                }
-                else {
-                    turnPower = turnPower(robot, robot.tagCamera);
-                }
+
+                turnPower = turnPower(robot, robot.tagCamera);
+
+
 
             }
         }

@@ -247,6 +247,7 @@ public class Robot {
 
         robotState = RobotState.INTAKE;
         scheduler.schedule(commands.startIntaking, getMilliseconds());
+        transfer.unblock();
     }
 
     public void startTeleop() {
@@ -339,6 +340,7 @@ public class Robot {
         packet.put("max", 6000);
         packet.put("min", 0);
         packet.put("error", Math.toDegrees(chassis.getHeadingError(this)));
+        packet.put("voltage", chassis.getVoltageMultiplier());
         /*packet.put("distance", lindexer.getLindexerColor().distance);
         if (lindexer.getLindexerColor().distance < 3.4) {
             packet.put("dist", 1);
