@@ -34,7 +34,7 @@ public class Commands {
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.intake.unblock()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
-                new Wait(200),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()));
 
         startLindexing = new SequentialCommand(
@@ -48,7 +48,6 @@ public class Commands {
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new InstantCommand(() -> robot.lindexer.moveToNextBall(robot.classifier.getNextColor(robot.getMotif()))),
                 new WaitTillLindexerReady(robot.lindexer),
-               // new Wait(0),
                 new InstantCommand(() -> robot.classifier.addBall())
         );
 

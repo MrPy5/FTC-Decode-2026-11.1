@@ -134,15 +134,15 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.usePinpoint) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot));
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot), robot);
                 }
                 else {
-                    robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range());
+                    robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range(), robot);
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting)) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting) && Math.abs(Math.toDegrees(robot.chassis.getHeadingError(robot))) < 1) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {

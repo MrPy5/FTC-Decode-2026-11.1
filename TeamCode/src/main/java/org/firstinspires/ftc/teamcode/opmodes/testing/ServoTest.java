@@ -17,7 +17,7 @@ public class ServoTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        testServo = hardwareMap.get(Servo.class, "right lindexer");
+        testServo = hardwareMap.get(Servo.class, "transfer blocker");
 
 
         double currentPosition = 0.5;

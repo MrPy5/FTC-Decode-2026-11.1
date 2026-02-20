@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,10 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
 import org.firstinspires.ftc.teamcode.config.util.ArtifactSensor;
-import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
-import org.opencv.ml.EM;
 
 public class Lindexer {
 
@@ -45,9 +39,6 @@ public class Lindexer {
     Color centerBall = Color.EMPTY;
     Color rightBall = Color.EMPTY;
 
-    int green = 400000000;
-    int purple = 100000000;
-
 
     LindexerState lindexerState = LindexerState.READY;
     LindexerPosition lindexerPosition = LindexerPosition.LEFT;
@@ -66,7 +57,6 @@ public class Lindexer {
 
     //Util functions
     public void update(Robot robot) {
-        //lindexerColor.update();
 
         if (lindexerState == LindexerState.READY) {
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
@@ -197,29 +187,7 @@ public class Lindexer {
         this.lindexerState = lindexerState;
     }
 
-    public void setLeftBall(Color leftBall) {
-        this.leftBall = leftBall;
-    }
 
-    public void setRightBall(Color rightBall) {
-        this.rightBall = rightBall;
-    }
-
-    public void setCenterBall(Color centerBall) {
-        this.centerBall = centerBall;
-    }
-
-    public Color getLeftBall() {
-        return leftBall;
-    }
-
-    public Color getRightBall() {
-        return rightBall;
-    }
-
-    public Color getCenterBall() {
-        return centerBall;
-    }
 
     public ArtifactSensor getLindexerColor() {
         return lindexerColor;

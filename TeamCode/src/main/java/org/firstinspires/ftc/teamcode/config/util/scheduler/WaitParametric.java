@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.config.util.scheduler;
 
 import com.pedropathing.follower.Follower;
 
-public class WaitFollowerOrStuck extends Command {
+public class WaitParametric extends Command {
     private Follower follower;
 
-    public WaitFollowerOrStuck(Follower follower) {
+    public WaitParametric(Follower follower) {
         this.follower = follower;
     }
 
@@ -16,7 +16,7 @@ public class WaitFollowerOrStuck extends Command {
 
     @Override
     public void update(double time) {
-        if (!follower.isBusy() || follower.isRobotStuck() || (Math.abs(follower.getVelocity().getXComponent()) < 0.05 && Math.abs(follower.getVelocity().getYComponent()) < 0.05)) finished = true;
+        if (follower.atParametricEnd()) finished = true;
     }
 
     @Override

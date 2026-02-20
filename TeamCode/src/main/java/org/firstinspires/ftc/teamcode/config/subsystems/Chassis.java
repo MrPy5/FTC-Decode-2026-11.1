@@ -167,10 +167,13 @@ public class Chassis {
             double error = getHeadingError(robot);
             double sign = error / Math.abs(error);
             double kd = ConfigConstants.TURN_kD;
-            double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
-            double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
-            powerError += boost;
+            double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd);
+
             double degreeError = Math.toDegrees(error);
+           /* if (Math.abs(powerError) < 5) {
+                double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error)) / 12;
+                powerError += boost;
+            }*/
             double clampedPowerError = clamp(powerError, -1, 1);
             if (Math.abs(clampedPowerError) < 0.06) {
                 clampedPowerError = 0.06 * sign;
@@ -180,6 +183,7 @@ public class Chassis {
                 turnCompleted = true;
                 turnTimer.reset();
             }
+
 
             if (Math.abs(degreeError) < 0.5) {
                 return 0;
@@ -211,8 +215,6 @@ public class Chassis {
 
 
             targetHeading = Math.toRadians(degrees);
-
-
 
 
 

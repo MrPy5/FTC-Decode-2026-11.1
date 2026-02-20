@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
-import static org.firstinspires.ftc.teamcode.constants.ConfigConstants.kS;
-import static org.firstinspires.ftc.teamcode.constants.ConfigConstants.kV;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -151,7 +149,7 @@ public class Shooter {
     }
 
 
-    public void spinAtCalculatedSpeed(double range) {
+    public void spinAtCalculatedSpeed(double range, Robot robot) {
         setRPM(calculateRPM(range));
     }
     public double calculateRPM(double range) {

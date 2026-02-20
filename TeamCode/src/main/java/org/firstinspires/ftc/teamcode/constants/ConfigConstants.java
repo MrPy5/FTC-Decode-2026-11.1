@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.constants;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
@@ -36,6 +37,8 @@ public class ConfigConstants {
     public static final String ARDUCAM = "ardu cam";
     public static final String INTAKE_BLOCKER = "intake blocker";
     public static final String TRANSFER_BLOCKER = "transfer blocker";
+    public static final String ASCENT_LEFT = "ascent left";
+    public static final String ASCENT_RIGHT = "ascent right";
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
@@ -80,9 +83,9 @@ public class ConfigConstants {
     public static final double TURN_DAMPENING = 0.8; //slows the robot down for motors
     public static final boolean USE_BRAKE_MODE = true;
 
-    public static double TURN_kP = 1.3;   // 0.01 – 0.025
+    public static double TURN_kP = 1.4;   // 0.01 – 0.025
     public static double TURN_kD = 0.15;   // 0.001 – 0.006
-    public static final double BOOST_MULTIPLIER = 0.15;   // 0.001 – 0.006
+    public static final double BOOST_MULTIPLIER = 5;   // 0.001 – 0.006
 
         //Intake
     public static final double INTAKE_POWER = 1;
@@ -101,7 +104,6 @@ public class ConfigConstants {
     public static final double RIGHT_LIN_OUT = 0.355;
     public static final double MOVE_MILLISECONDS = 300;
 
-
         //Transfer
     public static final double TRANSFER_INTAKE_RPM = 1;
     public static final double TRANSFER_INTAKE_SLOW_RPM = 1;
@@ -109,40 +111,17 @@ public class ConfigConstants {
 
         //Transfer Blocker
     public static final double TRANSFER_CPR = 103.8;
-    public static final double TRANSFER_BLOCK = 0.515;
-    public static final double TRANSFER_UNBLOCK = 0.315;
+    public static final double TRANSFER_BLOCK = 0.5;
+    public static final double TRANSFER_UNBLOCK = 0.25;
 
 
-    //Shooter
+        //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(130, 0, 1, 14);
-    public static double kP = 0.007;
-    public static double kS = 0;
-    public static double kV = 0.00035;
+
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
     public static final double NEAR_VS_FAR = 115; //
-
-    public static final double FURTHEST_DIST = 128;
-    public static final double FURTHEST_RPM = 3200;
-
-    public static final double BACK_TRIANGLE_DIST = 110;
-    public static final double BACK_TRIANGLE_RPM = 3100;
-
-    public static final double FARTHEST_FRONT_DIST = 95;
-    public static final double FARTHERST_FRONT_RPM = 2800;
-
-    public static final double FAR_FRONT_TRAINGLE_DIST = 85;
-    public static final double FAR_FRONT_TRIANGLE_RPM = 2700;
-
-    public static final double MID_FRONT_TRIANGLE_DIST = 70;
-    public static final double MID_FRONT_TRIANGLE_RPM = 2650;
-
-    public static final double FRONT_TRIANGLE_DIST = 50;
-    public static final double FRONT_TRIANGLE_RPM = 2500;
-
-    public static final double CLOSEST_DIST = 0;
-    public static final double CLOSEST_RPM = 2400;
 
     public static final double DEFAULT_RPM = 3000;
 
@@ -152,6 +131,12 @@ public class ConfigConstants {
         //Shooter Blocker
     public static final double SHOOTER_BLOCK = 0.39;
     public static final double SHOOTER_UNBLOCK = 0.61;
+
+        //Ascent
+    public static final double ASCEND_RIGHT = 0.39;
+    public static final double ASCEND_LEFT = 0.61;
+    public static final double DESCEND_RIGHT = 0.39;
+    public static final double DESCEND_LEFT = 0.61;
 
     public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
         put(0.0, 2400.0);
@@ -201,7 +186,8 @@ public class ConfigConstants {
         put(38.0, 1.0); // -1.2
     }};
 
-
+    Pose redFieldReset = new Pose(1.5, 11.5, 0);
+    Pose blueFieldReset = new Pose(1.5, 136, 0);
     //Auto
     public static final double AUTO_CLOSE_RPM_RED = 2600;
     public static final double AUTO_CLOSE_RPM_BLUE = 2800;

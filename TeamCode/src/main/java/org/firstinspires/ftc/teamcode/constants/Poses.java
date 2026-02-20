@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.constants;
 import com.pedropathing.geometry.Pose;
 
 public class Poses {
-    public static final Pose startPoseBlueFar = new Pose(-67, 14.5, 0); // Start Pose of our robot.
+    public static final Pose startPoseBlueFar = new Pose(1.2, 88, 0); // Start Pose of our robot.
     public static final Pose startPoseRedFar = new Pose(-66.6, -15.7, 0); // Start Pose of our robot.
     public static final Pose startPoseBlueClose = new Pose(122.14, 114.2, (0.896)); // Start Pose of our robot.
     public static final Pose startPoseRedClose = new Pose(39.5, -54, Math.toRadians(0)); // Start Pose of our robot.
@@ -12,7 +12,7 @@ public class Poses {
     public static final Pose detectPoseRed = new Pose(23, -25.6, Math.toRadians(23)); // Start Pose of our robot.
 
     public static final Pose shootPoseRedFar = new Pose(-60, -16, Math.toRadians(-20)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose shootPoseBlueFar = new Pose(-60, 16, Math.toRadians(20)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public static final Pose shootPoseBlueFar = new Pose(10.1, 86, 0.35); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose shootPoseBlueClose = new Pose(80, 77, 0.9);
     public static final Pose parkPoseBlueClose = new Pose(95, 83, Math.toRadians(0)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose shootPoseRedClose = new Pose(16, -15.5, Math.toRadians(-46));
@@ -35,14 +35,14 @@ public class Poses {
 
     //close
     public static final Pose spike1PoseBlue = new Pose(78.78, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike1EndPoseBlue = new Pose(78.78, 120, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike1EndPoseBlue = new Pose(78.78, 122, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose spike2PoseBlue = new Pose(55, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike2EndPoseBlue = new Pose(55, 127, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike2BezierPoseBlue = new Pose(-25, 0, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike2EndPoseBlue = new Pose(55, 129, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike2BezierPoseBlue = new Pose(45, 80, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose spike3PoseBlue = new Pose(31, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike3EndPoseBlue = new Pose(31, 127, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike3EndPoseBlue = new Pose(31, 129, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose tunnelPoseBlue = new Pose(-22, 61, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose tunnelPoseRed = new Pose(-22, -61, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
@@ -73,8 +73,8 @@ public class Poses {
     public static final Pose spike2PoseBlueFar = new Pose(-16.5, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose spike2EndPoseBlueFar = new Pose(-16.5, 50, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose spike3PoseBlueFar = new Pose(-40, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike3EndPoseBlueFar = new Pose(-40, 50, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike3PoseBlueFar = new Pose(31, 95, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose spike3EndPoseBlueFar = new Pose(31, 127, 1.56); // Highest (First Set) of Artifacts from the Spike Mark.
 
     public static final Pose spike2PoseRedFar = new Pose(-16, -20, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose spike2EndPoseRedFar = new Pose(-16, -52, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
@@ -82,24 +82,24 @@ public class Poses {
     public static final Pose spike3PoseRedFar = new Pose(-40, -20, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose spike3EndPoseRedFar = new Pose(-40, -51, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose parkPoseBlueFar = new Pose(-52, 22, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public static final Pose parkPoseBlueFar = new Pose(30, 86, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose parkPoseRedFar = new Pose(-50, -23, Math.toRadians(-90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose parkPoseRedClose = new Pose(30, -12, Math.toRadians(-54)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
     public static final Pose hpPoseRed = new Pose(-66.8, -60, Math.toRadians(-90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose hpPoseBlue = new Pose(-66.5, 59.5, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public static final Pose hpPoseBlue = new Pose(5, 129.3, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
     public static final Pose hpBezierPoseRed = new Pose(-70, -10, Math.toRadians(-90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose hpBezierPoseBlue = new Pose(-70, 10, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public static final Pose hpBezierPoseBlue = new Pose(0, 90, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
     public static final Pose backupHPPoseRed = new Pose(-65.5, -57.5, Math.toRadians(-100)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose backupHPPoseBlue = new Pose(-66, 58.5, Math.toRadians(100)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public static final Pose backupHPPoseBlue = new Pose(5, 125, Math.toRadians(90)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
-    public static final Pose spike4PoseBlueFar = new Pose(-40, 20, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike4EndPoseBlueFar = new Pose(-40, 50, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowPoseBlueFar = new Pose(31, 115, Math.toRadians(45)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowPoseRedFar = new Pose(-40, 50, Math.toRadians(90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose spike4PoseRedFar = new Pose(-40, -20, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose spike4EndPoseRedFar = new Pose(-40, -65, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(55, 130, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowEndPoseRedFar = new Pose(-40, -65, Math.toRadians(-90)); // Highest (First Set) of Artifacts from the Spike Mark.
 
     //Test
     public static final Pose startPose = new Pose(0, 0, Math.toRadians(0)); // Start Pose of our robot.

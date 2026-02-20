@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.constants.Poses;
 
 public class FarPaths {
 
-    public static PathChain shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike4, driveToSpike4, spike4ToShoot, spike3, spike3ToShoot, parkPath, driveToHP, backupHP, returnHP, hpToShoot;
+    public static PathChain shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, driveToGateOverflow, gateOverFlow, gateOverFlowToShoot, spike3, spike3ToShoot, parkPath, driveToHP, backupHP, returnHP, hpToShoot;
 
     public static Pose startPose = Poses.startPoseBlueFar;
     static Pose shootPose = Poses.shootPoseBlueFar;
@@ -18,8 +18,8 @@ public class FarPaths {
     static Pose spike2EndPose = Poses.spike2EndPoseBlueFar;
     static Pose spike3Pose = Poses.spike3PoseBlueFar;
     static Pose spike3EndPose = Poses.spike3EndPoseBlueFar;
-    static Pose spike4Pose = Poses.spike3PoseBlueFar;
-    static Pose spike4EndPose = Poses.spike3EndPoseBlueFar;
+    static Pose gateOverFlowPose = Poses.gateOverFlowPoseBlueFar;
+    static Pose gateOverFlowEndPose = Poses.gateOverFlowEndPoseBlueFar;
     static Pose parkPose = Poses.parkPoseBlueFar;
     static Pose hpPose = Poses.hpPoseBlue;
     static Pose hpBezierPose = Poses.hpBezierPoseBlue;
@@ -42,8 +42,8 @@ public class FarPaths {
         hpBezierPose = Poses.hpBezierPoseBlue;
         backupHPPose = Poses.backupHPPoseBlue;
 
-        spike4Pose = Poses.spike4PoseBlueFar;
-        spike4EndPose = Poses.spike4EndPoseBlueFar;
+        gateOverFlowPose = Poses.gateOverFlowPoseBlueFar;
+        gateOverFlowEndPose = Poses.gateOverFlowEndPoseBlueFar;
     }
 
     public static void useRedPaths() {
@@ -62,8 +62,8 @@ public class FarPaths {
         hpBezierPose = Poses.hpBezierPoseRed;
         backupHPPose = Poses.backupHPPoseRed;
 
-        spike4Pose = Poses.spike4PoseRedFar;
-        spike4EndPose = Poses.spike4EndPoseRedFar;
+        gateOverFlowPose = Poses.gateOverFlowPoseRedFar;
+        gateOverFlowEndPose = Poses.gateOverFlowEndPoseRedFar;
     }
 
     public static void buildPaths(Robot robot) {
@@ -71,6 +71,24 @@ public class FarPaths {
         shootPreload = robot.follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
                 .setConstantHeadingInterpolation(shootPose.getHeading())
+                .build();
+        driveToHP = robot.follower.pathBuilder()
+                .addPath(new BezierCurve(shootPose, hpBezierPose, hpPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), hpPose.getHeading(), 0.3)
+                .build();
+
+        backupHP = robot.follower.pathBuilder()
+                .addPath(new BezierLine(hpPose, backupHPPose))
+                .setLinearHeadingInterpolation(hpPose.getHeading(), backupHPPose.getHeading())
+                .build();
+
+        returnHP = robot.follower.pathBuilder()
+                .addPath(new BezierLine(backupHPPose, hpPose))
+                .setLinearHeadingInterpolation(backupHPPose.getHeading(), hpPose.getHeading())
+                .build();
+        hpToShoot = robot.follower.pathBuilder()
+                .addPath(new BezierLine(hpPose, shootPose))
+                .setLinearHeadingInterpolation(hpPose.getHeading(), shootPose.getHeading(), 0.3)
                 .build();
 
         driveToSpike2 = robot.follower.pathBuilder()
@@ -107,37 +125,20 @@ public class FarPaths {
                 .setLinearHeadingInterpolation(shootPose.getHeading(), parkPose.getHeading())
                 .build();
 
-        driveToHP = robot.follower.pathBuilder()
-                .addPath(new BezierCurve(shootPose, hpBezierPose, hpPose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), hpPose.getHeading(), 0.3)
+
+
+        driveToGateOverflow = robot.follower.pathBuilder()
+                .addPath(new BezierLine(shootPose, gateOverFlowPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), gateOverFlowPose.getHeading())
                 .build();
 
-        backupHP = robot.follower.pathBuilder()
-                .addPath(new BezierLine(hpPose, backupHPPose))
-                .setLinearHeadingInterpolation(hpPose.getHeading(), backupHPPose.getHeading())
+        gateOverFlow = robot.follower.pathBuilder()
+                .addPath(new BezierLine(gateOverFlowPose, gateOverFlowEndPose))
+                .setLinearHeadingInterpolation(gateOverFlowPose.getHeading(), gateOverFlowEndPose.getHeading())
                 .build();
 
-        returnHP = robot.follower.pathBuilder()
-                .addPath(new BezierLine(backupHPPose, hpPose))
-                .setLinearHeadingInterpolation(backupHPPose.getHeading(), hpPose.getHeading())
-                .build();
-        hpToShoot = robot.follower.pathBuilder()
-                .addPath(new BezierLine(hpPose, shootPose))
-                .setLinearHeadingInterpolation(hpPose.getHeading(), shootPose.getHeading(), 0.5)
-                .build();
-
-        driveToSpike4 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(shootPose, spike3Pose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), spike4Pose.getHeading())
-                .build();
-
-        spike4 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(spike4Pose, spike4EndPose))
-                .setLinearHeadingInterpolation(spike4Pose.getHeading(), spike4EndPose.getHeading())
-                .build();
-
-        spike4ToShoot = robot.follower.pathBuilder()
-                .addPath(new BezierLine(spike4EndPose, shootPose))
+        gateOverFlowToShoot = robot.follower.pathBuilder()
+                .addPath(new BezierLine(gateOverFlowEndPose, shootPose))
                 .setConstantHeadingInterpolation(shootPose.getHeading())
                 .build();
 
