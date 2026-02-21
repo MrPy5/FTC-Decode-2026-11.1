@@ -83,9 +83,9 @@ public class ConfigConstants {
     public static final double TURN_DAMPENING = 0.8; //slows the robot down for motors
     public static final boolean USE_BRAKE_MODE = true;
 
-    public static double TURN_kP = 1.4;   // 0.01 – 0.025
-    public static double TURN_kD = 0.15;   // 0.001 – 0.006
-    public static final double BOOST_MULTIPLIER = 5;   // 0.001 – 0.006
+    public static double TURN_kP = 1.3;   // 0.01 – 0.025
+    public static double TURN_kD = 0.16;   // 0.001 – 0.006
+    public static final double BOOST_MULTIPLIER = 0.15;   // 0.001 – 0.006
 
         //Intake
     public static final double INTAKE_POWER = 1;
@@ -125,7 +125,7 @@ public class ConfigConstants {
 
     public static final double DEFAULT_RPM = 3000;
 
-    public static final double RPM_ADJUST_AMOUNT = 50;
+    public static final double RPM_ADJUST_AMOUNT = 15;
     public static final double SHOOTER_CPR = 28.0; //ticks per revolution
 
         //Shooter Blocker
@@ -147,8 +147,8 @@ public class ConfigConstants {
     }};
     public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
 
-        put(105.0, 3050.0);
-        put(130.0, 3150.0);
+        put(105.0, 3100.0);
+        put(130.0, 3200.0);
         put(135.0, 3300.0);
     }};
 
@@ -173,11 +173,11 @@ public class ConfigConstants {
 
     public static final Map<Double, Double> FAR_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
         //Negative is left
-        put(-19.0, -1.5); //-2
-        put(-23.0, -0.5); //-2
-        put(-28.0, -2.0); // -1
-        put(-34.0, -2.0); // -1
-        put(-38.0, -3.0); // -1.2
+        put(-19.0, -0.5); //-2 RIGHT SIDE OF FIELD
+        put(-23.0, 0.5); //-2
+        put(-28.0, 0.0); // -1
+        put(-34.0, 0.0); // -1
+        put(-38.0, -2.0); // -1.2  LEFT SIDE OF FIELD
     }};
     public static final Map<Double, Double> FAR_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
         put(23.0, -0.5); //-2
@@ -186,8 +186,8 @@ public class ConfigConstants {
         put(38.0, 0.0); // -1.2
     }};
 
-    Pose redFieldReset = new Pose(1.5, 11.5, 0);
-    Pose blueFieldReset = new Pose(1.5, 136, 0);
+    public static final Pose BLUE_FIELD_RESET = new Pose(1.5, 11.5, 0);
+    public static final Pose RED_FIELD_RESET = new Pose(1.5, 136, 0);
     //Auto
     public static final double AUTO_CLOSE_RPM_RED = 2600;
     public static final double AUTO_CLOSE_RPM_BLUE = 2800;

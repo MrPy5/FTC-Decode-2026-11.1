@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollower;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollowerOrStuck;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametric;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitScheduler;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooter;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.close.ClosePaths;
@@ -109,8 +110,10 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2)),
                 new WaitFollower(robot.follower),
                 new Wait(500),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2ToShoot)),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2Reverse)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new WaitParametric(robot.follower),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2ToShoot)),
                 new Wait(500),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),

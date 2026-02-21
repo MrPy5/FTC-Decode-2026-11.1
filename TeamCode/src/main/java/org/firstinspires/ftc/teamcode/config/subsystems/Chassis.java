@@ -38,6 +38,7 @@ public class Chassis {
     public boolean noSticks = false;
     public boolean turnCompleted = true;
     public double targetHeading = 0;
+    public double degreeOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
 
     public Chassis(HardwareMap hardwareMap) {
@@ -49,7 +50,7 @@ public class Chassis {
 
 
     public double getVoltage() {
-        return clamp(voltageSensor.getVoltage(), 12, 13.5);
+        return clamp(voltageSensor.getVoltage(), 11, 13);
     }
 
     public double getClosestVal(List<Double> values, double inputVal) {
@@ -165,13 +166,13 @@ public class Chassis {
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd);
 
             double degreeError = Math.toDegrees(error);
-            if (Math.abs(degreeError) < 5) {
-                double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
-                powerError += boost;
-            }
+
+            double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
+            powerError += boost;
+
             double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.055 * getVoltageMultiplier()) {
-                clampedPowerError = 0.055 * sign * getVoltageMultiplier();
+            if (Math.abs(clampedPowerError) < 0.07) {
+                clampedPowerError = 0.07 * sign;
             }
 
             if (Math.abs(degreeError) < 1 && !turnCompleted) {
@@ -184,7 +185,7 @@ public class Chassis {
                 return 0;
             }
             else {
-                return clampedPowerError;
+                return clampedPowerError * getVoltageMultiplier();
             }
         }
         else {
@@ -201,17 +202,17 @@ public class Chassis {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         if (robot.getAlliance() == BLUE) {
-            return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+            return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
         }
         else {
-            return Math.toDegrees(Math.atan(((y)) / (140 - x))) * -1;
+            return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
         }
     }
     public double turnPowerWithPinpoint(Robot robot) {
 
 
         if (!justLetGoOfStick) {
-            double degrees = degreesAwayPinpoint(robot);
+            double degrees = degreesAwayPinpoint(robot) - degreeOffset;
 
 
             targetHeading = Math.toRadians(degrees);
@@ -227,15 +228,15 @@ public class Chassis {
             //powerError += boost;
             double degreeError = Math.toDegrees(error);
             double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.03) {
-                clampedPowerError = 0.03 * sign * getVoltageMultiplier();
+            if (Math.abs(clampedPowerError) < 0.06) {
+                clampedPowerError = 0.06 * sign;
             }
 
             if (Math.abs(degreeError) < 0.5) {
                 return 0;
             }
             else {
-                return clampedPowerError;
+                return clampedPowerError * getVoltageMultiplier();
             }
         }
         else {
@@ -278,7 +279,7 @@ public class Chassis {
             noSticks = false;
         }
 
-        if (justLetGoOfStick && justLetGoOfStickTimer.milliseconds() > 0) {
+        if (justLetGoOfStick && justLetGoOfStickTimer.milliseconds() > 200) {
             justLetGoOfStick = false;
             turnCompleted = true;
         }
@@ -289,7 +290,7 @@ public class Chassis {
 
             if (Math.abs(c1.right_stick_x) <= ConfigConstants.STICK_AT_ZERO_DISTANCE) {
 
-                turnPower = turnPower(robot, robot.tagCamera);
+                turnPower = turnPowerWithPinpoint(robot);
 
 
 
@@ -299,5 +300,8 @@ public class Chassis {
         return new double[]{drivePower, strafePower, turnPower};
     }
 
+    public double getVoltageScalar() {
+        return (getVoltage() - 11) / (13-11);
+    }
 
 }

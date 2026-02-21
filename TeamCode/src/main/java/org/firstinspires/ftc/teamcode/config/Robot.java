@@ -335,14 +335,15 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-        packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+       /* packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
         packet.put("min", 0);
         packet.put("error", Math.toDegrees(chassis.getHeadingError(this)));
-        packet.put("voltage", chassis.getVoltageMultiplier());
-        /*packet.put("distance", lindexer.getLindexerColor().distance);
-        if (lindexer.getLindexerColor().distance < 3.4) {
+        packet.put("voltage", chassis.getVoltage());
+        packet.put("distance", lindexer.getLindexerColor().getDistance());
+        packet.put("hue", lindexer.getLindexerColor().getHue());*/
+        /*if (lindexer.getLindexerColor().distance < 3.4) {
             packet.put("dist", 1);
         }
         else {

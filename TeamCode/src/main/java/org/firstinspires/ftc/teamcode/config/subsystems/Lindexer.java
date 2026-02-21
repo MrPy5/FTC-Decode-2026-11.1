@@ -50,7 +50,7 @@ public class Lindexer {
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
 
 
-        lindexerColor = new ArtifactSensor(null, hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT));
+        lindexerColor = new ArtifactSensor(null, hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT));
 
 
     }

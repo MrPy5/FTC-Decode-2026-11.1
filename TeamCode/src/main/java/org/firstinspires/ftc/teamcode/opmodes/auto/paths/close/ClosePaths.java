@@ -13,7 +13,7 @@ public class ClosePaths {
 
 
 
-    public static PathChain gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot;
+    public static PathChain spike2Reverse, gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot;
 
     public static Pose startPose = Poses.startPoseBlueClose;
     static Pose shootPose = Poses.shootPoseBlueClose;
@@ -123,9 +123,14 @@ public class ClosePaths {
                 .addPath(new BezierLine(spike2Pose, spike2EndPose))
                 .setLinearHeadingInterpolation(spike2Pose.getHeading(), spike2EndPose.getHeading())
                 .build();
+        spike2Reverse = robot.follower.pathBuilder()
+                .addPath(new BezierLine(spike2EndPose, spike2Pose))
+                .setLinearHeadingInterpolation(spike2EndPose.getHeading(), shootPose.getHeading())
+                .setTValueConstraint(0.7)
+                .build();
 
         spike2ToShoot = robot.follower.pathBuilder()
-                .addPath(new BezierCurve(spike2EndPose, spike2BezierPose, shootPose))
+                .addPath(new BezierLine(spike2Pose, shootPose))
                 .setConstantHeadingInterpolation(shootPose.getHeading())
                 .build();
 

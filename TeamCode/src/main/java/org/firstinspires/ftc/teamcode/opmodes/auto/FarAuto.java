@@ -46,7 +46,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.startAuto(FarPaths::buildPaths, FarPaths.startPose);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(3100)),
+                new InstantCommand(() -> robot.shooter.setRPM(3050)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),

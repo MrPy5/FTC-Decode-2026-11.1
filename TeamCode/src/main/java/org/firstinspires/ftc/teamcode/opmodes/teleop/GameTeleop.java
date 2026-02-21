@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
+import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
@@ -126,10 +127,10 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 //RPM addition
-                if (c1.dpadDownWasPressed()) {
+                if (c2.dpadDownWasPressed()) {
                     robot.shooter.decreaseManualRPMAdjustment();
                 }
-                if (c1.dpadUpWasPressed()) {
+                if (c2.dpadUpWasPressed()) {
                     robot.shooter.increaseManualRPMAdjustment();
                 }
 
@@ -173,7 +174,7 @@ public class GameTeleop extends LinearOpMode {
 
 
                 //Manual Stuff for Controller 2
-                if (c2.dpadDownWasPressed()) {
+                /*if (c2.dpadDownWasPressed()) {
                     robot.intake.intake();
                 }
                 if (c2.dpadUpWasPressed()) {
@@ -182,10 +183,10 @@ public class GameTeleop extends LinearOpMode {
                 }
                 if (c2.dpadRightWasPressed()) {
                     robot.intake.stopIntake();
-                }
+                }*/
 
                 //Motif mode (# of balls on ramp)
-                if (c2.triangleWasPressed()) {
+               /* if (c2.triangleWasPressed()) {
                     robot.classifier.addBall();
                     gamepad2.rumble(250);
                 }
@@ -198,14 +199,22 @@ public class GameTeleop extends LinearOpMode {
                 if (c2.circleWasPressed()) {
                     robot.classifier.reset();
                     gamepad2.rumble(1000);
+                }*/
+
+                if (c2.circleWasPressed()) {
+                    robot.chassis.degreeOffset += 0.5;
+                }
+                if (c2.squareWasPressed()) {
+                    robot.chassis.degreeOffset -= 0.5;
                 }
 
-                if (c1.triangleWasPressed()) {
-                    robot.lindexer.clear();
-                }
-
-                if (c1.touchpadWasPressed()) {
-                    robot.usePinpoint = !robot.usePinpoint;
+                if (c2.psWasPressed()) {
+                    if (robot.getAlliance() == Alliance.RED) {
+                        robot.follower.setPose(ConfigConstants.RED_FIELD_RESET);
+                    }
+                    else {
+                        robot.follower.setPose(ConfigConstants.BLUE_FIELD_RESET);
+                    }
                 }
 
 
@@ -216,7 +225,12 @@ public class GameTeleop extends LinearOpMode {
 
 
                // telemetry.addData("away", robot.tagCamera.degreesAway(robot.chassis.calculateOffset(robot, robot.tagCamera)));
-                telemetry.addData("target", robot.chassis.targetHeading);
+               // telemetry.addData("fps", robot.tagCamera.getFPS());
+               // telemetry.addData("tag", robot.tagCamera.hasTag());
+                telemetry.addData("scalar", robot.chassis.getVoltageScalar());
+                telemetry.addData("offset", robot.chassis.degreeOffset);
+             //   telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
+            //    telemetry.addData("combined", robot.tagCamera.combined());
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
             //    telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
              //   telemetry.addData("dist", robot.tagCamera.range());

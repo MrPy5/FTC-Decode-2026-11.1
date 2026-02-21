@@ -54,7 +54,7 @@ public class ArtifactSensor {
 
         distance = getDistance();
 
-        if (distance < 3 && (ballTimer.milliseconds() > 50  || !ballTimerStarted)) {
+        if (distance < 5 && (ballTimer.milliseconds() > 50  || !ballTimerStarted)) {
             if (!ballTimerStarted) {
                 ballTimer.reset();
                 ballTimerStarted = true;
@@ -76,7 +76,7 @@ public class ArtifactSensor {
 
            }
         }
-        else if (distance < 4.4 && ballTimerStarted) {
+        else if (distance < 5 && ballTimerStarted) {
             hue = getHue();
             hueList.add(hue, 0);
             return Color.EMPTY;
