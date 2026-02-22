@@ -150,7 +150,7 @@ public class Shooter {
 
 
     public void spinAtCalculatedSpeed(double range, Robot robot) {
-        setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 75));
+        setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
     }
     public double calculateRPM(double range) {
         return multiRPM(range) + manualAdjustment;

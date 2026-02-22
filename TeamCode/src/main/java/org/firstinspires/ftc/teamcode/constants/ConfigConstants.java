@@ -121,7 +121,7 @@ public class ConfigConstants {
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
-    public static final double NEAR_VS_FAR = 115; //
+    public static final double NEAR_VS_FAR = 110; //
 
     public static final double DEFAULT_RPM = 3000;
 

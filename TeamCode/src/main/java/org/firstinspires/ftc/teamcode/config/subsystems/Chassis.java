@@ -201,11 +201,19 @@ public class Chassis {
     public double degreesAwayPinpoint(Robot robot) {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        if (robot.getAlliance() == BLUE) {
-            return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
+        if (robot.tagCamera.range() > ConfigConstants.NEAR_VS_FAR) {
+            if (robot.getAlliance() == BLUE) {
+                return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
+            } else {
+                return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
+            }
         }
         else {
-            return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
+            if (robot.getAlliance() == BLUE) {
+                return Math.toDegrees(Math.atan((-(140 - y)) / (138 - x))) * -1;
+            } else {
+                return Math.toDegrees(Math.atan(((y)) / (138 - x))) * -1;
+            }
         }
     }
     public double turnPowerWithPinpoint(Robot robot) {
