@@ -153,7 +153,12 @@ public class Shooter {
         setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
     }
     public double calculateRPM(double range) {
-        return multiRPM(range) + manualAdjustment;
+        if (range > ConfigConstants.NEAR_VS_FAR) {
+            return multiRPM(range) + manualAdjustment;
+        }
+        else {
+            return multiRPM(range);
+        }
 
     }
     public double multiRPM(double range) {

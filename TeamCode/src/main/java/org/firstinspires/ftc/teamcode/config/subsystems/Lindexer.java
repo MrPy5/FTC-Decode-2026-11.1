@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import com.qualcomm.hardware.andymark.AndyMarkColorSensor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -50,7 +51,7 @@ public class Lindexer {
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
 
 
-        lindexerColor = new ArtifactSensor(null, hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT));
+        lindexerColor = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT));
 
 
     }
@@ -217,4 +218,5 @@ public class Lindexer {
     public LindexerState getLindexerState() {
         return lindexerState;
     }
+
 }

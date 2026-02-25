@@ -39,6 +39,7 @@ public class ConfigConstants {
     public static final String TRANSFER_BLOCKER = "transfer blocker";
     public static final String ASCENT_LEFT = "ascent left";
     public static final String ASCENT_RIGHT = "ascent right";
+    public static final String DIGITAL_DISTANCE = "digital distance";
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
@@ -90,8 +91,8 @@ public class ConfigConstants {
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
-    public static final double INTAKE_LIFT = 0.1;
-    public static final double INTAKE_DROP = 0.5;
+    public static final double INTAKE_LIFT = 0.135;
+    public static final double INTAKE_DROP = 0.385;
 
         //Intake Blocker
     public static final double INTAKE_BLOCK = 0.4;
@@ -133,10 +134,10 @@ public class ConfigConstants {
     public static final double SHOOTER_UNBLOCK = 0.61;
 
         //Ascent
-    public static final double ASCEND_RIGHT = 0.39;
-    public static final double ASCEND_LEFT = 0.61;
-    public static final double DESCEND_RIGHT = 0.39;
-    public static final double DESCEND_LEFT = 0.61;
+    public static final double ASCEND_RIGHT = 0.57;
+    public static final double ASCEND_LEFT = 0.5;
+    public static final double DESCEND_RIGHT = 0.83;
+    public static final double DESCEND_LEFT = 0.25;
 
     public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
         put(0.0, 2400.0);

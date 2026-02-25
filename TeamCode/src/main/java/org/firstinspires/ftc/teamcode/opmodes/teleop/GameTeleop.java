@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Robot.RobotState;
 import org.firstinspires.ftc.teamcode.config.Storage;
+import org.firstinspires.ftc.teamcode.config.subsystems.Ascent;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
@@ -74,12 +75,17 @@ public class GameTeleop extends LinearOpMode {
 
                 //Switching modes between intake and shoot
                     //Shoot
-                boolean psPressed = c1.psWasPressed();
-                if (c1.rightTriggerWasPressed() && robot.getRobotState() == RobotState.INTAKE) {
-                    robot.intake.lift();
-                    robot.shooter.unblock();
+              //  boolean psPressed = c1.psWasPressed();
+                if (robot.getRobotState() == RobotState.INTAKE) {
+                    if (robot.intake.getArtifactSensor().hasBall()) {
+                        robot.intake.lift();
+                    }
+                    else {
+                        robot.intake.drop();
+                    }
                 }
-                if ((psPressed || c1.rightBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) {
+
+                if ((c1.rightBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.SHOOT);
@@ -93,7 +99,7 @@ public class GameTeleop extends LinearOpMode {
 
                 }
                     //Intake
-                else if ((psPressed || c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && robot.getRobotState() != RobotState.INTAKE) {
+                else if ((c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
@@ -103,6 +109,39 @@ public class GameTeleop extends LinearOpMode {
                     }
                     else {
                         robot.transfer.unblock();
+                    }
+
+                }
+
+                if (c1.psWasPressed()) {
+                    if (robot.getRobotState() != RobotState.PARK) {
+                        robot.setRobotState(RobotState.PARK);
+                        robot.shooter.stop();
+                        robot.intake.stopIntake();
+                        robot.transfer.stop();
+                    }
+                    else {
+                        robot.scheduler.clear();
+                        robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
+                        robot.setRobotState(RobotState.INTAKE);
+
+                        if (motifMode) {
+                            robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
+                        }
+                        else {
+                            robot.transfer.unblock();
+                        }
+                    }
+                }
+
+                if (robot.getRobotState() == RobotState.PARK) {
+                    if (c2.touchpadWasPressed()) {
+                        if (robot.ascent.getAscentState() == Ascent.AscentState.DOWN) {
+                            robot.ascent.ascend();
+                        }
+                        else {
+                            robot.ascent.descend();
+                        }
                     }
 
                 }
@@ -127,15 +166,48 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 //RPM addition
-                if (c2.dpadDownWasPressed()) {
-                    robot.shooter.decreaseManualRPMAdjustment();
+                if (robot.getRobotState() == RobotState.PARK) {
+                    if (robot.getAlliance() == Alliance.BLUE) {
+                        if (c2.dpadLeftWasPressed()) {
+                            robot.chassis.parkHeading = 180;
+                        }
+                        if (c2.dpadDownWasPressed()) {
+                            robot.chassis.parkHeading = 270;
+                        }
+                        if (c2.dpadUpWasPressed()) {
+                            robot.chassis.parkHeading = 90;
+                        }
+                        if (c2.dpadRightWasPressed()) {
+                            robot.chassis.parkHeading = 0;
+                        }
+                    }
+                    else {
+                        if (c2.dpadLeftWasPressed()) {
+                            robot.chassis.parkHeading = 0;
+                        }
+                        if (c2.dpadDownWasPressed()) {
+                            robot.chassis.parkHeading = 90;
+                        }
+                        if (c2.dpadUpWasPressed()) {
+                            robot.chassis.parkHeading = 270;
+                        }
+                        if (c2.dpadRightWasPressed()) {
+                            robot.chassis.parkHeading = 180;
+                        }
+                    }
                 }
-                if (c2.dpadUpWasPressed()) {
-                    robot.shooter.increaseManualRPMAdjustment();
+                else {
+                    if (c2.dpadDownWasPressed()) {
+                        robot.shooter.decreaseManualRPMAdjustment();
+                    }
+                    if (c2.dpadUpWasPressed()) {
+                        robot.shooter.increaseManualRPMAdjustment();
+                    }
                 }
 
-
-                robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range(), robot);
+                if (robot.getRobotState() != RobotState.PARK) {
+                    robot.shooter.spinAtCalculatedSpeed(robot.tagCamera.range(), robot);
+                }
 
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
@@ -217,40 +289,30 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
 
+                if (robot.intake.getArtifactSensor().hasBall()) {
+                    c1.rumble(500);
+                }
 
+               /* if (robot.lindexer.getLindexerColor().getDistance() < 4.7) {
+                    robot.intake.lift();
+                }*/
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
-
-
-               // telemetry.addData("away", robot.tagCamera.degreesAway(robot.chassis.calculateOffset(robot, robot.tagCamera)));
-               // telemetry.addData("fps", robot.tagCamera.getFPS());
-               // telemetry.addData("tag", robot.tagCamera.hasTag());
-                telemetry.addData("scalar", robot.chassis.getVoltageScalar());
+                telemetry.addData("loop", loopTimes.average());
+                telemetry.addData("State", robot.lindexer.getLindexerState());
+                /*telemetry.addData("scalar", robot.chassis.getVoltageScalar());
                 telemetry.addData("offset", robot.chassis.degreeOffset);
-             //   telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
-            //    telemetry.addData("combined", robot.tagCamera.combined());
+
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
-            //    telemetry.addData("error", Math.toDegrees(robot.chassis.getHeadingError(robot)));
-             //   telemetry.addData("dist", robot.tagCamera.range());
-             //   telemetry.addData("c", robot.tagCamera.combined());
-             //   telemetry.addData("offset", robot.chassis.calculateOffset(robot, robot.tagCamera));
-              //  telemetry.addData("pinpoint", robot.chassis.inchesAwayPinpoint(robot));
-              //  telemetry.addData("@", Math.toDegrees(robot.chassis.getHeadingError(robot)));
-               // telemetry.addData("ready", robot.lindexer.getLindexerState());
-                //telemetry.addData("c", robot.tagCamera.combined());
-            //    telemetry.addData("nextBall", robot.classifier.getNextColor(robot.getMotif()));
+
                 telemetry.addData("motifMode", motifMode);
-             //   telemetry.addData("left", robot.lindexer.getLeftBall());
-             //   telemetry.addData("center", robot.lindexer.getCenterBall());
-             //   telemetry.addData("right", robot.lindexer.getRightBall());
-               /* telemetry.addLine();*/
                 telemetry.addData("ready", robot.shooter.getShooterState());
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
 
                 telemetry.update();
 

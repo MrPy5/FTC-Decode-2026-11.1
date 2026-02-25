@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import android.os.Build;
+
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
+import org.firstinspires.ftc.teamcode.config.util.IntakeArtifactSensor;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
 public class Intake {
@@ -25,6 +29,7 @@ public class Intake {
     HardwareMap hardwareMap;
     CachedMotor intakeMotor;
     Servo intakeLifter;
+    IntakeArtifactSensor artifactSensor;
 
     Servo intakeBlocker;
 
@@ -48,6 +53,8 @@ public class Intake {
 
         intakeBlocker = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_BLOCKER);
 
+        artifactSensor = new IntakeArtifactSensor(hardwareMap.get(DigitalChannel.class, ConfigConstants.DIGITAL_DISTANCE));
+
     }
 
     //Util functions
@@ -56,15 +63,7 @@ public class Intake {
     }
 
     public void update(Robot robot) {
-     /*   if (robot.lindexer.getLindexerState() == Lindexer.LindexerState.WAITING && !isOff) {
-            prevPower = intakePower;
-            isOff = true;
-            intakeMotor.setPower(0);
-        }
-        if (robot.lindexer.getLindexerState() == Lindexer.LindexerState.READY && isOff) {
-            intakeMotor.setPower(prevPower);
-            isOff = false;
-        }*/
+        artifactSensor.update();
     }
     public void updatePower() {
         intakeMotor.setPower(intakePower);
@@ -105,5 +104,7 @@ public class Intake {
         intakeBlocker.setPosition(ConfigConstants.INTAKE_UNBLOCK);
     }
 
-
+    public IntakeArtifactSensor getArtifactSensor() {
+        return artifactSensor;
+    }
 }

@@ -57,20 +57,22 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new WaitScheduler(robot.scheduler)
         );
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(2700)),
+                new InstantCommand(() -> robot.shooter.setRPM(2500)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.shootPreload)),
-                new Wait(300),
+
                 new WaitShooter(robot.shooter),
-                new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop()),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.scanMotif)),
                 //Supplier<Boolean> condition
                 new WaitFollower(robot.follower),
                 new InstantCommand(() -> robot.setMotifByTag(robot.tagCamera.getMostPopularMotifTag())),
+                new InstantCommand(() -> robot.tagCamera.getVisionPortal().close()),
                 new InstantCommand(() -> robot.lindexer.setIndex(true))
         );
         SequentialCommand spike1 = new SequentialCommand(
@@ -83,10 +85,12 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.setMaxPower(0.3)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1)),
                 new WaitFollower(robot.follower),
-                new Wait(500),
+                new InstantCommand(() -> robot.intake.lift()),
+                //new Wait(500),
                 new InstantCommand(() -> robot.follower.setMaxPower(0.7)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1ToGateTurn)),
                 new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.4)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateTurnToGatePush1)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new WaitFollowerOrStuck(robot.follower),
@@ -109,16 +113,19 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.setMaxPower(0.3)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2)),
                 new WaitFollower(robot.follower),
-                new Wait(500),
+                new InstantCommand(() -> robot.intake.lift()),
+               // new Wait(0),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2Reverse)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new WaitParametric(robot.follower),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2ToShoot)),
                 new Wait(500),
+                new InstantCommand(() -> robot.intake.outtake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.intake.intake()),
                 shoot
         );
         SequentialCommand spike3 = new SequentialCommand(
@@ -130,14 +137,17 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.setMaxPower(0.3)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike3)),
                 new WaitFollower(robot.follower),
-                new Wait(500),
+                new InstantCommand(() -> robot.intake.lift()),
+              //  new Wait(500),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike3ToShoot)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new Wait(500),
+                new InstantCommand(() -> robot.intake.outtake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.intake.intake()),
                 shoot
         );
         SequentialCommand park = new SequentialCommand(

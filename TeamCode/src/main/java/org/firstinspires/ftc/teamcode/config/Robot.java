@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.lynx.LynxI2cDeviceSynch;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -39,7 +40,8 @@ public class Robot {
 
     public enum RobotState {
         INTAKE,
-        SHOOT
+        SHOOT,
+        PARK
     }
 
     public CommandScheduler scheduler = new CommandScheduler();
@@ -128,6 +130,8 @@ public class Robot {
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
+
+        ((LynxI2cDeviceSynch) lindexer.getLindexerColor().getColorSensor().getDeviceClient()).setBusSpeed(LynxI2cDeviceSynch.BusSpeed.FAST_400K);
 
         tagCamera = new TagCamera(hardwareMap);
         while (tagCamera.getVisionPortal().getCameraState() != VisionPortal.CameraState.STREAMING || !tagCamera.getVisionPortal().getProcessorEnabled(tagCamera.getAprilTag())) {
@@ -248,6 +252,7 @@ public class Robot {
         robotState = RobotState.INTAKE;
         scheduler.schedule(commands.startIntaking, getMilliseconds());
         transfer.unblock();
+        ascent.descend();
     }
 
     public void startTeleop() {
@@ -335,14 +340,12 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-       /* packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+        /*packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
-        packet.put("min", 0);
-        packet.put("error", Math.toDegrees(chassis.getHeadingError(this)));
-        packet.put("voltage", chassis.getVoltage());
-        packet.put("distance", lindexer.getLindexerColor().getDistance());
-        packet.put("hue", lindexer.getLindexerColor().getHue());*/
+        packet.put("min", 0);*/
+      //  packet.put("dist", lindexer.getLindexerColor().getDistance());
+        //packet.put("hue", lindexer.getLindexerColor().getHue());
         /*if (lindexer.getLindexerColor().distance < 3.4) {
             packet.put("dist", 1);
         }
@@ -368,6 +371,8 @@ public class Robot {
         tagCamera.getVisionPortal().close();
         Storage.cleanup(alliance, motif, follower);
     }
+
+
 
 
 

@@ -25,8 +25,8 @@ public class Ascent {
     public Ascent(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
 
-        ascentLeft = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
-        ascentRight = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
+        ascentLeft = hardwareMap.get(Servo.class, ConfigConstants.ASCENT_LEFT);
+        ascentRight = hardwareMap.get(Servo.class, ConfigConstants.ASCENT_RIGHT);
 
     }
 
@@ -44,4 +44,7 @@ public class Ascent {
         ascentState = AscentState.DOWN;
     }
 
+    public AscentState getAscentState() {
+        return ascentState;
+    }
 }

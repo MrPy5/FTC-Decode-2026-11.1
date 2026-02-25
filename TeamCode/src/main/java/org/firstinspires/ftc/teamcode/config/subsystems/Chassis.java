@@ -39,6 +39,7 @@ public class Chassis {
     public boolean turnCompleted = true;
     public double targetHeading = 0;
     public double degreeOffset = 0;
+    public double parkHeading = 180;
     public ElapsedTime turnTimer = new ElapsedTime();
 
     public Chassis(HardwareMap hardwareMap) {
@@ -216,6 +217,7 @@ public class Chassis {
             }
         }
     }
+
     public double turnPowerWithPinpoint(Robot robot) {
 
 
@@ -252,6 +254,36 @@ public class Chassis {
         }
 
     }
+    public double turnPowerWithPinpointToPark(Robot robot) {
+
+        if (!justLetGoOfStick) {
+
+            targetHeading = Math.toRadians(parkHeading);
+
+
+            double error = getHeadingError(robot);
+            double sign = error / Math.abs(error);
+            double kd = 0.09;
+            double kp = 0.9;
+            double powerError = (error * kp) - (robot.follower.getAngularVelocity() * kd);
+            double degreeError = Math.toDegrees(error);
+            double clampedPowerError = clamp(powerError, -1, 1);
+            if (Math.abs(clampedPowerError) < 0.06) {
+                clampedPowerError = 0.06 * sign;
+            }
+
+            if (Math.abs(degreeError) < 0.5) {
+                return 0;
+            } else {
+                return clampedPowerError * getVoltageMultiplier();
+            }
+
+        }
+        else {
+            return 0;
+        }
+
+    }
 
     public double getHeadingError(Robot robot) {
         double headingError = MathFunctions.getTurnDirection(robot.follower.getPose().getHeading(), targetHeading) * MathFunctions.getSmallestAngleDifference(robot.follower.getPose().getHeading(), targetHeading);
@@ -267,7 +299,16 @@ public class Chassis {
         double drivePower;
         double strafePower;
         double turnPower;
-
+        if (robot.getRobotState() == Robot.RobotState.PARK) {
+            driveDampeneing = 0.3;
+            strafeDampening = 0.3;
+            turnDampening = 0.3;
+        }
+        if (c1.left_trigger_pressed) {
+            driveDampeneing = 0.3;
+            strafeDampening = 0.3;
+            turnDampening = 0.3;
+        }
         drivePower = -c1.left_stick_y * driveDampeneing;
         strafePower = -c1.left_stick_x * strafeDampening;
         turnPower = -c1.right_stick_x * turnDampening;
@@ -300,9 +341,16 @@ public class Chassis {
 
                 turnPower = turnPowerWithPinpoint(robot);
 
-
-
             }
+        }
+
+        if (robot.getRobotState() == Robot.RobotState.PARK) {
+
+
+
+            turnPower = turnPowerWithPinpointToPark(robot);
+
+
         }
 
         return new double[]{drivePower, strafePower, turnPower};
