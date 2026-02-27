@@ -253,6 +253,7 @@ public class Robot {
         scheduler.schedule(commands.startIntaking, getMilliseconds());
         transfer.unblock();
         ascent.descend();
+        lindexer.leftCenter();
     }
 
     public void startTeleop() {
@@ -344,8 +345,12 @@ public class Robot {
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
         packet.put("min", 0);*/
+      //  packet.put("hue", lindexer.getLindexerColor().getDistance());
+       // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
       //  packet.put("dist", lindexer.getLindexerColor().getDistance());
         //packet.put("hue", lindexer.getLindexerColor().getHue());
+       // packet.put("hue", lindexer.getLindexerColor().getHue() > 240 ? 1 : 0);
+        //packet.put("dist", lindexer.getLindexerColor().getDistance() < 5 ? 1 : 0);
         /*if (lindexer.getLindexerColor().distance < 3.4) {
             packet.put("dist", 1);
         }

@@ -134,8 +134,8 @@ public class ConfigConstants {
     public static final double SHOOTER_UNBLOCK = 0.61;
 
         //Ascent
-    public static final double ASCEND_RIGHT = 0.57;
-    public static final double ASCEND_LEFT = 0.5;
+    public static final double ASCEND_RIGHT = 0.53;
+    public static final double ASCEND_LEFT = 0.54;
     public static final double DESCEND_RIGHT = 0.83;
     public static final double DESCEND_LEFT = 0.25;
 

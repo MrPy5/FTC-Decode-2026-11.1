@@ -16,7 +16,7 @@ public class IntakeArtifactSensor {
     DigitalChannel distanceSensor;
     ElapsedTime ballTimer = new ElapsedTime();
 
-    CyclingList distanceList = new CyclingList(15);
+    CyclingList distanceList = new CyclingList(20);
 
     public double distance = 0;
     boolean ballTimerStarted = false;
@@ -46,6 +46,10 @@ public class IntakeArtifactSensor {
 
         distanceList.add(distanceSensor.getState() ? 1 : 0, 0);
 
+        if (!distanceSensor.getState()) {
+
+        }
+
     }
 
     public boolean getBall(Robot robot) {
@@ -63,6 +67,7 @@ public class IntakeArtifactSensor {
         }
     }
 
-
-
+    public CyclingList getDistanceList() {
+        return distanceList;
+    }
 }

@@ -46,7 +46,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.startAuto(FarPaths::buildPaths, FarPaths.startPose);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(3050)),
+                new InstantCommand(() -> robot.shooter.setRPM(3000)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -100,9 +100,10 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         SequentialCommand getGateBall = new SequentialCommand(
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToGateOverflow)),
                 new WaitFollowerOrStuck(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.5)),
+                new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlow)),
                 new WaitFollowerOrStuck(robot.follower),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
@@ -124,6 +125,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 shootPreload,
                 humanPlayer,
                 spike3,
+                getGateBall,
                 getGateBall,
                 getGateBall,
                 park

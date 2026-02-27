@@ -40,6 +40,7 @@ public class Chassis {
     public double targetHeading = 0;
     public double degreeOffset = 0;
     public double parkHeading = 180;
+    public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
 
     public Chassis(HardwareMap hardwareMap) {
@@ -211,9 +212,9 @@ public class Chassis {
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(140 - y)) / (138 - x))) * -1;
+                return Math.toDegrees(Math.atan((-(135 - y)) / (133 - x))) * -1;
             } else {
-                return Math.toDegrees(Math.atan(((y)) / (138 - x))) * -1;
+                return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }
         }
     }
@@ -258,7 +259,7 @@ public class Chassis {
 
         if (!justLetGoOfStick) {
 
-            targetHeading = Math.toRadians(parkHeading);
+            targetHeading = Math.toRadians(parkHeading + parkHeadingOffset);
 
 
             double error = getHeadingError(robot);
@@ -344,7 +345,7 @@ public class Chassis {
             }
         }
 
-        if (robot.getRobotState() == Robot.RobotState.PARK) {
+        if (robot.getRobotState() == Robot.RobotState.PARK && robot.ascent.getAscentState() == Ascent.AscentState.DOWN) {
 
 
 

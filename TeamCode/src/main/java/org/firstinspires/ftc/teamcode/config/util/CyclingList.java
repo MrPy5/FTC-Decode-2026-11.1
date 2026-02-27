@@ -101,4 +101,6 @@ public class CyclingList {
     public void reset() {
         values.clear();
     }
+
+
 }
