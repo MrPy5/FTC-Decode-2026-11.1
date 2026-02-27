@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 
 @TeleOp(name = "Shooter Test")
-
+@Disabled
 //http://192.168.43.1:8080/dash
 public class ShooterTest extends LinearOpMode {
 

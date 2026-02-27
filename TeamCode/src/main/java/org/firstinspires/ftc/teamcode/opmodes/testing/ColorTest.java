@@ -24,7 +24,7 @@ public class ColorTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         RevColorSensorV3 color = hardwareMap.get(RevColorSensorV3.class, "lindex color left");
-        color.setGain(15f);
+        color.setGain(5f);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(50);
 
