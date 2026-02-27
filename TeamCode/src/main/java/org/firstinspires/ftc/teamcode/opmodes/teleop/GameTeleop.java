@@ -318,24 +318,26 @@ public class GameTeleop extends LinearOpMode {
                     c1.rumble(500);
                 }
 
+                if (c1.shareWasPressed()) {
+                    robot.scheduler.clear();
+                    robot.setRobotState(RobotState.INTAKE);
+                    robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
+                }
+
 
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
-                loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
-                telemetry.addData("loop", loopTimes.average());
+                //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
+                //telemetry.addData("loop", loopTimes.average());
 
-                /*telemetry.addData("scalar", robot.chassis.getVoltageScalar());
                 telemetry.addData("offset", robot.chassis.degreeOffset);
 
-                telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
-
                 telemetry.addData("motifMode", motifMode);
-                telemetry.addData("ready", robot.shooter.getShooterState());
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
 
                 telemetry.update();
 

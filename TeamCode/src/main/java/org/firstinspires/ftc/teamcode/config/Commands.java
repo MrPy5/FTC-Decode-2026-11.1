@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitTillLindexerRead
 
 public class Commands {
 
-    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing;
+    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing, resetEverything;
 
 
     public Commands(Robot robot) {
@@ -49,6 +49,25 @@ public class Commands {
                 new InstantCommand(() -> robot.lindexer.moveToNextBall(robot.classifier.getNextColor(robot.getMotif()))),
                 new WaitTillLindexerReady(robot.lindexer),
                 new InstantCommand(() -> robot.classifier.addBall())
+        );
+
+        resetEverything = new SequentialCommand(
+                new InstantCommand(() -> robot.ascent.descend()),
+                new InstantCommand(() -> robot.intake.drop()),
+                new InstantCommand(() -> robot.transfer.unblock()),
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new InstantCommand(() -> robot.intake.intake()),
+                new InstantCommand(() -> robot.lindexer.clear()),
+                new WaitTillLindexerReady(robot.lindexer),
+                new Wait(500),
+                new InstantCommand(() -> robot.lindexer.leftCenter()),
+                new WaitTillLindexerReady(robot.lindexer),
+                new Wait(500),
+                new InstantCommand(() -> robot.lindexer.rightCenter()),
+                new WaitTillLindexerReady(robot.lindexer),
+                new Wait(1000),
+                startIntaking
         );
 
 
