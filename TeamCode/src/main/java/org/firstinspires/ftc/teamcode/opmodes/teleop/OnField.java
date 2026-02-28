@@ -9,7 +9,7 @@ public class OnField extends OpMode {
     Robot robot;
     @Override
     public void init() {
-        robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
     @Override

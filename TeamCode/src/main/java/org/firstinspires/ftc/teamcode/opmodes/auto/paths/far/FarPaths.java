@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
+import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.constants.Poses;
 
 public class FarPaths {
@@ -80,15 +81,17 @@ public class FarPaths {
         backupHP = robot.follower.pathBuilder()
                 .addPath(new BezierLine(hpPose, backupHPPose))
                 .setLinearHeadingInterpolation(hpPose.getHeading(), backupHPPose.getHeading())
+                .setTValueConstraint(0.7)
                 .build();
 
         returnHP = robot.follower.pathBuilder()
                 .addPath(new BezierLine(backupHPPose, hpPose))
                 .setLinearHeadingInterpolation(backupHPPose.getHeading(), hpPose.getHeading())
+                .setTValueConstraint(0.7)
                 .build();
         hpToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(hpPose, shootPose))
-                .setLinearHeadingInterpolation(hpPose.getHeading(), shootPose.getHeading(), 0.3)
+                .setConstantHeadingInterpolation(shootPose.getHeading() - Math.toRadians(robot.getAlliance() == Alliance.BLUE ? 1 : -1))
                 .build();
 
         driveToSpike2 = robot.follower.pathBuilder()
@@ -139,7 +142,7 @@ public class FarPaths {
 
         gateOverFlowToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(gateOverFlowEndPose, shootPose))
-                .setConstantHeadingInterpolation(shootPose.getHeading())
+                .setConstantHeadingInterpolation(shootPose.getHeading() - Math.toRadians(robot.getAlliance() == Alliance.BLUE ? 2 : -2))
                 .build();
 
     }

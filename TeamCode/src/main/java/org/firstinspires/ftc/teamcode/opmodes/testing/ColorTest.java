@@ -36,6 +36,9 @@ public class ColorTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            telemetry.addData("ball", getDistance(color) < 4.7 ? "yes" : "no");
+            telemetry.addData("ball", getHue(color) > 220 ? "purple" : "green");
+            telemetry.update();
 
             TelemetryPacket packet = new TelemetryPacket();
             packet.put("dist", getDistance(color));

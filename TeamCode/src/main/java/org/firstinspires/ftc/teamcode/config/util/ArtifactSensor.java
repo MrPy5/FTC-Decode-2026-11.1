@@ -18,10 +18,11 @@ public class ArtifactSensor {
 
     RevColorSensorV3 colorSensor;
     ElapsedTime ballTimer = new ElapsedTime();
-    CyclingList hueList = new CyclingList(2);
+    CyclingList hueList = new CyclingList(5);
     public double hue = 0;
     public double distance = 0;
     boolean ballTimerStarted = false;
+    public double time = 50;
     public ArtifactSensor(RevColorSensorV3 colorSensor) {
        // this.colorSensorOne = colorSensorOne;
         this.colorSensor= colorSensor;
@@ -54,7 +55,7 @@ public class ArtifactSensor {
 
         distance = getDistance();
 
-        if (distance < 4.7 && (ballTimer.milliseconds() > 50  || !ballTimerStarted)) {
+        if (distance < 4.7 && (ballTimer.milliseconds() > time  || !ballTimerStarted)) {
             if (!ballTimerStarted) {
                 ballTimer.reset();
                 ballTimerStarted = true;
@@ -66,7 +67,7 @@ public class ArtifactSensor {
                 ballTimerStarted = false;
 
 
-                if (hueList.average() > 240) {
+                if (hueList.average() > 220) {
                     hueList.reset();
                     return Color.PURPLE;
                 } else {

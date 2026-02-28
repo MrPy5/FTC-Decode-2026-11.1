@@ -64,7 +64,7 @@ public class Lindexer {
 
                 Color ballColor = lindexerColor.getBall(robot);
                 if (ballColor != Color.EMPTY) {
-                    if (ballColor == robot.classifier.getNextColor(robot.getMotif()) && centerBall == Color.EMPTY) {
+                    if ((ballColor == robot.classifier.getNextColor(robot.getMotif()) && centerBall == Color.EMPTY) || (leftBall != Color.EMPTY && rightBall != Color.EMPTY)) {
                         robot.transfer.unblock();
                         centerBall = ballColor;
                         lindexerState = LindexerState.NOTREADY;
@@ -219,4 +219,21 @@ public class Lindexer {
         return lindexerState;
     }
 
+    public void empty() {
+        leftBall = Color.EMPTY;
+        centerBall = Color.EMPTY;
+        rightBall = Color.EMPTY;
+    }
+
+    public Color getLeftBall() {
+        return leftBall;
+    }
+
+    public Color getRightBall() {
+        return rightBall;
+    }
+
+    public Color getCenterBall() {
+        return centerBall;
+    }
 }

@@ -63,6 +63,7 @@ public class GameTeleop extends LinearOpMode {
 
             //Start gametimer, hardware reset before start (kicker down, others), other...
             robot.startTeleop();
+            robot.lindexer.getLindexerColor().time = 200;
            // robot.tagCamera.getVisionPortal().stopStreaming();
             while (opModeIsActive()) {
                 loopTimer.reset();
@@ -77,7 +78,7 @@ public class GameTeleop extends LinearOpMode {
                 //Switching modes between intake and shoot
                     //Shoot
               //  boolean psPressed = c1.psWasPressed();
-                if (robot.getRobotState() == RobotState.INTAKE) {
+                /*if (robot.getRobotState() == RobotState.INTAKE) {
                     if (robot.intake.getArtifactSensor().hasBall() && !prevHasBall) {
                         gamepad1.rumble(200);
                         prevHasBall = true;
@@ -85,7 +86,15 @@ public class GameTeleop extends LinearOpMode {
                     if (!robot.intake.getArtifactSensor().hasBall()) {
                         prevHasBall = false;
                     }
+                }*/
+                if (motifMode && robot.getRobotState() == RobotState.INTAKE && robot.lindexer.numOfBalls() == 3 && !prevHasBall) {
+                    gamepad1.rumble(1000);
+                    prevHasBall = true;
                 }
+                if (motifMode && robot.getRobotState() == RobotState.INTAKE && robot.lindexer.numOfBalls() != 3)  {
+                    prevHasBall = false;
+                }
+
                 if (robot.getRobotState() == RobotState.INTAKE) {
                     if (robot.intake.getArtifactSensor().hasBall()) {
                         robot.intake.lift();
@@ -116,6 +125,7 @@ public class GameTeleop extends LinearOpMode {
 
                     if (motifMode) {
                         robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
+                        robot.lindexer.empty();
                     }
                     else {
                         robot.transfer.unblock();
@@ -178,42 +188,52 @@ public class GameTeleop extends LinearOpMode {
                 //RPM addition
                 if (robot.getRobotState() == RobotState.PARK) {
                     if (robot.getAlliance() == Alliance.BLUE) {
-                        if (c2.dpadLeftWasPressed()) {
+                        if (c1.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 180;
                         }
-                        if (c2.dpadDownWasPressed()) {
+                        if (c1.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 270;
                         }
-                        if (c2.dpadUpWasPressed()) {
+                        if (c1.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 90;
                         }
-                        if (c2.dpadRightWasPressed()) {
+                        if (c1.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 0;
                         }
                     }
                     else {
-                        if (c2.dpadLeftWasPressed()) {
+                        if (c1.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 0;
                         }
-                        if (c2.dpadDownWasPressed()) {
+                        if (c1.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 90;
                         }
-                        if (c2.dpadUpWasPressed()) {
+                        if (c1.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 270;
                         }
-                        if (c2.dpadRightWasPressed()) {
+                        if (c1.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 180;
                         }
                     }
                 }
                 else {
-                    if (c2.dpadDownWasPressed()) {
-                        robot.shooter.decreaseManualRPMAdjustment();
-                        gamepad2.rumble(200);
+                    if (motifMode) {
+                        if (c2.dpadUpWasPressed()) {
+                            robot.intake.outtake();
+                        }
+                        if (c2.dpadDownWasPressed()) {
+                            robot.intake.intake();
+                        }
                     }
-                    if (c2.dpadUpWasPressed()) {
-                        robot.shooter.increaseManualRPMAdjustment();
-                        gamepad2.rumble(200);
+                    else {
+                        if (c2.dpadDownWasPressed()) {
+                            robot.shooter.decreaseManualRPMAdjustment();
+                            gamepad2.rumble(200);
+                        }
+                        if (c2.dpadUpWasPressed()) {
+                            robot.shooter.increaseManualRPMAdjustment();
+                            gamepad2.rumble(200);
+                        }
                     }
                 }
 
@@ -228,7 +248,7 @@ public class GameTeleop extends LinearOpMode {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
-                                robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
+                                robot.scheduler.schedule(robot.commands.teleopMotif, robot.getMilliseconds());
                             }
                             if (!motifMode) {
                                 robot.transfer.intakeTransfer();
@@ -257,20 +277,10 @@ public class GameTeleop extends LinearOpMode {
                 );
 
 
-                //Manual Stuff for Controller 2
-                /*if (c2.dpadDownWasPressed()) {
-                    robot.intake.intake();
-                }
-                if (c2.dpadUpWasPressed()) {
-                    robot.intake.outtake();
-                    gamepad2.rumble(500);
-                }
-                if (c2.dpadRightWasPressed()) {
-                    robot.intake.stopIntake();
-                }*/
+
 
                 //Motif mode (# of balls on ramp)
-               /* if (c2.triangleWasPressed()) {
+                if (c2.triangleWasPressed()) {
                     robot.classifier.addBall();
                     gamepad2.rumble(250);
                 }
@@ -280,10 +290,6 @@ public class GameTeleop extends LinearOpMode {
                     gamepad2.rumble(1000);
                 }
 
-                if (c2.circleWasPressed()) {
-                    robot.classifier.reset();
-                    gamepad2.rumble(1000);
-                }*/
                 if (robot.getRobotState() == RobotState.PARK) {
                     if (c2.circleWasPressed()) {
                         robot.chassis.parkHeadingOffset += 3;
@@ -314,10 +320,6 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
 
-                if (robot.intake.getArtifactSensor().hasBall()) {
-                    c1.rumble(500);
-                }
-
                 if (c1.shareWasPressed()) {
                     robot.scheduler.clear();
                     robot.setRobotState(RobotState.INTAKE);
@@ -330,7 +332,10 @@ public class GameTeleop extends LinearOpMode {
                 robot.doDashboard();
                 //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //telemetry.addData("loop", loopTimes.average());
-
+                telemetry.addData("left", robot.lindexer.getLeftBall());
+                telemetry.addData("right", robot.lindexer.getRightBall());
+                telemetry.addData("center", robot.lindexer.getCenterBall());
+                telemetry.addLine();
                 telemetry.addData("offset", robot.chassis.degreeOffset);
 
                 telemetry.addData("motifMode", motifMode);

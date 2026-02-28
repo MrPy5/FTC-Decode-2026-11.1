@@ -247,7 +247,7 @@ public class Chassis {
                 return 0;
             }
             else {
-                return clampedPowerError * getVoltageMultiplier();
+                return clampedPowerError/* * getVoltageMultiplier()*/;
             }
         }
         else {

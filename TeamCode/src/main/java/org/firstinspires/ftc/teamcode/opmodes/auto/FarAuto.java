@@ -10,7 +10,9 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollower;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollowerOrStuck;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollowerOrThreeBalls;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametric;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametricOrThreeBalls;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitScheduler;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooter;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.close.ClosePaths;
@@ -105,9 +107,30 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new WaitFollowerOrStuck(robot.follower),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlow)),
-                new WaitFollowerOrStuck(robot.follower),
+                new WaitFollowerOrThreeBalls(robot.follower, robot),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlowToShoot)),
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(500),
+                new InstantCommand(() -> robot.transfer.stop())
+        );
+        SequentialCommand humanPlayer2 = new SequentialCommand(
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
+                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new WaitParametric(robot.follower),
+                new Wait(500),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
+                new WaitParametricOrThreeBalls(robot.follower, robot),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.returnHP)),
+                new WaitParametricOrThreeBalls(robot.follower, robot),
+                new Wait(500),
+                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
@@ -123,9 +146,9 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
 
         pathSchedule = new SequentialCommand(
                 shootPreload,
-                humanPlayer,
+                humanPlayer2,
                 spike3,
-                getGateBall,
+                humanPlayer2,
                 getGateBall,
                 getGateBall,
                 park

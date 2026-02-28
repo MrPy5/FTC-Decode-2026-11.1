@@ -79,8 +79,8 @@ public class Robot {
     private ElapsedTime gameTimer = new ElapsedTime();
     public boolean usePinpoint = false;
 
-    public Robot(HardwareMap hardwareMap, Gamepad g1, Gamepad g2) {
-        this(hardwareMap, OpMode.TELEOP, null, null, null, g1, g2, null, null);
+    public Robot(HardwareMap hardwareMap, Gamepad g1, Gamepad g2, Telemetry telemetry) {
+        this(hardwareMap, OpMode.TELEOP, null, null, null, g1, g2, telemetry, null);
     }
     public Robot(HardwareMap hardwareMap, Gamepad g1, Gamepad g2, Follower follower) {
         this(hardwareMap, OpMode.TELEOP, null, null, follower, g1, g2, null, null);
@@ -201,6 +201,7 @@ public class Robot {
 
         telemetry.addData("Tag FPS: ", tagCamera.getFPS());
         telemetry.addData("state", tagCamera.getState());
+        telemetry.addData("pinpoint", follower.getHeading());
 
 
     }
@@ -376,6 +377,8 @@ public class Robot {
         tagCamera.getVisionPortal().close();
         Storage.cleanup(alliance, motif, follower);
     }
+
+
 
 
 

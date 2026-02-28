@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitTillLindexerRead
 
 public class Commands {
 
-    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing, resetEverything;
+    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing, resetEverything, teleopMotif;
 
 
     public Commands(Robot robot) {
@@ -38,7 +38,9 @@ public class Commands {
                 new InstantCommand(() -> robot.transfer.intakeTransfer()));
 
         startLindexing = new SequentialCommand(
-                new InstantCommand(() -> robot.transfer.block()));
+                new InstantCommand(() -> robot.transfer.block()),
+                new InstantCommand(() -> robot.lindexer.leftCenter())
+        );
         stopLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.block()),
                 new InstantCommand(() -> robot.transfer.unblock()),
@@ -52,10 +54,13 @@ public class Commands {
         );
 
         resetEverything = new SequentialCommand(
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new Wait(300),
                 new InstantCommand(() -> robot.ascent.descend()),
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.transfer.unblock()),
-                new InstantCommand(() -> robot.shooter.unblock()),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.lindexer.clear()),
@@ -68,6 +73,11 @@ public class Commands {
                 new WaitTillLindexerReady(robot.lindexer),
                 new Wait(1000),
                 startIntaking
+        );
+
+        teleopMotif = new SequentialCommand(
+              shootLindexing,
+              new Wait(300)
         );
 
 

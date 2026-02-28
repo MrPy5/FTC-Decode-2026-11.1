@@ -149,11 +149,11 @@ public class PreMatch extends LinearOpMode {
         sleep(500);
         ll.setPosition(ConfigConstants.LEFT_LIN_IN);
         sleep(500);
-        transferBlocker.setPosition(ConfigConstants.LEFT_LIN_OUT);
+        ll.setPosition(ConfigConstants.LEFT_LIN_OUT);
         sleep(500);
-        shooterBlocker.setPosition(ConfigConstants.RIGHT_LIN_IN);
+        rl.setPosition(ConfigConstants.RIGHT_LIN_IN);
         sleep(500);
-        shooterBlocker.setPosition(ConfigConstants.RIGHT_LIN_OUT);
+        rl.setPosition(ConfigConstants.RIGHT_LIN_OUT);
         sleep(500);
 
         while (!gamepad1.ps);
@@ -173,11 +173,13 @@ public class PreMatch extends LinearOpMode {
 
         while(!gamepad1.ps) {
             telemetry.addData("distance", colorSensorV3.getDistance(DistanceUnit.CM));
+            telemetry.update();
         }
         sleep(1000);
 
         while(!gamepad1.ps) {
             telemetry.addData("ball in?", distance.getState());
+            telemetry.update();
         }
 
     }

@@ -16,13 +16,13 @@ public class Poses {
     public static final Pose shootPoseBlueClose = new Pose(80, 77, Math.toRadians(49));
     public static final Pose parkPoseBlueClose = new Pose(95, 84, Math.toRadians(0)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public static final Pose parkPoseRedClose = new Pose(95, 60, Math.toRadians(0)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public static final Pose shootPoseRedClose = new Pose(83, 59.6, Math.toRadians(311));
+    public static final Pose shootPoseRedClose = new Pose(83, 59.6, Math.toRadians(312.5));
 
     public static final Pose endShootPoseBlue = new Pose(80, 74.55, 0.92);
     public static final Pose endShootPoseRed = new Pose(25, -9, Math.toRadians(-54));
 
 
-    public static final Pose gateTurn1Red = new Pose(68, 30, Math.toRadians(0));
+    public static final Pose gateTurn1Red = new Pose(68, 22, Math.toRadians(0));
     public static final Pose gatePush1Red = new Pose(68, 15, Math.toRadians(0));
 
     public static final Pose gateTurn1Blue = new Pose(68, 118, Math.toRadians(0));
@@ -105,8 +105,8 @@ public class Poses {
     public static final Pose gateOverFlowPoseBlueFar = new Pose(2, 130, Math.toRadians(35)); // Highest (First Set) of Artifacts from the Spike Mark.
     public static final Pose gateOverFlowPoseRedFar = new Pose(2, 14, Math.toRadians(-35)); // Highest (First Set) of Artifacts from the Spike Mark.
 
-    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(30, 130, Math.toRadians(35)); // Highest (First Set) of Artifacts from the Spike Mark.
-    public static final Pose gateOverFlowEndPoseRedFar = new Pose(30, 14, Math.toRadians(-35)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(45, 130, Math.toRadians(35)); // Highest (First Set) of Artifacts from the Spike Mark.
+    public static final Pose gateOverFlowEndPoseRedFar = new Pose(45, 14, Math.toRadians(-35)); // Highest (First Set) of Artifacts from the Spike Mark.
 
     //Test
     public static final Pose startPose = new Pose(0, 0, Math.toRadians(0)); // Start Pose of our robot.
