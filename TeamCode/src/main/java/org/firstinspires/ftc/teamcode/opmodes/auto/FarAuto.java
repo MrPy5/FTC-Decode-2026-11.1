@@ -48,7 +48,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.startAuto(FarPaths::buildPaths, FarPaths.startPose);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(3000)),
+                new InstantCommand(() -> robot.shooter.setRPM(3100)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -94,6 +94,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -113,6 +114,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -122,18 +124,19 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
-                new WaitParametric(robot.follower),
+                new WaitFollowerOrStuck(robot.follower),
                 new Wait(500),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
-                new WaitParametricOrThreeBalls(robot.follower, robot),
+                new WaitFollowerOrStuck(robot.follower),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.returnHP)),
-                new WaitParametricOrThreeBalls(robot.follower, robot),
+                new WaitFollowerOrStuck(robot.follower),
                 new Wait(500),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -149,7 +152,6 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 humanPlayer2,
                 spike3,
                 humanPlayer2,
-                getGateBall,
                 getGateBall,
                 park
         );

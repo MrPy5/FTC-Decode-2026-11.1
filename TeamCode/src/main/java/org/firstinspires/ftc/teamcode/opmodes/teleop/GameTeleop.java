@@ -95,6 +95,10 @@ public class GameTeleop extends LinearOpMode {
                     prevHasBall = false;
                 }
 
+                if (robot.getRobotState() == RobotState.SHOOT && robot.lindexer.numOfBalls() == 0 && motifMode) {
+                    gamepad2.rumble(1000);
+                }
+
                 if (robot.getRobotState() == RobotState.INTAKE) {
                     if (robot.intake.getArtifactSensor().hasBall()) {
                         robot.intake.lift();
@@ -114,7 +118,7 @@ public class GameTeleop extends LinearOpMode {
                     }
 
                     robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint(robot));
-
+                    gamepad2.rumble(500);
 
                 }
                     //Intake
@@ -126,6 +130,7 @@ public class GameTeleop extends LinearOpMode {
                     if (motifMode) {
                         robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
                         robot.lindexer.empty();
+
                     }
                     else {
                         robot.transfer.unblock();

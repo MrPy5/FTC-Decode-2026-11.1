@@ -13,7 +13,7 @@ public class ClosePaths {
 
 
 
-    public static PathChain spike2Reverse, gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot;
+    public static PathChain spike2Fast, spike2Reverse, gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot, driveToGateFromSpike2, spike2GateToShoot;
 
     public static Pose startPose = Poses.startPoseBlueClose;
     static Pose shootPose = Poses.shootPoseBlueClose;
@@ -35,6 +35,8 @@ public class ClosePaths {
     static Pose gatePushAngleBezier = Poses.gatePushAngleBezierBlue;
     static Pose gateBackupAngle = Poses.gateBackupAngleBlue;
     static Pose tunnelPose = Poses.tunnelPoseBlue;
+    static Pose gatePoseSpike = Poses.gatePoseSpikeBlue;
+    static Pose spike2EndPoseFast = Poses.spike2EndPoseFastBlue;
 
     public static boolean pathsBuilt = false;
     public static void useBluePaths() {
@@ -59,6 +61,8 @@ public class ClosePaths {
         gatePushAngleBezier = Poses.gatePushAngleBezierBlue;
         gateBackupAngle = Poses.gateBackupAngleBlue;
         tunnelPose = Poses.tunnelPoseBlue;
+        gatePoseSpike = Poses.gatePoseSpikeBlue;
+        spike2EndPoseFast = Poses.spike2EndPoseFastBlue;
 
     }
 
@@ -84,6 +88,10 @@ public class ClosePaths {
         gatePushAngleBezier = Poses.gatePushAngleBezierRed;
         gateBackupAngle = Poses.gateBackupAngleRed;
         tunnelPose = Poses.tunnelPoseRed;
+
+        gatePoseSpike = Poses.gatePoseSpikeRed;
+
+        spike2EndPoseFast = Poses.spike2EndPoseFastRed;
 
     }
     public static void buildPaths(Robot robot) {
@@ -122,6 +130,10 @@ public class ClosePaths {
         spike2 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike2Pose, spike2EndPose))
                 .setLinearHeadingInterpolation(spike2Pose.getHeading(), spike2EndPose.getHeading())
+                .build();
+        spike2Fast = robot.follower.pathBuilder()
+                .addPath(new BezierLine(spike2Pose, spike2EndPoseFast))
+                .setLinearHeadingInterpolation(spike2Pose.getHeading(), spike2EndPoseFast.getHeading())
                 .build();
         spike2Reverse = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike2EndPose, spike2Pose))
@@ -227,7 +239,14 @@ public class ClosePaths {
                 .addPath(new BezierLine(tunnelPose, shootPose))
                 .setConstantHeadingInterpolation(shootPose.getHeading())
                 .build();
-
+        driveToGateFromSpike2 = robot.follower.pathBuilder()
+                .addPath(new BezierLine(spike2EndPoseFast, gatePoseSpike))
+                .setConstantHeadingInterpolation(gatePoseSpike.getHeading())
+                .build();
+        spike2GateToShoot = robot.follower.pathBuilder()
+                .addPath(new BezierLine(gatePoseSpike, shootPose))
+                .setConstantHeadingInterpolation(shootPose.getHeading())
+                .build();
     }
 
 }

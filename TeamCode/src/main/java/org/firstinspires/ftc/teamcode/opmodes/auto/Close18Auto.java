@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollower;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollowerOrThreeBalls;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooter;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.close.ClosePaths;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
@@ -43,12 +44,12 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
         robot.startAuto(ClosePaths::buildPaths, ClosePaths.startPose);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(2700)),
+                new InstantCommand(() -> robot.shooter.setRPM(2500)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.shootPreload)),
-                new Wait(300),
+                new Wait(400),
                 new WaitShooter(robot.shooter),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new WaitFollower(robot.follower),
@@ -76,9 +77,12 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike2)),
                 new WaitFollower(robot.follower),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2)),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2Fast)),
                 new WaitFollower(robot.follower),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2ToShoot)),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToGateFromSpike2)),
+                new WaitFollower(robot.follower),
+                new Wait(500),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2GateToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new WaitFollower(robot.follower),
@@ -102,6 +106,23 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop())
         );
+        SequentialCommand gateBall = new SequentialCommand(
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToGate)),
+                new WaitFollower(robot.follower),
+                new Wait(1000),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.backupFronGate)),
+                new WaitFollower(robot.follower),
+                new Wait(1000),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateAngleToShoot)),
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new WaitFollower(robot.follower),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(500),
+                new InstantCommand(() -> robot.transfer.stop())
+        );
 
         SequentialCommand park = new SequentialCommand(
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.parkPath)),
@@ -110,9 +131,10 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
 
         pathSchedule = new SequentialCommand(
                 shootPreload,
-                spike1,
                 spike2,
-                spike3,
+                gateBall,
+                gateBall,
+                spike1,
                 park
         );
         pathSchedule.start();

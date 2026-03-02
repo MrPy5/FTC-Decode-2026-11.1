@@ -39,7 +39,7 @@ public class Chassis {
     public boolean turnCompleted = true;
     public double targetHeading = 0;
     public double degreeOffset = 0;
-    public double parkHeading = 180;
+    public double parkHeading = 0;
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
 

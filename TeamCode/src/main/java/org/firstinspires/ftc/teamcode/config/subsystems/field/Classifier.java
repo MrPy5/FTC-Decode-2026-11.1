@@ -29,4 +29,7 @@ public class Classifier {
     public Color getNextColor(Motif motif) {
         return ConfigConstants.MOFIT_COLOR_MAP.get(motif)[ballsInClassifier % 3];
     }
+    public void addBalls(int numOfBalls) {
+        ballsInClassifier += numOfBalls;
+    }
 }
