@@ -26,20 +26,11 @@ public class ShooterTest extends LinearOpMode {
         double ticksPerRevolution = 28.0;
         DcMotorEx sml = hardwareMap.get(DcMotorEx.class, "shooter left");
         DcMotorEx smr = hardwareMap.get(DcMotorEx.class, "shooter right");
-        DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
 
-        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE); //intake with positive value
 
-        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotorEx transferMotor = hardwareMap.get(DcMotorEx.class, "green wheel");
 
-        transferMotor.setDirection(DcMotorEx.Direction.FORWARD); //intake with positive value
 
-        transferMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        transferMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         sml.setDirection(DcMotorSimple.Direction.FORWARD);
         sml.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
@@ -54,9 +45,6 @@ public class ShooterTest extends LinearOpMode {
         int targetRPM = 0;
         int rpm;
         boolean on = false;
-        boolean on2 = true;
-        double lowRPMTime = -1;
-        double lastSpinUpElapsedTime = 0;
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(50);
         CyclingList loopTime = new CyclingList(100);
@@ -85,17 +73,6 @@ public class ShooterTest extends LinearOpMode {
                     targetRPM = 0;
                 }
             }
-            if (gamepad1.shareWasPressed()) {
-                on2 = !on2;
-                if (on2) {
-                    transferMotor.setPower(1);
-                    intakeMotor.setPower(1);
-                }
-                else {
-                    transferMotor.setPower(0);
-                    intakeMotor.setPower(0);
-                }
-            }
 
 
 
@@ -117,7 +94,6 @@ public class ShooterTest extends LinearOpMode {
             loopTime.add(rpm, gameTimer.milliseconds());
 
             telemetry.addData("On?: ", on);
-            telemetry.addData("On2?: ", on2);
 
             telemetry.addData("Target RPM: ", targetRPM);
             telemetry.addData("Current RPM: ", rpm);
