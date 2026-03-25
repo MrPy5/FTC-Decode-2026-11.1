@@ -73,7 +73,14 @@ public class ShooterTest extends LinearOpMode {
                     targetRPM = 0;
                 }
             }
-
+            if (gamepad1.crossWasPressed()) {
+                sml.setDirection(DcMotorSimple.Direction.REVERSE);
+                smr.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
+            if (gamepad1.squareWasPressed()) {
+                sml.setDirection(DcMotorSimple.Direction.FORWARD);
+                smr.setDirection(DcMotorSimple.Direction.REVERSE);
+            }
 
 
             //Power changing
