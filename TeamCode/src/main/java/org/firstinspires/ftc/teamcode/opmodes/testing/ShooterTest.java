@@ -28,7 +28,7 @@ public class ShooterTest extends LinearOpMode {
         double turretMiddleAim = 0.5;
         double turretChangeAmt = 0.1;
         double turretCurrentAim = turretMiddleAim;
-        double prevTurretAim = 0;
+        double turretPrevAim = 0;
 
         DcMotorEx sml = hardwareMap.get(DcMotorEx.class, "shooter left");
         DcMotorEx smr = hardwareMap.get(DcMotorEx.class, "shooter right");
@@ -40,11 +40,11 @@ public class ShooterTest extends LinearOpMode {
 
         sml.setDirection(DcMotorSimple.Direction.REVERSE);
         sml.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        sml.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(100, 0, 1, 14));
+        sml.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(130, 0, 1, 14));
 
         smr.setDirection(DcMotorSimple.Direction.FORWARD);
         smr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        smr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(100, 0, 1, 14));
+        smr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(130, 0, 1, 14));
 
         im.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -93,26 +93,25 @@ public class ShooterTest extends LinearOpMode {
 
              */
 
-            if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) {  // Intake and Transfer on
                 tm.setPower(1.0);
                 im.setPower(1.0);
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_down) { // Intake and Transfer off
                 tm.setPower(0);
                 im.setPower(0);
             }
 
-            if (gamepad1.squareWasReleased()) {
+            if (gamepad1.squareWasReleased()) {  // Turns turret Left
                 turretCurrentAim = turretCurrentAim + turretChangeAmt;
-
             }
-            if (gamepad1.circleWasReleased()) {
+            if (gamepad1.circleWasReleased()) {  // Turns turret Right
                 turretCurrentAim = turretCurrentAim - turretChangeAmt;
             }
-            if (prevTurretAim != turretCurrentAim) {
+            if (turretPrevAim != turretCurrentAim) {
                 turretServoLeft.setPosition(turretCurrentAim);
                 turretServoRight.setPosition(turretCurrentAim);
-                prevTurretAim = turretCurrentAim;
+                turretPrevAim = turretCurrentAim;
             }
 
             //Power changing
