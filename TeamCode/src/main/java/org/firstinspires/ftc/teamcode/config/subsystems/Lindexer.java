@@ -26,6 +26,8 @@ public class Lindexer {
     }
 
     ElapsedTime moveTime = new ElapsedTime();
+    ElapsedTime waitTimer = new ElapsedTime();
+    boolean waitStarted = false;
 
     boolean index = false;
 
@@ -58,7 +60,7 @@ public class Lindexer {
 
     //Util functions
     public void update(Robot robot) {
-
+        /*
         if (lindexerState == LindexerState.READY) {
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
 
@@ -108,6 +110,26 @@ public class Lindexer {
             if (centerBall != Color.EMPTY && robot.getRobotState() == RobotState.INTAKE) {
                 robot.transfer.block();
             }
+        }*/
+
+        if (lindexerState == LindexerState.READY) {
+            if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() == 0 && robot.intake.getArtifactSensor().getState() && !waitStarted) {
+                waitTimer.reset();
+                waitStarted = true;
+            }
+            if (waitTimer.milliseconds() > 0 && waitStarted) {
+                rightCenter();
+                rightBall = Color.PURPLE;
+                waitStarted = false;
+            }
+        }
+        else if (lindexerState == LindexerState.NOTREADY) {
+            moveTime.reset();
+            lindexerState = LindexerState.WAITING;
+        }
+        else if (lindexerState == LindexerState.WAITING && moveTime.milliseconds() > ConfigConstants.MOVE_MILLISECONDS)  {
+            lindexerState = LindexerState.READY;
+
         }
     }
 
@@ -235,5 +257,24 @@ public class Lindexer {
 
     public Color getCenterBall() {
         return centerBall;
+    }
+
+    public void stopIntakingAndLindex(Robot robot) {
+        centerBall = Color.PURPLE;
+        leftBall = Color.GREEN;
+        rightBall = Color.PURPLE;
+
+        Color nextBall = robot.classifier.getNextColor(robot.getMotif());
+        robot.transfer.intakeTransfer();
+        if (matchesColor(centerBall, nextBall)) {
+            robot.scheduler.schedule(robot.commands.acceptCenterBall, robot.getMilliseconds());
+        }
+        else if (matchesColor(rightBall, nextBall)) {
+            robot.scheduler.schedule(robot.commands.acceptRightBall, robot.getMilliseconds());
+        }
+        else if (matchesColor(leftBall, nextBall)) {
+            robot.scheduler.schedule(robot.commands.acceptLeftBall, robot.getMilliseconds());
+        }
+
     }
 }

@@ -49,15 +49,13 @@ public class Shooter {
         this.hardwareMap = hardwareMap;
 
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
+        shooterMotorLeft.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-       // shooterMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotorRight.setDirection(DcMotorEx.Direction.FORWARD);
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-      //  shooterMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
@@ -92,12 +90,7 @@ public class Shooter {
             }
         }
     }
-    public void setPower(double power) {
-       // shooterMotorLeft.setPower(power);
-       // shooterMotorRight.setPower(power);
 
-        this.power = power;
-    }
     public ShooterState getShooterState() {
         return shooterState;
     }
@@ -110,12 +103,6 @@ public class Shooter {
 
         shooterMotorLeft.setRPM(targetShooterRPM);
         shooterMotorRight.setRPM(targetShooterRPM);
-       /* if (droppedActivateBangBang) {
-            setPower(1);
-        }
-        else {
-            setPower((ConfigConstants.kV * targetShooterRPM) + (ConfigConstants.kP * (targetShooterRPM - shooterMotorLeft.getRPM())) + ConfigConstants.kS);
-        }*/
     }
 
     public double getTargetShooterRPM() {
@@ -162,38 +149,6 @@ public class Shooter {
 
     }
     public double multiRPM(double range) {
-        /*
-        if (range > ConfigConstants.FURTHEST_DIST) {
-            lastRPM = ConfigConstants.FURTHEST_RPM;
-            return ConfigConstants.FURTHEST_RPM;
-        }
-        else if (range > ConfigConstants.BACK_TRIANGLE_DIST) {
-            lastRPM = ConfigConstants.BACK_TRIANGLE_RPM;
-            return ConfigConstants.BACK_TRIANGLE_RPM;
-        }
-        else if (range > ConfigConstants.FARTHEST_FRONT_DIST) {
-            lastRPM = ConfigConstants.FARTHERST_FRONT_RPM;
-            return ConfigConstants.FARTHERST_FRONT_RPM;
-        }
-        else if (range > ConfigConstants.FAR_FRONT_TRAINGLE_DIST) {
-            lastRPM = ConfigConstants.FAR_FRONT_TRIANGLE_RPM;
-            return ConfigConstants.FAR_FRONT_TRIANGLE_RPM;
-        }
-        else if (range > ConfigConstants.MID_FRONT_TRIANGLE_DIST) {
-            lastRPM = ConfigConstants.MID_FRONT_TRIANGLE_RPM;
-            return ConfigConstants.MID_FRONT_TRIANGLE_RPM;
-        }
-        else if (range > ConfigConstants.FRONT_TRIANGLE_DIST) {
-            lastRPM = ConfigConstants.FRONT_TRIANGLE_RPM;
-            return ConfigConstants.FRONT_TRIANGLE_RPM;
-        }
-        else if (range > ConfigConstants.CLOSEST_DIST) {
-            lastRPM = ConfigConstants.CLOSEST_RPM;
-            return ConfigConstants.CLOSEST_RPM;
-        }
-        else {
-            return lastRPM;
-        }*/
 
         if (range == -1) {
             return lastRPM;

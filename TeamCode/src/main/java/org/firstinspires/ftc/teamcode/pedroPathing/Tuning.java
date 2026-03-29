@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Configurable
 @TeleOp(name = "Tuning", group = "Pedro Pathing")
-
+@Disabled
 public class Tuning extends SelectableOpMode {
     public static Follower follower;
 

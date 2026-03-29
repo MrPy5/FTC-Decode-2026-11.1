@@ -212,7 +212,7 @@ public class Chassis {
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(135 - y)) / (133 - x))) * -1;
+                return Math.toDegrees(Math.atan((-(135 - y)) / (133 - x))) * -1; //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }
@@ -235,8 +235,6 @@ public class Chassis {
             double sign = error / Math.abs(error);
             double kd = ConfigConstants.TURN_kD;
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
-            double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
-            //powerError += boost;
             double degreeError = Math.toDegrees(error);
             double clampedPowerError = clamp(powerError, -1, 1);
             if (Math.abs(clampedPowerError) < 0.06) {
@@ -345,7 +343,7 @@ public class Chassis {
             }
         }
 
-        if (robot.getRobotState() == Robot.RobotState.PARK && robot.ascent.getAscentState() == Ascent.AscentState.DOWN) {
+        if (robot.getRobotState() == Robot.RobotState.PARK && robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
 
 
 

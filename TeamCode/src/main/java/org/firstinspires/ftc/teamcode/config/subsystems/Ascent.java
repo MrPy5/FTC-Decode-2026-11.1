@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
 public class Ascent {
     public enum AscentState {
-        UP,
-        DOWN
+        ASCENDED,
+        NOTASCENDED
     }
 
 
@@ -20,7 +20,7 @@ public class Ascent {
     Servo ascentLeft;
     Servo ascentRight;
 
-    AscentState ascentState = AscentState.DOWN;
+    AscentState ascentState = AscentState.NOTASCENDED;
 
     public Ascent(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -35,13 +35,13 @@ public class Ascent {
         ascentLeft.setPosition(ConfigConstants.ASCEND_LEFT);
         ascentRight.setPosition(ConfigConstants.ASCEND_RIGHT);
 
-        ascentState = AscentState.UP;
+        ascentState = AscentState.ASCENDED;
     }
     public void descend() {
         ascentLeft.setPosition(ConfigConstants.DESCEND_LEFT);
         ascentRight.setPosition(ConfigConstants.DESCEND_RIGHT);
 
-        ascentState = AscentState.DOWN;
+        ascentState = AscentState.NOTASCENDED;
     }
 
     public AscentState getAscentState() {

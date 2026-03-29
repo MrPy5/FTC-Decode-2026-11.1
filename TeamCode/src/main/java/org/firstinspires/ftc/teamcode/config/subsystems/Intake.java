@@ -35,7 +35,6 @@ public class Intake {
 
     double intakePower = 0;
     double prevPower = 0;
-    boolean isOff = false;
 
     IntakeState intakeState = IntakeState.OFF;
 

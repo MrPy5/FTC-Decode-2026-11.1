@@ -70,4 +70,7 @@ public class IntakeArtifactSensor {
     public CyclingList getDistanceList() {
         return distanceList;
     }
+    public boolean getState() {
+        return distanceSensor.getState();
+    }
 }

@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.field.Classifier;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
@@ -62,6 +63,7 @@ public class Robot {
     public Intake intake;
     public Chassis chassis;
     public Ascent ascent;
+    public Turret turret;
     public Follower follower;
 
     public TagCamera tagCamera;
@@ -119,6 +121,7 @@ public class Robot {
         lindexer = new Lindexer(hardwareMap);
         chassis = new Chassis(hardwareMap);
         ascent = new Ascent(hardwareMap);
+        turret = new Turret(hardwareMap);
 
 
         commands = new Commands(this);
@@ -134,6 +137,7 @@ public class Robot {
         ((LynxI2cDeviceSynch) lindexer.getLindexerColor().getColorSensor().getDeviceClient()).setBusSpeed(LynxI2cDeviceSynch.BusSpeed.FAST_400K);
 
         tagCamera = new TagCamera(hardwareMap);
+        /*
         while (tagCamera.getVisionPortal().getCameraState() != VisionPortal.CameraState.STREAMING || !tagCamera.getVisionPortal().getProcessorEnabled(tagCamera.getAprilTag())) {
 
             telemetry.addData("waiting", "...");
@@ -162,7 +166,10 @@ public class Robot {
 
             tagCamera.reinstall();
         }
+
+         */
     }
+
 
     public void initAutoPositions() {
 
@@ -285,6 +292,7 @@ public class Robot {
         follower.update();
         transfer.update(getRobotState());
         tagCamera.processDetections(tagCamera.getDetections(), this);
+        turret.update(this);
 
         scheduler.update(getMilliseconds());
     }

@@ -77,16 +77,7 @@ public class GameTeleop extends LinearOpMode {
 
                 //Switching modes between intake and shoot
                     //Shoot
-              //  boolean psPressed = c1.psWasPressed();
-                /*if (robot.getRobotState() == RobotState.INTAKE) {
-                    if (robot.intake.getArtifactSensor().hasBall() && !prevHasBall) {
-                        gamepad1.rumble(200);
-                        prevHasBall = true;
-                    }
-                    if (!robot.intake.getArtifactSensor().hasBall()) {
-                        prevHasBall = false;
-                    }
-                }*/
+
                 if (motifMode && robot.getRobotState() == RobotState.INTAKE && robot.lindexer.numOfBalls() == 3 && !prevHasBall) {
                     gamepad1.rumble(1000);
                     prevHasBall = true;
@@ -115,6 +106,9 @@ public class GameTeleop extends LinearOpMode {
 
                     if (motifMode) {
                         robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
+                    }
+                    else {
+                        robot.shooter.unblock();
                     }
 
                     robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint(robot));
@@ -161,7 +155,7 @@ public class GameTeleop extends LinearOpMode {
 
                 if (robot.getRobotState() == RobotState.PARK) {
                     if (c1.touchpadWasPressed()) {
-                        if (robot.ascent.getAscentState() == Ascent.AscentState.DOWN) {
+                        if (robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
                             robot.ascent.ascend();
                         }
                         else {
@@ -278,7 +272,7 @@ public class GameTeleop extends LinearOpMode {
                         drivePowers[0],
                         drivePowers[1],
                         drivePowers[2],
-                        true // Robot Centric NOT field centric
+                        true
                 );
 
 

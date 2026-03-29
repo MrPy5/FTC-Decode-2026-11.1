@@ -31,9 +31,9 @@ public class ConfigConstants {
     public static final String SHOOTER_BLOCKER = "shooter blocker";
     public static final String LEFT_LINDEXER = "left lindexer";
     public static final String RIGHT_LINDEXER = "right lindexer";
-    public static final String INTAKE = "intake";
+    public static final String INTAKE = "intake motor";
     public static final String INTAKE_LIFTER = "intake lifter";
-    public static final String GREEN_WHEEL = "green wheel";
+    public static final String GREEN_WHEEL = "transfer motor";
     public static final String ARDUCAM = "ardu cam";
     public static final String INTAKE_BLOCKER = "intake blocker";
     public static final String TRANSFER_BLOCKER = "transfer blocker";
@@ -43,6 +43,9 @@ public class ConfigConstants {
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
+
+    public static final String TURRET_LEFT = "ts left";
+    public static final String TURRET_RIGHT = "ts right";
 
     //Game
         //Defaults
@@ -115,6 +118,13 @@ public class ConfigConstants {
     public static final double TRANSFER_BLOCK = 0.5;
     public static final double TRANSFER_UNBLOCK = 0.25;
 
+        //Turret
+    public static final double TURRET_ZERO = 0.5225; // left ticks
+    public static final double TURRET_NINETY = 0.844; // left ticks
+    public static final double TURRET_MAX = 0.88; // left ticks
+    public static final double TURRET_MIN = 0.13; // left ticks
+    public static final double TICKS_PER_TURRET_DEGREE = (TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
+    public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
 
         //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(130, 0, 1, 14);
