@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 
 @TeleOp(name = "Shooter Test")
-@Disabled
 //http://192.168.43.1:8080/dash
 public class ShooterTest extends LinearOpMode {
 
@@ -24,21 +24,29 @@ public class ShooterTest extends LinearOpMode {
     public void runOpMode() {
         double secondsPerMinute = 60;
         double ticksPerRevolution = 28.0;
+
+        double turretMiddleAim = 0.5;
+        double turretChangeAmt = 0.1;
+        double turretCurrentAim = turretMiddleAim;
+        double prevTurretAim = 0;
+
         DcMotorEx sml = hardwareMap.get(DcMotorEx.class, "shooter left");
         DcMotorEx smr = hardwareMap.get(DcMotorEx.class, "shooter right");
+        DcMotorEx tm = hardwareMap.get(DcMotorEx.class, "transfer motor");
+        DcMotorEx im = hardwareMap.get(DcMotorEx.class, "intake motor");
 
+        Servo turretServoLeft = hardwareMap.get(Servo.class, "ts left");
+        Servo turretServoRight = hardwareMap.get(Servo.class, "ts right");
 
-
-
-
-
-        sml.setDirection(DcMotorSimple.Direction.FORWARD);
+        sml.setDirection(DcMotorSimple.Direction.REVERSE);
         sml.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         sml.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(100, 0, 1, 14));
 
-        smr.setDirection(DcMotorSimple.Direction.REVERSE);
+        smr.setDirection(DcMotorSimple.Direction.FORWARD);
         smr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         smr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(100, 0, 1, 14));
+
+        im.setDirection(DcMotorSimple.Direction.REVERSE);
 
         ElapsedTime gameTimer = new ElapsedTime();
 
@@ -52,8 +60,8 @@ public class ShooterTest extends LinearOpMode {
         waitForStart();
         gameTimer.reset();
 
-
-
+        turretServoLeft.setPosition(turretCurrentAim);
+        turretServoRight.setPosition(turretCurrentAim);
 
         while (opModeIsActive()) {
 
@@ -73,6 +81,7 @@ public class ShooterTest extends LinearOpMode {
                     targetRPM = 0;
                 }
             }
+            /*
             if (gamepad1.crossWasPressed()) {
                 sml.setDirection(DcMotorSimple.Direction.REVERSE);
                 smr.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -82,6 +91,29 @@ public class ShooterTest extends LinearOpMode {
                 smr.setDirection(DcMotorSimple.Direction.REVERSE);
             }
 
+             */
+
+            if (gamepad1.dpad_up) {
+                tm.setPower(1.0);
+                im.setPower(1.0);
+            }
+            if (gamepad1.dpad_down) {
+                tm.setPower(0);
+                im.setPower(0);
+            }
+
+            if (gamepad1.squareWasReleased()) {
+                turretCurrentAim = turretCurrentAim + turretChangeAmt;
+
+            }
+            if (gamepad1.circleWasReleased()) {
+                turretCurrentAim = turretCurrentAim - turretChangeAmt;
+            }
+            if (prevTurretAim != turretCurrentAim) {
+                turretServoLeft.setPosition(turretCurrentAim);
+                turretServoRight.setPosition(turretCurrentAim);
+                prevTurretAim = turretCurrentAim;
+            }
 
             //Power changing
             if (gamepad1.dpadLeftWasPressed()) {
