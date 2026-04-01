@@ -71,8 +71,6 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.scanMotif)),
                 //Supplier<Boolean> condition
                 new WaitFollower(robot.follower),
-                new InstantCommand(() -> robot.setMotifByTag(robot.tagCamera.getMostPopularMotifTag())),
-                new InstantCommand(() -> robot.tagCamera.getVisionPortal().close()),
                 new InstantCommand(() -> robot.lindexer.setIndex(true))
         );
         SequentialCommand spike1 = new SequentialCommand(

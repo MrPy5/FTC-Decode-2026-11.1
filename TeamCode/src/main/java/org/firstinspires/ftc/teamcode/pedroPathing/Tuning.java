@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Configurable
 @TeleOp(name = "Tuning", group = "Pedro Pathing")
-@Disabled
+
 public class Tuning extends SelectableOpMode {
     public static Follower follower;
 
@@ -102,7 +102,16 @@ public class Tuning extends SelectableOpMode {
 
     public static void drawOnlyCurrent() {
         try {
+            double x = follower.getPose().getX();
+            double y = follower.getPose().getY();
+            double heading = follower.getHeading();
+            double newX = x + (1.5 * Math.cos(heading));
+            double newY = y - (1 * Math.sin(heading));
+
+            x = newX;
+            y = newY;
             Drawing.drawRobot(follower.getPose());
+
             Drawing.sendPacket();
         } catch (Exception e) {
             throw new RuntimeException("Drawing failed " + e);

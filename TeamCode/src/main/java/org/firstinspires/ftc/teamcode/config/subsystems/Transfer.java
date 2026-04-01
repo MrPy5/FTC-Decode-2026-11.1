@@ -36,10 +36,11 @@ public class Transfer {
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
     }
-    public void update(Robot.RobotState robotState) {
-        if (robotState == Robot.RobotState.INTAKE && transferMotor.getCurrent() > 4) {
+    public void update(Robot robot) {
+        if (transferMotor.getCurrent() > 6 && robot.getRobotState() == Robot.RobotState.INTAKE) {
             stop();
         }
+
     }
     public void updatePower() {
 

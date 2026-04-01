@@ -31,7 +31,6 @@ public class Intake {
     Servo intakeLifter;
     IntakeArtifactSensor artifactSensor;
 
-    Servo intakeBlocker;
 
     double intakePower = 0;
     double prevPower = 0;
@@ -50,7 +49,6 @@ public class Intake {
         intakeLifter = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_LIFTER);
 
 
-        intakeBlocker = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_BLOCKER);
 
         artifactSensor = new IntakeArtifactSensor(hardwareMap.get(DigitalChannel.class, ConfigConstants.DIGITAL_DISTANCE));
 
@@ -96,12 +94,7 @@ public class Intake {
     public void drop() {
         intakeLifter.setPosition(ConfigConstants.INTAKE_DROP);
     }
-    public void block() {
-        intakeBlocker.setPosition(ConfigConstants.INTAKE_BLOCK);
-    }
-    public void unblock() {
-        intakeBlocker.setPosition(ConfigConstants.INTAKE_UNBLOCK);
-    }
+
 
     public IntakeArtifactSensor getArtifactSensor() {
         return artifactSensor;

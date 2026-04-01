@@ -32,7 +32,6 @@ public class OnField extends OpMode {
         telemetry.addData("x:", robot.follower.getPose().getX());
         telemetry.addData("y:", robot.follower.getPose().getY());
         telemetry.addData("heading:", robot.follower.getPose().getHeading());
-        telemetry.addData("tag fps", robot.tagCamera.getFPS());
         telemetry.update();
 
     }

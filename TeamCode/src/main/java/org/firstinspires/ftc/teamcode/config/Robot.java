@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.field.Classifier;
-import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
@@ -66,7 +65,6 @@ public class Robot {
     public Turret turret;
     public Follower follower;
 
-    public TagCamera tagCamera;
 
 
     private Alliance alliance;
@@ -136,45 +134,12 @@ public class Robot {
 
         ((LynxI2cDeviceSynch) lindexer.getLindexerColor().getColorSensor().getDeviceClient()).setBusSpeed(LynxI2cDeviceSynch.BusSpeed.FAST_400K);
 
-        tagCamera = new TagCamera(hardwareMap);
-        /*
-        while (tagCamera.getVisionPortal().getCameraState() != VisionPortal.CameraState.STREAMING || !tagCamera.getVisionPortal().getProcessorEnabled(tagCamera.getAprilTag())) {
-
-            telemetry.addData("waiting", "...");
-            telemetry.update();
-
-        }
-
-        ElapsedTime fpsWaitTimer = new ElapsedTime();
-        while (fpsWaitTimer.milliseconds() < 500) {
-            telemetry.addData("Waiting for frames", "%.1f ms", fpsWaitTimer.milliseconds());
-            telemetry.update();
-        }
-
-        if (tagCamera.getFPS() == 0) {
-            telemetry.addData("FPS Issue", "Reinstalling camera...");
-            telemetry.update();
-
-            tagCamera.getVisionPortal().close();
-
-            ElapsedTime reinstallTimer = new ElapsedTime();
-            while (reinstallTimer.milliseconds() < 500) {
-                // Just wait, but don't burn CPU
-                telemetry.addData("Closing", "%.1f ms", reinstallTimer.milliseconds());
-                telemetry.update();
-            }
-
-            tagCamera.reinstall();
-        }
-
-         */
     }
 
 
     public void initAutoPositions() {
 
         shooter.unblock();
-        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
     }
     public void initLoopAuto(Runnable useBluePaths, Runnable useRedPaths, boolean scanMotif) {
         updateGamepads();
@@ -189,31 +154,26 @@ public class Robot {
         }
 
         if (scanMotif) {
-           tagCamera.processDetections(tagCamera.getDetections(), this);
 
-           setMotifByTag(tagCamera.getMostPopularMotifTag());
+
         }
     }
     public void initLoopTelemetry() {
-        if (tagCamera.getFPS() == 0) {
-            telemetry.addData("ERROR", "ARDUCAM ERROR");
-            telemetry.addLine();
-            telemetry.addLine();
-        }
+
         if (getMotif() != null) {
             telemetry.addData("motif", getMotif().toString());
         }
 
         telemetry.addData("Alliance: ", getAlliance());
 
-        telemetry.addData("Tag FPS: ", tagCamera.getFPS());
-        telemetry.addData("state", tagCamera.getState());
         telemetry.addData("pinpoint", follower.getHeading());
+        telemetry.addData("position", follower.getPose().getX());
+        telemetry.addData("position", follower.getPose().getY());
 
 
     }
     public void startAuto(Consumer<Robot> buildPaths, Pose startPose) {
-        tagCamera.setCurrentMode(TagCamera.TagMode.MOTIF);
+
         follower.setStartingPose(startPose);
 
         buildPaths.accept(this);
@@ -252,6 +212,7 @@ public class Robot {
 
         if (c1.psWasPressed()) {
             follower.setPose(new Pose(72,72,0));
+            follower.update();
         }
     }
 
@@ -262,13 +223,12 @@ public class Robot {
         transfer.unblock();
         ascent.descend();
         lindexer.leftCenter();
+        turret.setAngle(0);
     }
 
     public void startTeleop() {
         gameTimer.reset();
         follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
-        tagCamera.setCurrentMode(TagCamera.TagMode.GOAL);
-
         startTeleopPositions();
     }
 
@@ -290,8 +250,7 @@ public class Robot {
         lindexer.update(this);
         intake.update(this);
         follower.update();
-        transfer.update(getRobotState());
-        tagCamera.processDetections(tagCamera.getDetections(), this);
+        transfer.update(this);
         turret.update(this);
 
         scheduler.update(getMilliseconds());
@@ -350,10 +309,11 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-        /*packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+        packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
-        packet.put("min", 0);*/
+        packet.put("voltage", transfer.getTransferMotor().getCurrent());
+        packet.put("min", 0);
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
       //  packet.put("dist", lindexer.getLindexerColor().getDistance());
@@ -382,7 +342,6 @@ public class Robot {
     }
 
     public void stop() {
-        tagCamera.getVisionPortal().close();
         Storage.cleanup(alliance, motif, follower);
     }
 

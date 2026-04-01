@@ -17,7 +17,7 @@ public class Turret {
     Servo turretLeft;
     Servo turretRight;
 
-    TurretState turretState = TurretState.HOLD;
+    TurretState turretState = TurretState.TRACK;
 
     double angle = 0;
 
@@ -36,7 +36,7 @@ public class Turret {
 
     public void update(Robot robot) {
         if (turretState == TurretState.TRACK) {
-            setAngle(-Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayPinpoint(robot));
+            setAngle(-Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(robot));
         }
     }
     public void setAngle(double angle) {

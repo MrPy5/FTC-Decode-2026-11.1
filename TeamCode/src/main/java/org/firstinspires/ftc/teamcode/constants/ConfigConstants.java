@@ -35,7 +35,6 @@ public class ConfigConstants {
     public static final String INTAKE_LIFTER = "intake lifter";
     public static final String GREEN_WHEEL = "transfer motor";
     public static final String ARDUCAM = "ardu cam";
-    public static final String INTAKE_BLOCKER = "intake blocker";
     public static final String TRANSFER_BLOCKER = "transfer blocker";
     public static final String ASCENT_LEFT = "ascent left";
     public static final String ASCENT_RIGHT = "ascent right";
@@ -115,19 +114,19 @@ public class ConfigConstants {
 
         //Transfer Blocker
     public static final double TRANSFER_CPR = 103.8;
-    public static final double TRANSFER_BLOCK = 0.5;
-    public static final double TRANSFER_UNBLOCK = 0.25;
+    public static final double TRANSFER_BLOCK = 0.4;
+    public static final double TRANSFER_UNBLOCK = 0.63;
 
         //Turret
     public static final double TURRET_ZERO = 0.5225; // left ticks
     public static final double TURRET_NINETY = 0.844; // left ticks
     public static final double TURRET_MAX = 0.88; // left ticks
     public static final double TURRET_MIN = 0.13; // left ticks
-    public static final double TICKS_PER_TURRET_DEGREE = (TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
+    public static final double TICKS_PER_TURRET_DEGREE = 0.0037;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
 
         //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(130, 0, 1, 14);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(150, 0, 1, 14);
 
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
@@ -140,8 +139,8 @@ public class ConfigConstants {
     public static final double SHOOTER_CPR = 28.0; //ticks per revolution
 
         //Shooter Blocker
-    public static final double SHOOTER_BLOCK = 0.39;
-    public static final double SHOOTER_UNBLOCK = 0.61;
+    public static final double SHOOTER_BLOCK = 0.715;
+    public static final double SHOOTER_UNBLOCK = 0.475;
 
         //Ascent
     public static final double ASCEND_RIGHT = 0.53; // 53
@@ -150,17 +149,17 @@ public class ConfigConstants {
     public static final double DESCEND_LEFT = 0.25;
 
     public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
-        put(0.0, 2400.0);
-        put(50.0, 2500.0);
-        put(70.0, 2600.0);
-        put(85.0, 2700.0);
-        put(95.0, 2800.0);
+        put(0.0, 2300.0);
+        put(50.0, 2400.0);
+        put(70.0, 2500.0);
+        put(85.0, 2600.0);
+        put(95.0, 2700.0);
     }};
     public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
 
-        put(105.0, 3100.0);
-        put(130.0, 3200.0);
-        put(135.0, 3300.0);
+        put(105.0, 2900.0);
+        put(130.0, 3000.0);
+        put(135.0, 3100.0);
     }};
 
     //Vision

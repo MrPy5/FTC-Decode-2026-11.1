@@ -49,12 +49,12 @@ public class Shooter {
         this.hardwareMap = hardwareMap;
 
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorRight.setDirection(DcMotorEx.Direction.FORWARD);
+        shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 

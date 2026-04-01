@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.config.util.Alliance.BLUE;
 import static org.firstinspires.ftc.teamcode.config.util.Alliance.RED;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.MathFunctions;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -203,7 +204,7 @@ public class Chassis {
     public double degreesAwayPinpoint(Robot robot) {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        if (robot.tagCamera.range() > ConfigConstants.NEAR_VS_FAR) {
+        if (inchesAwayPinpoint(robot) > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
             } else {
@@ -213,6 +214,31 @@ public class Chassis {
         else {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan((-(135 - y)) / (133 - x))) * -1; //  (-(135 - y)) / (133 - x))
+            } else {
+                return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
+            }
+        }
+    }
+
+    public double degreesAwayTurret(Robot robot) {
+        double x = robot.follower.getPose().getX();
+        double y = robot.follower.getPose().getY();
+        double heading = robot.follower.getHeading();
+        double newX = x + (4 * Math.cos(heading));
+        double newY = y - (4 * Math.sin(heading));
+
+        x = newX;
+        y = newY;
+        if (inchesAwayPinpoint(robot) > ConfigConstants.NEAR_VS_FAR) {
+            if (robot.getAlliance() == BLUE) {
+                return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+            } else {
+                return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
+            }
+        }
+        else {
+            if (robot.getAlliance() == BLUE) {
+                return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1; //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }
@@ -333,7 +359,7 @@ public class Chassis {
         }
 
 
-
+        /*
         if (robot.getRobotState() == Robot.RobotState.SHOOT) {
 
             if (Math.abs(c1.right_stick_x) <= ConfigConstants.STICK_AT_ZERO_DISTANCE) {
@@ -341,7 +367,7 @@ public class Chassis {
                 turnPower = turnPowerWithPinpoint(robot);
 
             }
-        }
+        }*/
 
         if (robot.getRobotState() == Robot.RobotState.PARK && robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
 
@@ -357,6 +383,19 @@ public class Chassis {
 
     public double getVoltageScalar() {
         return (getVoltage() - 11) / (13-11);
+    }
+
+    public Pose turretPose(Robot robot) {
+        double x = robot.follower.getPose().getX();
+        double y = robot.follower.getPose().getY();
+        double heading = robot.follower.getHeading();
+        double newX = x + (4 * Math.cos(heading));
+        double newY = y - (4 * Math.sin(heading));
+
+        x = newX;
+        y = newY;
+
+        return new Pose(x, y, heading);
     }
 
 }
