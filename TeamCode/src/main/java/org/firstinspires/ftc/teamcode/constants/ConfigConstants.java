@@ -118,11 +118,11 @@ public class ConfigConstants {
     public static final double TRANSFER_UNBLOCK = 0.63;
 
         //Turret
-    public static final double TURRET_ZERO = 0.5225; // left ticks
-    public static final double TURRET_NINETY = 0.844; // left ticks
+    public static final double TURRET_ZERO = 0.516; // left ticks
+    public static final double TURRET_NINETY = 0.182; // left ticks
     public static final double TURRET_MAX = 0.88; // left ticks
     public static final double TURRET_MIN = 0.13; // left ticks
-    public static final double TICKS_PER_TURRET_DEGREE = 0.0037;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
+    public static final double TICKS_PER_TURRET_DEGREE = 0.0037111;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
 
         //Shooter

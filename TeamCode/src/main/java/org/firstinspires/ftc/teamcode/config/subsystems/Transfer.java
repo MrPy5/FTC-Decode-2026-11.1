@@ -18,6 +18,8 @@ public class Transfer {
     CachedMotor transferMotor;
     Servo transferBlocker;
 
+    public boolean motorStopped = false;
+
     double transferRPM = 0;
     double transferPower = 0;
 
@@ -37,8 +39,9 @@ public class Transfer {
 
     }
     public void update(Robot robot) {
-        if (transferMotor.getCurrent() > 6 && robot.getRobotState() == Robot.RobotState.INTAKE) {
+        if (transferMotor.getCurrent() > 4 && robot.getRobotState() == Robot.RobotState.INTAKE) {
             stop();
+            motorStopped = true; // for transfer to shooting mode;
         }
 
     }

@@ -211,7 +211,7 @@ public class Robot {
         }
 
         if (c1.psWasPressed()) {
-            follower.setPose(new Pose(72,72,0));
+            follower.setPose(new Pose(78.5,72,0));
             follower.update();
         }
     }

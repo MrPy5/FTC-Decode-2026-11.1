@@ -224,8 +224,8 @@ public class Chassis {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         double heading = robot.follower.getHeading();
-        double newX = x + (4 * Math.cos(heading));
-        double newY = y - (4 * Math.sin(heading));
+        double newX = x - (3 * Math.cos(heading));
+        double newY = y + (3 * Math.sin(heading));
 
         x = newX;
         y = newY;

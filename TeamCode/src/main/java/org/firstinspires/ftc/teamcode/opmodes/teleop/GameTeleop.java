@@ -92,7 +92,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
 
-                if ((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) {
+                if (((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) || robot.transfer.motorStopped) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.SHOOT);
@@ -106,6 +106,8 @@ public class GameTeleop extends LinearOpMode {
 
                     robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint(robot));
                     gamepad2.rumble(500);
+
+                    robot.transfer.motorStopped = false;
 
                 }
 
@@ -325,6 +327,13 @@ public class GameTeleop extends LinearOpMode {
                 robot.doDashboard();
                 //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //telemetry.addData("loop", loopTimes.average());
+
+                telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
+                telemetry.addData("x", robot.chassis.turretPose(robot).getX());
+                telemetry.addData("y", robot.chassis.turretPose(robot).getY());
+                telemetry.addLine();
+                telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()));
+                telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
                 telemetry.addData("left", robot.lindexer.getLeftBall());
                 telemetry.addData("right", robot.lindexer.getRightBall());
                 telemetry.addData("center", robot.lindexer.getCenterBall());
@@ -338,8 +347,6 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
 
 
-                telemetry.addData("x", robot.chassis.turretPose(robot).getX());
-                telemetry.addData("y", robot.chassis.turretPose(robot).getY());
                 telemetry.update();
 
             }
