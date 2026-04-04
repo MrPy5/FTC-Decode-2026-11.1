@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class Turret {
     public enum TurretState {
@@ -36,7 +42,31 @@ public class Turret {
 
     public void update(Robot robot) {
         if (turretState == TurretState.TRACK) {
-            setAngle(-Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(robot));
+            // Current position
+            double x = robot.chassis.turretPose(robot).getX();
+            double y = robot.chassis.turretPose(robot).getY();
+
+            double heading = robot.follower.getHeading(); // radians
+
+            double robotVx = robot.follower.getVelocity().getXComponent();
+            double robotVy = robot.follower.getVelocity().getYComponent();
+
+// Convert to field-centric
+            double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
+            double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
+
+            // Estimate airtime (you can tune this or calculate it)
+            double airTime = robot.chassis.inchesAwayPinpoint(robot) / 90;
+
+            // Predicted future position
+            double predictedX = x + (fieldVx * airTime);
+            double predictedY = y + (fieldVy * airTime);
+
+            // Aim at predicted position
+            setAngle(
+                    -Math.toDegrees(robot.follower.getHeading()) +
+                            robot.chassis.degreesAwayTurret(robot, new Pose(predictedX, predictedY))
+            );
         }
     }
     public void setAngle(double angle) {
@@ -47,7 +77,7 @@ public class Turret {
     }
 
     public double angleToTicks(double angle) {
-        double ticks = ConfigConstants.TURRET_ZERO + (angle * ConfigConstants.TICKS_PER_TURRET_DEGREE);
+        double ticks = ConfigConstants.TURRET_ZERO + (angle * getInterpolatedOffset(ConfigConstants.TICKS_PER_TURRET_DEGREE_MAP, angle));
         ticks = Math.min(ConfigConstants.TURRET_MAX, ticks);
         ticks = Math.max(ConfigConstants.TURRET_MIN, ticks);
         return ticks;
@@ -70,5 +100,45 @@ public class Turret {
     }
     public void incrementAngle(double increment) {
         this.angle += increment;
+    }
+
+    public static double getInterpolatedOffset(Map<Double, Double> angleMap, double inputAngle) {
+
+        if (angleMap == null || angleMap.size() < 2) {
+            throw new IllegalArgumentException("Map must contain at least two points.");
+        }
+
+        // Sort the angle keys
+        List<Double> angles = new ArrayList<>(angleMap.keySet());
+        Collections.sort(angles);
+
+        // Clamp if outside range
+        if (inputAngle <= angles.get(0)) {
+            return angleMap.get(angles.get(0));
+        }
+
+        if (inputAngle >= angles.get(angles.size() - 1)) {
+            return angleMap.get(angles.get(angles.size() - 1));
+        }
+
+        // Find surrounding angles
+        for (int i = 0; i < angles.size() - 1; i++) {
+            double lowerAngle = angles.get(i);
+            double upperAngle = angles.get(i + 1);
+
+            if (inputAngle >= lowerAngle && inputAngle <= upperAngle) {
+
+                double lowerOffset = angleMap.get(lowerAngle);
+                double upperOffset = angleMap.get(upperAngle);
+
+                // Linear interpolation
+                double t = (inputAngle - lowerAngle) / (upperAngle - lowerAngle);
+
+                return lowerOffset + t * (upperOffset - lowerOffset);
+            }
+        }
+
+        // Should never happen
+        return 0;
     }
 }

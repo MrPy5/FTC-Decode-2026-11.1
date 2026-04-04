@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.field.Classifier;
+import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
@@ -65,6 +66,8 @@ public class Robot {
     public Turret turret;
     public Follower follower;
 
+
+    public LimelightCamera limelightCamera;
 
 
     private Alliance alliance;
@@ -120,6 +123,7 @@ public class Robot {
         chassis = new Chassis(hardwareMap);
         ascent = new Ascent(hardwareMap);
         turret = new Turret(hardwareMap);
+        limelightCamera = new LimelightCamera(hardwareMap);
 
 
         commands = new Commands(this);

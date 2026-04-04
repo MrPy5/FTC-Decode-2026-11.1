@@ -89,7 +89,7 @@ public class LimelightCamera {
 
     public Pose getPedroPose() {
         LLResult result = getResult();
-        return new Pose(getBotPose().getPosition().x * 39.701 + 72,getBotPose().getPosition().y * -39.701 + 72,getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
+        return new Pose(getBotPose().getPosition().x * 39.701 - 72,getBotPose().getPosition().y * -39.701 + 72,getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
 
     }
     public int getMostPopularMotifTag() {

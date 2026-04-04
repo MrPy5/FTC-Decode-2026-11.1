@@ -40,11 +40,11 @@ public class ShooterTest extends LinearOpMode {
 
         sml.setDirection(DcMotorSimple.Direction.REVERSE);
         sml.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        sml.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(130, 0, 1, 14));
+        sml.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(200, 0, 1, 15));
 
         smr.setDirection(DcMotorSimple.Direction.FORWARD);
         smr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        smr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(130, 0, 1, 14));
+        smr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(200, 0, 1, 15));
 
         im.setDirection(DcMotorSimple.Direction.REVERSE);
 

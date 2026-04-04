@@ -220,25 +220,20 @@ public class Chassis {
         }
     }
 
-    public double degreesAwayTurret(Robot robot) {
-        double x = robot.follower.getPose().getX();
-        double y = robot.follower.getPose().getY();
-        double heading = robot.follower.getHeading();
-        double newX = x - (3 * Math.cos(heading));
-        double newY = y + (3 * Math.sin(heading));
+    public double degreesAwayTurret(Robot robot, Pose position) {
+        double x = position.getX();
+        double y = position.getY();
 
-        x = newX;
-        y = newY;
         if (inchesAwayPinpoint(robot) > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1;
+                return Math.toDegrees(Math.atan2(130 - y, 134 - x));
             } else {
                 return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
             }
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(140 - y)) / (140 - x))) * -1; //  (-(135 - y)) / (133 - x))
+                return Math.toDegrees(Math.atan2(130 - y, 134 - x)); //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }
@@ -389,8 +384,8 @@ public class Chassis {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         double heading = robot.follower.getHeading();
-        double newX = x + (4 * Math.cos(heading));
-        double newY = y - (4 * Math.sin(heading));
+        double newX = x - (3.5 * Math.cos(heading));
+        double newY = y - (3.5 * Math.sin(heading));
 
         x = newX;
         y = newY;

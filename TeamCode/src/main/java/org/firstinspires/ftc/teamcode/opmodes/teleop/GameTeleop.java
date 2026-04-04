@@ -39,6 +39,10 @@ public class GameTeleop extends LinearOpMode {
             CyclingList loopTimes = new CyclingList(5);
             ElapsedTime loopTimer = new ElapsedTime();
 
+            CyclingList xPos = new CyclingList(10);
+            CyclingList yPos = new CyclingList(10);
+            CyclingList headingPos = new CyclingList(10);
+
             //Create new robot instance
             Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), Storage.getStoredFollower(), gamepad1, gamepad2, telemetry, dashboard);
 
@@ -112,7 +116,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                     //Intake
-                else if ((c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && robot.getRobotState() != RobotState.INTAKE) {
+                else if ((c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
@@ -239,7 +243,7 @@ public class GameTeleop extends LinearOpMode {
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting)) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -321,6 +325,16 @@ public class GameTeleop extends LinearOpMode {
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
 
+                if (c1.touchpad) {
+                    Pose botPose = robot.limelightCamera.getPedroPose();
+                    xPos.add(botPose.getX() - (10 * Math.cos(botPose.getHeading())), 0);
+                    yPos.add(botPose.getY() - (10 * Math.sin(botPose.getHeading())), 0);
+                    headingPos.add(botPose.getHeading(), 0);
+                }
+                if (c2.touchpadWasPressed()) {
+                    robot.follower.setPose(new Pose(xPos.average(), yPos.average(), headingPos.average()));
+                }
+
 
                 //update everything
                 robot.updateHardware();
@@ -329,10 +343,13 @@ public class GameTeleop extends LinearOpMode {
                 //telemetry.addData("loop", loopTimes.average());
 
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
-                telemetry.addData("x", robot.chassis.turretPose(robot).getX());
-                telemetry.addData("y", robot.chassis.turretPose(robot).getY());
+                telemetry.addData("xrobot", robot.follower.getPose().getX());
+                telemetry.addData("yrobot", robot.follower.getPose().getY());
+                telemetry.addData("xlime", xPos.average());
+                telemetry.addData("ylime", yPos.average());
+                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint(robot));
                 telemetry.addLine();
-                telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()));
+               // telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(robot));
                 telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
                 telemetry.addData("left", robot.lindexer.getLeftBall());
                 telemetry.addData("right", robot.lindexer.getRightBall());

@@ -54,7 +54,7 @@ public class AngleTurretTest extends LinearOpMode {
             robot.startTeleop();
 
             int targetRPM = 0;
-            int turretAngle = 0;
+            double turretAngle = 0;
             robot.turret.setAngle(0);
             robot.turret.setState(Turret.TurretState.HOLD);
             robot.follower.setPose(new Pose(72, 72, 0));
@@ -96,7 +96,7 @@ public class AngleTurretTest extends LinearOpMode {
                     robot.turret.setAngle(turretAngle);
                 }
                 if (c1.squareWasPressed()) {
-                    turretAngle = 90;
+                    turretAngle = 44.48;
                     robot.turret.setAngle(turretAngle);
                 }
                 if (c1.triangleWasPressed()) {

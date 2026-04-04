@@ -125,8 +125,21 @@ public class ConfigConstants {
     public static final double TICKS_PER_TURRET_DEGREE = 0.0037111;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
 
+    public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
+        put(-67.5, 0.0037);
+        put(-43.0, 0.004);
+        put(-20.0, 0.0043);
+        put(-12.0, 0.0045);
+        put(-5.0, 0.005);
+        put(5.0, 0.005);
+        put(12.0, 0.0045);
+        put(20.0, 0.0043);
+        put(43.0, 0.004);
+        put(67.5, 0.0037);
+    }};
+
         //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(150, 0, 1, 14);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(250, 0, 1, 15);
 
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
@@ -135,7 +148,7 @@ public class ConfigConstants {
 
     public static final double DEFAULT_RPM = 3000;
 
-    public static final double RPM_ADJUST_AMOUNT = 15;
+    public static final double RPM_ADJUST_AMOUNT = 30;
     public static final double SHOOTER_CPR = 28.0; //ticks per revolution
 
         //Shooter Blocker
@@ -153,13 +166,13 @@ public class ConfigConstants {
         put(50.0, 2400.0);
         put(70.0, 2500.0);
         put(85.0, 2600.0);
-        put(95.0, 2700.0);
+        put(95.0, 2750.0);
     }};
     public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
 
-        put(105.0, 2900.0);
-        put(130.0, 3000.0);
-        put(135.0, 3100.0);
+        put(126.0, 3200.0);
+        put(140.0, 3300.0);
+        put(154.0, 3400.0);
     }};
 
     //Vision
