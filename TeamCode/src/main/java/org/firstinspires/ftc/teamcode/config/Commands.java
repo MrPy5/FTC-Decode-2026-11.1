@@ -31,7 +31,9 @@ public class Commands {
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
                 new Wait(300),
-                new InstantCommand(() -> robot.transfer.intakeTransfer()));
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(500),
+                new InstantCommand(() -> robot.transfer.startCheckingNow()));
 
         startLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.block()),

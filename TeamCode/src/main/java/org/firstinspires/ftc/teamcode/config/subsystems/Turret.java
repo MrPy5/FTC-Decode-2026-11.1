@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
+import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -24,7 +27,6 @@ public class Turret {
     HardwareMap hardwareMap;
     Servo turretLeft;
     Servo turretRight;
-    DcMotorEx turretEncoder;
 
     TurretState turretState = TurretState.TRACK;
 
@@ -36,9 +38,6 @@ public class Turret {
 
         turretLeft = hardwareMap.get(Servo.class, ConfigConstants.TURRET_LEFT);
         turretRight = hardwareMap.get(Servo.class, ConfigConstants.TURRET_RIGHT);
-        turretEncoder = hardwareMap.get(DcMotorEx.class, ConfigConstants.TURRET_ENCODER);
-
-        turretEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
     }
@@ -59,8 +58,8 @@ public class Turret {
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
 
-            double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
-            double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
+            double fieldVx = robotVx * Math.cos(heading) + robotVy * Math.sin(heading);
+            double fieldVy = -robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
             double airTime = robot.chassis.inchesAwayPinpoint() / 90;
 
@@ -68,7 +67,7 @@ public class Turret {
             double predictedY = y + (fieldVy * airTime);
 
             setAngle(
-                    -Math.toDegrees(robot.follower.getHeading()) +
+                    -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreeOffset +
                             robot.chassis.degreesAwayTurret(new Pose(predictedX, predictedY))
             );
         }
@@ -147,9 +146,11 @@ public class Turret {
     }
 
     public double getEncoderAngle() {
-        double position = turretEncoder.getCurrentPosition();
+        double position = robot.intake.getIntakeMotor().getCurrentPosition();
+
         double rotations = (position / ConfigConstants.TICKS_PER_ENCODER_REVOLUTION) * (ConfigConstants.ENCODER_TEETH / ConfigConstants.TURRET_TEETH);
         double angle = rotations * 360;
         return angle;
     }
+
 }

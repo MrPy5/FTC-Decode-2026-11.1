@@ -44,6 +44,7 @@ public class Intake {
         intakeMotor.setDirection(DcMotorEx.Direction.REVERSE); //intake with positive value
 
         intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         intakeLifter = hardwareMap.get(Servo.class, ConfigConstants.INTAKE_LIFTER);
@@ -99,4 +100,10 @@ public class Intake {
     public IntakeArtifactSensor getArtifactSensor() {
         return artifactSensor;
     }
+
+    public void reset() {
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
 }

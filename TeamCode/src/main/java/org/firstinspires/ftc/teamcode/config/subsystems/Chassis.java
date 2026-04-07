@@ -197,10 +197,32 @@ public class Chassis {
         }
 
     }
-    public double inchesAwayPinpoint() {
+    public double inchesAwayPinpoint() { //TODO make color based
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        return Math.sqrt((((140 - x) * (140 - x))   + ((140 - y) * (140 - y))));
+        return Math.sqrt((((142 - x) * (142 - x))   + ((142 - y) * (142 - y))));
+    }
+
+    public double predictedInchesAway() {
+        double x = robot.chassis.turretPose().getX();
+        double y = robot.chassis.turretPose().getY();
+
+        double heading = robot.follower.getHeading(); // radians
+
+        double robotVx = robot.follower.getVelocity().getXComponent();
+        double robotVy = robot.follower.getVelocity().getYComponent();
+
+        double fieldVx = robotVx * Math.cos(heading) + robotVy * Math.sin(heading);
+        double fieldVy = -robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
+
+        double airTime = robot.chassis.inchesAwayPinpoint() / 90;
+
+        double predictedX = x + (fieldVx * airTime);
+        double predictedY = y + (fieldVy * airTime);
+
+        x = predictedX;
+        y = predictedY;
+        return Math.sqrt((((142 - x) * (142 - x))   + ((142 - y) * (142 - y))));
     }
     public double degreesAwayPinpoint() {
         double x = robot.follower.getPose().getX();
@@ -227,14 +249,14 @@ public class Chassis {
 
         if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(131 - y, 135 - x));
+                return Math.toDegrees(Math.atan2(136 - y, 136 - x));
             } else {
                 return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
             }
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(131 - y, 135 - x)); //  (-(135 - y)) / (133 - x))
+                return Math.toDegrees(Math.atan2(136 - y, 136 - x)); //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }

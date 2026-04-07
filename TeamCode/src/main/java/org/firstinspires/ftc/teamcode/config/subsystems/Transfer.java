@@ -23,6 +23,8 @@ public class Transfer {
     double transferRPM = 0;
     double transferPower = 0;
 
+    public boolean startChecking = false;
+
 
     public Transfer(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
@@ -33,16 +35,17 @@ public class Transfer {
         transferMotor.setDirection(DcMotorEx.Direction.FORWARD); //intake with positive value
 
         transferMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        transferMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.TRANSFER_PID);
 
-        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
     }
     public void update() {
-        if (transferMotor.getCurrent() > 4 && robot.getRobotState() == Robot.RobotState.INTAKE) {
+        if (transferMotor.getVelocity() < 2000 && robot.getRobotState() == Robot.RobotState.INTAKE && startChecking) {
             stop();
             motorStopped = true; // for transfer to shooting mode;
+            startChecking = false;
         }
 
     }
@@ -83,5 +86,8 @@ public class Transfer {
 
     public CachedMotor getTransferMotor() {
         return transferMotor;
+    }
+    public void startCheckingNow() {
+        startChecking = true;
     }
 }

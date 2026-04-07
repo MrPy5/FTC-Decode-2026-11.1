@@ -39,7 +39,7 @@ public class ConfigConstants {
     public static final String ASCENT_LEFT = "ascent left";
     public static final String ASCENT_RIGHT = "ascent right";
     public static final String DIGITAL_DISTANCE = "digital distance";
-    public static final String TURRET_ENCODER = "turret encoder";
+    public static final String TURRET_ENCODER = INTAKE;
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
@@ -79,7 +79,9 @@ public class ConfigConstants {
     public static final double TRIGGER_SENSITIVITY = 0.01;   // Anything less than this number is considered 0
     public static final double STICK_AT_ZERO_DISTANCE = 0.01;  // Anything less than this number is considered 0
     public static final double IGNORE_LEFT_STICK_X = 0.15;   // Dead zone between .1 and 0
-
+    //Field
+    public static final double FIELD_WIDTH = 143;
+    public static final double FIELD_LENGTH = 143;
     //Subsystems
         //Driving
     public static final double DRIVE_DAMPENING = 1; //slows the robot down for motors
@@ -126,24 +128,25 @@ public class ConfigConstants {
     public static final double TICKS_PER_TURRET_DEGREE = 0.0037111;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
     public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
-    public static final double TURRET_TEETH = 209;
+    public static final double TURRET_TEETH = 204;
     public static final double ENCODER_TEETH = 34;
+    public static final PIDFCoefficients TRANSFER_PID = new PIDFCoefficients(100, 0, 1, 5);
 
     public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
-        put(-67.5, 0.0037);
+        put(-67.5, 0.0038);
         put(-43.0, 0.004);
         put(-20.0, 0.0043);
         put(-12.0, 0.0045);
-        put(-5.0, 0.005);
-        put(5.0, 0.005);
+        put(-5.0, 0.0055);
+        put(5.0, 0.0055);
         put(12.0, 0.0045);
         put(20.0, 0.0043);
         put(43.0, 0.004);
-        put(67.5, 0.0037);
+        put(67.5, 0.0036);
     }};
 
         //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(250, 0, 1, 15);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(300, 0, 1, 15);
 
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
@@ -185,8 +188,8 @@ public class ConfigConstants {
         put(70.0, 2500.0);
         put(85.0, 2600.0);
         put(95.0, 2750.0);
-        put(126.0, 3200.0);
-        put(140.0, 3300.0);
+        put(126.0, 3100.0);
+        put(140.0, 3200.0);
         put(154.0, 3400.0);
     }};
 

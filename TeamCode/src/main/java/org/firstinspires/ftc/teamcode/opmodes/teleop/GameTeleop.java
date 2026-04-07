@@ -237,7 +237,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint());
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
                 }
 
                 //RPM and shooting
@@ -332,7 +332,7 @@ public class GameTeleop extends LinearOpMode {
                     headingPos.add(botPose.getHeading(), 0);
                 }
                 if (c2.touchpadWasPressed()) {
-                    robot.follower.setPose(new Pose(xPos.average(), yPos.average(), headingPos.average()));
+                    robot.follower.setPose(new Pose(robot.follower.getPose().getX(), robot.follower.getPose().getY(), headingPos.average()));
                 }
 
 
@@ -345,10 +345,11 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("xrobot", robot.follower.getPose().getX());
                 telemetry.addData("yrobot", robot.follower.getPose().getY());
-                telemetry.addData("xlime", xPos.average());
-                telemetry.addData("ylime", yPos.average());
-                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
+                telemetry.addData("heading", Math.toDegrees(headingPos.average()));
+               // telemetry.addData("ylime", yPos.average());
+               // telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addLine();
+                telemetry.addData("offset", robot.chassis.degreeOffset);
                 telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(new Pose(robot.chassis.turretPose().getX(), robot.chassis.turretPose().getY())));
                 telemetry.addData("real angle", robot.turret.getEncoderAngle());
                 telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));

@@ -107,6 +107,7 @@ public class Robot {
         //Follower
         if (follower == null) {
             follower = Constants.createFollower(hardwareMap);
+
         }
 
         this.follower = follower;
@@ -188,6 +189,7 @@ public class Robot {
     public void initTeleop() {
         breakFollowing();
         follower.update();
+        turret.setAngle(0);
 
     }
     public void breakFollowing() {
@@ -215,7 +217,7 @@ public class Robot {
         }
 
         if (c1.psWasPressed()) {
-            follower.setPose(new Pose(78.5,72,0));
+            follower.setPose(new Pose(77.5,71,0));
             follower.update();
         }
     }
@@ -234,6 +236,7 @@ public class Robot {
         gameTimer.reset();
         follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
         startTeleopPositions();
+        intake.reset(); // for turret reset
     }
 
     public void updateGamepads() {
@@ -316,7 +319,7 @@ public class Robot {
         packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
         packet.put("max", 6000);
-        packet.put("voltage", transfer.getTransferMotor().getCurrent());
+        packet.put("voltage", transfer.getTransferMotor().getVelocity());
         packet.put("min", 0);
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
@@ -348,6 +351,8 @@ public class Robot {
     public void stop() {
         Storage.cleanup(alliance, motif, follower);
     }
+
+
 
 
 
