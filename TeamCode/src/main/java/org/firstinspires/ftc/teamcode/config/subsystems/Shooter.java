@@ -27,7 +27,7 @@ public class Shooter {
         NOTREADY
     }
 
-
+    Robot robot;
     HardwareMap hardwareMap;
     CachedMotor shooterMotorLeft;
     CachedMotor shooterMotorRight;
@@ -45,8 +45,9 @@ public class Shooter {
 
     ShooterState shooterState = ShooterState.NOTREADY;
 
-    public Shooter(HardwareMap hardwareMap) {
+    public Shooter(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
         shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
@@ -64,7 +65,7 @@ public class Shooter {
     }
 
     //Util functions
-    public void update(Robot robot) {
+    public void update() {
         shooterRPM.add(robot.shooter.shooterMotorLeft.getRPM(), robot.getMilliseconds());
 
         setShooterState(getShooterReady());
@@ -136,7 +137,7 @@ public class Shooter {
     }
 
 
-    public void spinAtCalculatedSpeed(double range, Robot robot) {
+    public void spinAtCalculatedSpeed(double range) {
         setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
     }
     public double calculateRPM(double range) {
@@ -153,13 +154,8 @@ public class Shooter {
         if (range == -1) {
             return lastRPM;
         }
-        if (range > ConfigConstants.NEAR_VS_FAR) {
-            double rpm = getInterpolatedOffset(ConfigConstants.RPM_MAP_FAR, range);
-            lastRPM = rpm;
-            return rpm;
-        }
         else {
-            double rpm = getInterpolatedOffset(ConfigConstants.RPM_MAP_CLOSE, range);
+            double rpm = getInterpolatedOffset(ConfigConstants.RPM_MAP, range);
             lastRPM = rpm;
             return rpm;
         }

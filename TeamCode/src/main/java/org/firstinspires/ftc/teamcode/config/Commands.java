@@ -38,7 +38,7 @@ public class Commands {
                 new InstantCommand(() -> robot.lindexer.leftCenter())
         );
         stopLindexing = new SequentialCommand(
-                new InstantCommand(() -> robot.lindexer.stopIntakingAndLindex(robot)));
+                new InstantCommand(() -> robot.lindexer.stopIntakingAndLindex()));
 
         shootLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),

@@ -43,6 +43,10 @@ public class SequentialCommand extends Command {
 
     @Override
     public void reset() {
+        for (Command cmd : commands) {
+            cmd.reset();
+            cmd.started = false;
+        }
         current = 0;
         finished = false;
     }

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 public class Transfer {
 
 
-
+    Robot robot;
     HardwareMap hardwareMap;
     CachedMotor transferMotor;
     Servo transferBlocker;
@@ -24,8 +24,9 @@ public class Transfer {
     double transferPower = 0;
 
 
-    public Transfer(HardwareMap hardwareMap) {
+    public Transfer(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
 
         transferMotor = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.GREEN_WHEEL), ConfigConstants.TRANSFER_CPR);
@@ -38,7 +39,7 @@ public class Transfer {
         transferBlocker = hardwareMap.get(Servo.class, ConfigConstants.TRANSFER_BLOCKER);
 
     }
-    public void update(Robot robot) {
+    public void update() {
         if (transferMotor.getCurrent() > 4 && robot.getRobotState() == Robot.RobotState.INTAKE) {
             stop();
             motorStopped = true; // for transfer to shooting mode;

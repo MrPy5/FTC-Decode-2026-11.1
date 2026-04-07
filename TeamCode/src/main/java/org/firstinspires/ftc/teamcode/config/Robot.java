@@ -116,13 +116,13 @@ public class Robot {
         this.telemetry = telemetry;
         this.dashboard = dashboard;
 
-        shooter = new Shooter(hardwareMap);
+        shooter = new Shooter(hardwareMap, this);
         intake = new Intake(hardwareMap);
-        transfer = new Transfer(hardwareMap);
-        lindexer = new Lindexer(hardwareMap);
-        chassis = new Chassis(hardwareMap);
+        transfer = new Transfer(hardwareMap, this);
+        lindexer = new Lindexer(hardwareMap, this);
+        chassis = new Chassis(hardwareMap, this);
         ascent = new Ascent(hardwareMap);
-        turret = new Turret(hardwareMap);
+        turret = new Turret(hardwareMap, this);
         limelightCamera = new LimelightCamera(hardwareMap);
 
 
@@ -250,12 +250,12 @@ public class Robot {
     }
 
     public void update() {
-        shooter.update(this);
-        lindexer.update(this);
-        intake.update(this);
+        shooter.update();
+        lindexer.update();
+        intake.update();
         follower.update();
-        transfer.update(this);
-        turret.update(this);
+        transfer.update();
+        turret.update();
 
         scheduler.update(getMilliseconds());
     }

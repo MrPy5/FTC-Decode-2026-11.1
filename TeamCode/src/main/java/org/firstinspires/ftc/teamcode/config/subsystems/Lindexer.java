@@ -31,7 +31,7 @@ public class Lindexer {
 
     boolean index = false;
 
-
+    Robot robot;
     HardwareMap hardwareMap;
     Servo leftLindexer;
     Servo rightLindexer;
@@ -46,8 +46,9 @@ public class Lindexer {
     LindexerState lindexerState = LindexerState.READY;
     LindexerPosition lindexerPosition = LindexerPosition.LEFT;
 
-    public Lindexer(HardwareMap hardwareMap) {
+    public Lindexer(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
         leftLindexer = hardwareMap.get(Servo.class, ConfigConstants.LEFT_LINDEXER);
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
@@ -59,7 +60,7 @@ public class Lindexer {
     }
 
     //Util functions
-    public void update(Robot robot) {
+    public void update() {
         /*
         if (lindexerState == LindexerState.READY) {
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
@@ -259,7 +260,7 @@ public class Lindexer {
         return centerBall;
     }
 
-    public void stopIntakingAndLindex(Robot robot) {
+    public void stopIntakingAndLindex() {
         centerBall = Color.PURPLE;
         leftBall = Color.GREEN;
         rightBall = Color.PURPLE;

@@ -39,6 +39,7 @@ public class ConfigConstants {
     public static final String ASCENT_LEFT = "ascent left";
     public static final String ASCENT_RIGHT = "ascent right";
     public static final String DIGITAL_DISTANCE = "digital distance";
+    public static final String TURRET_ENCODER = "turret encoder";
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
@@ -124,6 +125,9 @@ public class ConfigConstants {
     public static final double TURRET_MIN = 0.13; // left ticks
     public static final double TICKS_PER_TURRET_DEGREE = 0.0037111;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
+    public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
+    public static final double TURRET_TEETH = 209;
+    public static final double ENCODER_TEETH = 34;
 
     public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
         put(-67.5, 0.0037);
@@ -161,7 +165,7 @@ public class ConfigConstants {
     public static final double DESCEND_RIGHT = 0.83;
     public static final double DESCEND_LEFT = 0.25;
 
-    public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
+   /* public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
         put(50.0, 2400.0);
         put(70.0, 2500.0);
@@ -170,6 +174,17 @@ public class ConfigConstants {
     }};
     public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
 
+        put(126.0, 3200.0);
+        put(140.0, 3300.0);
+        put(154.0, 3400.0);
+    }};*/
+
+    public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
+        put(0.0, 2300.0);
+        put(50.0, 2400.0);
+        put(70.0, 2500.0);
+        put(85.0, 2600.0);
+        put(95.0, 2750.0);
         put(126.0, 3200.0);
         put(140.0, 3300.0);
         put(154.0, 3400.0);

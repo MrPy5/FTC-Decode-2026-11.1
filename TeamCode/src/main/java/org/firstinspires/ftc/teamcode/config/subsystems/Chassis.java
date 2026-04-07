@@ -27,7 +27,7 @@ import java.util.Map;
 public class Chassis {
 
 
-
+    Robot robot;
     HardwareMap hardwareMap;
 
     VoltageSensor voltageSensor;
@@ -44,8 +44,9 @@ public class Chassis {
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
 
-    public Chassis(HardwareMap hardwareMap) {
+    public Chassis(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
@@ -109,7 +110,7 @@ public class Chassis {
         return 0;
     }
 
-    public double calculateOffset(Robot robot, TagCamera tagCamera) {
+    public double calculateOffset(TagCamera tagCamera) {
 
         double combined = tagCamera.combined();
 
@@ -143,11 +144,11 @@ public class Chassis {
         return offset;
     }
 
-    public double turnPower(Robot robot, TagCamera tagCamera) {
+    public double turnPower(TagCamera tagCamera) {
 
 
         if (!justLetGoOfStick) {
-            double degrees = tagCamera.degreesAway(calculateOffset(robot, tagCamera));
+            double degrees = tagCamera.degreesAway(calculateOffset(tagCamera));
 
             if (tagCamera.hasTag() && tagCamera.tagValid(robot)) {
 
@@ -163,7 +164,7 @@ public class Chassis {
                 }
             }
 
-            double error = getHeadingError(robot);
+            double error = getHeadingError();
             double sign = error / Math.abs(error);
             double kd = ConfigConstants.TURN_kD;
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd);
@@ -196,15 +197,15 @@ public class Chassis {
         }
 
     }
-    public double inchesAwayPinpoint(Robot robot) {
+    public double inchesAwayPinpoint() {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         return Math.sqrt((((140 - x) * (140 - x))   + ((140 - y) * (140 - y))));
     }
-    public double degreesAwayPinpoint(Robot robot) {
+    public double degreesAwayPinpoint() {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        if (inchesAwayPinpoint(robot) > ConfigConstants.NEAR_VS_FAR) {
+        if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
             } else {
@@ -220,31 +221,31 @@ public class Chassis {
         }
     }
 
-    public double degreesAwayTurret(Robot robot, Pose position) {
+    public double degreesAwayTurret(Pose position) {
         double x = position.getX();
         double y = position.getY();
 
-        if (inchesAwayPinpoint(robot) > ConfigConstants.NEAR_VS_FAR) {
+        if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(130 - y, 134 - x));
+                return Math.toDegrees(Math.atan2(131 - y, 135 - x));
             } else {
                 return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
             }
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(130 - y, 134 - x)); //  (-(135 - y)) / (133 - x))
+                return Math.toDegrees(Math.atan2(131 - y, 135 - x)); //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }
         }
     }
 
-    public double turnPowerWithPinpoint(Robot robot) {
+    public double turnPowerWithPinpoint() {
 
 
         if (!justLetGoOfStick) {
-            double degrees = degreesAwayPinpoint(robot) - degreeOffset;
+            double degrees = degreesAwayPinpoint() - degreeOffset;
 
 
             targetHeading = Math.toRadians(degrees);
@@ -252,7 +253,7 @@ public class Chassis {
 
 
 
-            double error = getHeadingError(robot);
+            double error = getHeadingError();
             double sign = error / Math.abs(error);
             double kd = ConfigConstants.TURN_kD;
             double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
@@ -274,14 +275,14 @@ public class Chassis {
         }
 
     }
-    public double turnPowerWithPinpointToPark(Robot robot) {
+    public double turnPowerWithPinpointToPark() {
 
         if (!justLetGoOfStick) {
 
             targetHeading = Math.toRadians(parkHeading + parkHeadingOffset);
 
 
-            double error = getHeadingError(robot);
+            double error = getHeadingError();
             double sign = error / Math.abs(error);
             double kd = 0.09;
             double kp = 0.9;
@@ -305,7 +306,7 @@ public class Chassis {
 
     }
 
-    public double getHeadingError(Robot robot) {
+    public double getHeadingError() {
         double headingError = MathFunctions.getTurnDirection(robot.follower.getPose().getHeading(), targetHeading) * MathFunctions.getSmallestAngleDifference(robot.follower.getPose().getHeading(), targetHeading);
         return headingError;
     }
@@ -315,7 +316,7 @@ public class Chassis {
     public double getVoltageMultiplier() {
         return 14 / getVoltage();
     }
-    public double[] calculateDrivePowers(Gamepad c1, double driveDampeneing, double strafeDampening, double turnDampening, Robot robot) {
+    public double[] calculateDrivePowers(Gamepad c1, double driveDampeneing, double strafeDampening, double turnDampening) {
         double drivePower;
         double strafePower;
         double turnPower;
@@ -368,7 +369,7 @@ public class Chassis {
 
 
 
-            turnPower = turnPowerWithPinpointToPark(robot);
+            turnPower = turnPowerWithPinpointToPark();
 
 
         }
@@ -380,7 +381,7 @@ public class Chassis {
         return (getVoltage() - 11) / (13-11);
     }
 
-    public Pose turretPose(Robot robot) {
+    public Pose turretPose() {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         double heading = robot.follower.getHeading();

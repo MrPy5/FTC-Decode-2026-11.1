@@ -26,7 +26,6 @@ public class CommandScheduler {
                 if (cmd.isFinished()) {
                     cmd.reset();
                     it.remove();
-                    commands.remove(cmd);
                 }
             }
         }

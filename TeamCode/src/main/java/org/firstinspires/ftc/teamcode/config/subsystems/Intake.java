@@ -59,7 +59,7 @@ public class Intake {
         return intakeState;
     }
 
-    public void update(Robot robot) {
+    public void update() {
         artifactSensor.update();
     }
     public void updatePower() {

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -18,20 +20,26 @@ public class Turret {
         HOLD
     }
 
-
+    Robot robot;
     HardwareMap hardwareMap;
     Servo turretLeft;
     Servo turretRight;
+    DcMotorEx turretEncoder;
 
     TurretState turretState = TurretState.TRACK;
 
     double angle = 0;
 
-    public Turret(HardwareMap hardwareMap) {
+    public Turret(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
         turretLeft = hardwareMap.get(Servo.class, ConfigConstants.TURRET_LEFT);
         turretRight = hardwareMap.get(Servo.class, ConfigConstants.TURRET_RIGHT);
+        turretEncoder = hardwareMap.get(DcMotorEx.class, ConfigConstants.TURRET_ENCODER);
+
+        turretEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
     }
 
@@ -40,32 +48,28 @@ public class Turret {
         return turretState;
     }
 
-    public void update(Robot robot) {
+    public void update() {
         if (turretState == TurretState.TRACK) {
             // Current position
-            double x = robot.chassis.turretPose(robot).getX();
-            double y = robot.chassis.turretPose(robot).getY();
+            double x = robot.chassis.turretPose().getX();
+            double y = robot.chassis.turretPose().getY();
 
             double heading = robot.follower.getHeading(); // radians
 
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
 
-// Convert to field-centric
             double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
             double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
-            // Estimate airtime (you can tune this or calculate it)
-            double airTime = robot.chassis.inchesAwayPinpoint(robot) / 90;
+            double airTime = robot.chassis.inchesAwayPinpoint() / 90;
 
-            // Predicted future position
             double predictedX = x + (fieldVx * airTime);
             double predictedY = y + (fieldVy * airTime);
 
-            // Aim at predicted position
             setAngle(
                     -Math.toDegrees(robot.follower.getHeading()) +
-                            robot.chassis.degreesAwayTurret(robot, new Pose(predictedX, predictedY))
+                            robot.chassis.degreesAwayTurret(new Pose(predictedX, predictedY))
             );
         }
     }
@@ -140,5 +144,12 @@ public class Turret {
 
         // Should never happen
         return 0;
+    }
+
+    public double getEncoderAngle() {
+        double position = turretEncoder.getCurrentPosition();
+        double rotations = (position / ConfigConstants.TICKS_PER_ENCODER_REVOLUTION) * (ConfigConstants.ENCODER_TEETH / ConfigConstants.TURRET_TEETH);
+        double angle = rotations * 360;
+        return angle;
     }
 }

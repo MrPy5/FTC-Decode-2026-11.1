@@ -108,7 +108,7 @@ public class GameTeleop extends LinearOpMode {
                         robot.shooter.unblock();
                     }
 
-                    robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint(robot));
+                    robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint());
                     gamepad2.rumble(500);
 
                     robot.transfer.motorStopped = false;
@@ -237,7 +237,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot), robot);
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint());
                 }
 
                 //RPM and shooting
@@ -267,7 +267,7 @@ public class GameTeleop extends LinearOpMode {
 
                 //Driving code
 
-                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING, robot);
+                double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING);
                 robot.follower.setTeleOpDrive(
                         drivePowers[0],
                         drivePowers[1],
@@ -347,21 +347,22 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("yrobot", robot.follower.getPose().getY());
                 telemetry.addData("xlime", xPos.average());
                 telemetry.addData("ylime", yPos.average());
-                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint(robot));
+                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addLine();
-               // telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(robot));
+                telemetry.addData("angle", -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreesAwayTurret(new Pose(robot.chassis.turretPose().getX(), robot.chassis.turretPose().getY())));
+                telemetry.addData("real angle", robot.turret.getEncoderAngle());
                 telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
-                telemetry.addData("left", robot.lindexer.getLeftBall());
-                telemetry.addData("right", robot.lindexer.getRightBall());
-                telemetry.addData("center", robot.lindexer.getCenterBall());
+               // telemetry.addData("left", robot.lindexer.getLeftBall());
+               // telemetry.addData("right", robot.lindexer.getRightBall());
+              //  telemetry.addData("center", robot.lindexer.getCenterBall());
                 telemetry.addLine();
                 telemetry.addData("offset", robot.chassis.degreeOffset);
 
-                telemetry.addData("motifMode", motifMode);
+              /*  telemetry.addData("motifMode", motifMode);
                 telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
 
 
                 telemetry.update();
