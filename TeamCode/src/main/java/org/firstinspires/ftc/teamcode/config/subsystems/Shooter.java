@@ -70,12 +70,12 @@ public class Shooter {
 
         setShooterState(getShooterReady());
 
-        if (shooterState == ShooterState.NOTREADY && shooting) {
+      /*  if (shooterState == ShooterState.NOTREADY && shooting) {
             droppedActivateBangBang = true;
         }
         else {
             droppedActivateBangBang = false;
-        }
+        }*/
 
 
     }
@@ -101,9 +101,17 @@ public class Shooter {
     }
 
     public void updatePower() {
+        if (!droppedActivateBangBang) {
+            shooterMotorLeft.setRPM(targetShooterRPM);
+            shooterMotorRight.setRPM(targetShooterRPM);
+        }
+        else {
 
-        shooterMotorLeft.setRPM(targetShooterRPM);
-        shooterMotorRight.setRPM(targetShooterRPM);
+            shooterMotorLeft.setPower(1);
+            shooterMotorRight.setPower(1);
+        }
+
+
     }
 
     public double getTargetShooterRPM() {

@@ -56,7 +56,7 @@ public class AngleTurretTest extends LinearOpMode {
             int targetRPM = 0;
             double turretAngle = 0;
             robot.turret.setAngle(0);
-            robot.turret.setState(Turret.TurretState.HOLD);
+            //robot.turret.setState(Turret.TurretState.HOLD);
             robot.follower.setPose(new Pose(72, 72, 0));
 
             while (opModeIsActive()) {
@@ -113,7 +113,7 @@ public class AngleTurretTest extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("turret Angle", turretAngle);
-                telemetry.addData("left tick", robot.turret.angleToTicks(turretAngle));
+                //telemetry.addData("left tick", robot.turret.angleToTicks(turretAngle));
                 telemetry.addData("loop", loopTimes.average());
                 telemetry.addData("rpm", targetRPM);
                 telemetry.addData("turretAngle", robot.turret.getAngle());

@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
 
-import com.pedropathing.ftc.localization.Encoder;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.AnalogSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,7 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Turret {
+@Config
+public class CrTurret {
     public enum TurretState {
         TRACK,
         HOLD
@@ -25,19 +23,22 @@ public class Turret {
 
     Robot robot;
     HardwareMap hardwareMap;
-    Servo turretLeft;
-    Servo turretRight;
+    CRServo turretLeft;
+    CRServo turretRight;
 
     TurretState turretState = TurretState.TRACK;
 
     double angle = 0;
+    public static double P = 0.02;
+    public static double D = 0.0017;
+    public static double min = 0.07;
 
-    public Turret(HardwareMap hardwareMap, Robot robot) {
+    public CrTurret(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
         this.robot = robot;
 
-        turretLeft = hardwareMap.get(Servo.class, ConfigConstants.TURRET_LEFT);
-        turretRight = hardwareMap.get(Servo.class, ConfigConstants.TURRET_RIGHT);
+        turretLeft = hardwareMap.get(CRServo.class, ConfigConstants.TURRET_LEFT);
+        turretRight = hardwareMap.get(CRServo.class, ConfigConstants.TURRET_RIGHT);
 
 
     }
@@ -71,35 +72,27 @@ public class Turret {
                             robot.chassis.degreesAwayTurret(new Pose(predictedX, predictedY))
             );
         }
+
+        setPower();
     }
     public void setAngle(double angle) {
-        this.angle = angle;
-        double ticks = angleToTicks(wrapAngle(angle));
+        this.angle = wrapAngle(angle);
 
-        if (Math.abs(getEncoderVelocity()) < .1) {
-            double difference = angle - getEncoderAngle();
-
-            if (Math.abs(difference) > 1) {
-                ticks = angleToTicks(wrapAngle(angle + (1 * Math.signum(difference))));
-
-            }
-        }
-        turretLeft.setPosition(ticks);
-        turretRight.setPosition(ticks + ConfigConstants.TURRET_TICK_OFFSET_FOR_RIGHT);
     }
 
-    public double angleToTicks(double angle) {
-        double ticks = ConfigConstants.TURRET_ZERO + (angle * getInterpolatedOffset(ConfigConstants.TICKS_PER_TURRET_DEGREE_MAP, angle));
-        ticks = Math.min(ConfigConstants.TURRET_MAX, ticks);
-        ticks = Math.max(ConfigConstants.TURRET_MIN, ticks);
-        return ticks;
-    }
 
     public double wrapAngle(double angle) {
         angle = angle % 360;
 
         if (angle > 180) {
             angle = -(360 - angle);
+        }
+
+        if (angle > 90) {
+            angle = 90;
+        }
+        else if (angle < -90) {
+            angle = -90;
         }
         return angle;
     }
@@ -110,48 +103,27 @@ public class Turret {
     public double getAngle() {
         return angle;
     }
-    public void incrementAngle(double increment) {
-        this.angle += increment;
+    public void setPower() {
+        double power = getPowerPID();
+        turretLeft.setPower(power);
+
+        turretRight.setPower(power);
     }
+    public double getPowerPID() {
+        /*double angleRemaining = angle - getEncoderAngle();
+        double direction = Math.signum(angleRemaining);
+        double velocity = getEncoderVelocity();
 
-    public static double getInterpolatedOffset(Map<Double, Double> angleMap, double inputAngle) {
+        double power = (angleRemaining * P) - (velocity * D);
+        double absScale = Math.min(Math.abs(power), 1);
+       // double minnedPower = Math.max(absScale, min);
+        double minnedPower = (absScale * 0.93) + min;
+        return minnedPower * direction;*/
 
-        if (angleMap == null || angleMap.size() < 2) {
-            throw new IllegalArgumentException("Map must contain at least two points.");
-        }
-
-        // Sort the angle keys
-        List<Double> angles = new ArrayList<>(angleMap.keySet());
-        Collections.sort(angles);
-
-        // Clamp if outside range
-        if (inputAngle <= angles.get(0)) {
-            return angleMap.get(angles.get(0));
-        }
-
-        if (inputAngle >= angles.get(angles.size() - 1)) {
-            return angleMap.get(angles.get(angles.size() - 1));
-        }
-
-        // Find surrounding angles
-        for (int i = 0; i < angles.size() - 1; i++) {
-            double lowerAngle = angles.get(i);
-            double upperAngle = angles.get(i + 1);
-
-            if (inputAngle >= lowerAngle && inputAngle <= upperAngle) {
-
-                double lowerOffset = angleMap.get(lowerAngle);
-                double upperOffset = angleMap.get(upperAngle);
-
-                // Linear interpolation
-                double t = (inputAngle - lowerAngle) / (upperAngle - lowerAngle);
-
-                return lowerOffset + t * (upperOffset - lowerOffset);
-            }
-        }
-
-        // Should never happen
         return 0;
+
+
+
     }
 
     public double getEncoderAngle() {
@@ -161,7 +133,6 @@ public class Turret {
         double angle = rotations * 360;
         return angle;
     }
-
     public double getEncoderVelocity() {
         double velocityTicks = robot.intake.getIntakeMotor().getVelocity();
 

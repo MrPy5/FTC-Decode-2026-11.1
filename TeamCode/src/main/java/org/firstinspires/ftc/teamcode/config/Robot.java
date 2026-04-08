@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.config.subsystems.Ascent;
 import org.firstinspires.ftc.teamcode.config.subsystems.Chassis;
+import org.firstinspires.ftc.teamcode.config.subsystems.CrTurret;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
@@ -321,6 +322,8 @@ public class Robot {
         packet.put("max", 6000);
         packet.put("voltage", transfer.getTransferMotor().getVelocity());
         packet.put("min", 0);
+        packet.put("left", shooter.getShooterMotorLeft().getCurrent());
+        packet.put("right", shooter.getShooterMotorRight().getCurrent());
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
       //  packet.put("dist", lindexer.getLindexerColor().getDistance());

@@ -130,9 +130,12 @@ public class ConfigConstants {
     public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
     public static final double TURRET_TEETH = 204;
     public static final double ENCODER_TEETH = 34;
+    public static final double P = (1/45);
+    public static final double D = 0;
     public static final PIDFCoefficients TRANSFER_PID = new PIDFCoefficients(100, 0, 1, 5);
 
     public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
+        put(-90.0, 0.0042);
         put(-67.5, 0.0038);
         put(-43.0, 0.004);
         put(-20.0, 0.0043);
