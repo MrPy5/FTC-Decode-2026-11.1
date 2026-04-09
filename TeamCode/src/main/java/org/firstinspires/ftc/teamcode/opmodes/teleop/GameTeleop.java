@@ -130,6 +130,7 @@ public class GameTeleop extends LinearOpMode {
                     else {
                         robot.transfer.unblock();
                     }
+                    robot.shooter.setShooting(false);
 
                 }
 
@@ -238,7 +239,11 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint());
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+                }
+
+                if (c1.triangleWasPressed()) {
+                    robot.intake.stopIntake();
                 }
 
                 //RPM and shooting
@@ -252,14 +257,17 @@ public class GameTeleop extends LinearOpMode {
                             }
                             if (!motifMode) {
                                 robot.transfer.intakeTransfer();
+                                robot.intake.intake();
                             }
                         }
+                        robot.shooter.setShooting(true);
                     }
                     else {
                         startedShooting = false;
                         if (!motifMode) {
                             robot.transfer.stop();
                         }
+                        robot.shooter.setShooting(false);
                     }
 
 
@@ -336,28 +344,17 @@ public class GameTeleop extends LinearOpMode {
                     robot.follower.setPose(new Pose(robot.follower.getPose().getX(), robot.follower.getPose().getY(), headingPos.average()));
                 }
 
-                if (c1.triangle) {
-                    robot.shooter.droppedActivateBangBang = true;
-                    robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                }
-                else {
-                    robot.shooter.droppedActivateBangBang = false;
-                    robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                }
-
-
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
                 //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //telemetry.addData("loop", loopTimes.average());
 
+                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("xrobot", robot.follower.getPose().getX());
                 telemetry.addData("yrobot", robot.follower.getPose().getY());
-                telemetry.addData("heading", Math.toDegrees(headingPos.average()));
+               // telemetry.addData("heading", Math.toDegrees(headingPos.average()));
                // telemetry.addData("ylime", yPos.average());
                // telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addLine();

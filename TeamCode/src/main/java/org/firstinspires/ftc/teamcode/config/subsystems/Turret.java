@@ -58,13 +58,13 @@ public class Turret {
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
 
-            double fieldVx = robotVx * Math.cos(-heading) + robotVy * Math.sin(-heading);
-            double fieldVy = -robotVx * Math.sin(-heading) + robotVy * Math.cos(-heading);
+           // double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
+           // double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
-            double airTime = robot.chassis.inchesAwayPinpoint() / 90;
+            double airTime = robot.chassis.inchesAwayPinpoint() / 145;
 
-            double predictedX = x + (fieldVx * airTime);
-            double predictedY = y + (fieldVy * airTime);
+            double predictedX = x + (robotVx * airTime);
+            double predictedY = y + (robotVy * airTime);
 
             setAngle(
                     -Math.toDegrees(robot.follower.getHeading()) + robot.chassis.degreeOffset +

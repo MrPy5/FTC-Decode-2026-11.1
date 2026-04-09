@@ -198,9 +198,9 @@ public class Chassis {
 
     }
     public double inchesAwayPinpoint() { //TODO make color based
-        double x = robot.follower.getPose().getX();
-        double y = robot.follower.getPose().getY();
-        return Math.sqrt((((140 - x) * (140 - x))   + ((140 - y) * (140 - y))));
+        double x = turretPose().getX();
+        double y = turretPose().getY();
+        return Math.sqrt((((144 - x) * (144 - x))   + ((144 - y) * (144 - y))));
     }
 
     public double predictedInchesAway() {
@@ -212,17 +212,17 @@ public class Chassis {
         double robotVx = robot.follower.getVelocity().getXComponent();
         double robotVy = robot.follower.getVelocity().getYComponent();
 
-        double fieldVx = robotVx * Math.cos(-heading) + robotVy * Math.sin(-heading);
-        double fieldVy = -robotVx * Math.sin(-heading) + robotVy * Math.cos(-heading);
+        double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
+        double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
-        double airTime = robot.chassis.inchesAwayPinpoint() / 90;
+        double airTime = robot.chassis.inchesAwayPinpoint() / 145;
 
-        double predictedX = x + (fieldVx * airTime);
-        double predictedY = y + (fieldVy * airTime);
+        double predictedX = x + (robotVx * airTime);
+        double predictedY = y + (robotVy * airTime);
 
         x = predictedX;
         y = predictedY;
-        return Math.sqrt((((142 - x) * (142 - x))   + ((142 - y) * (142 - y))));
+        return Math.sqrt((((144 - x) * (144 - x))   + ((144 - y) * (144 - y))));
     }
     public double degreesAwayPinpoint() {
         double x = robot.follower.getPose().getX();
@@ -407,8 +407,8 @@ public class Chassis {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
         double heading = robot.follower.getHeading();
-        double newX = x - (3 * Math.cos(-heading));
-        double newY = y - (3 * Math.sin(-heading));
+        double newX = x - (3.5 * Math.cos(-heading));
+        double newY = y + (3.5 * Math.sin(-heading));
 
         x = newX;
         y = newY;

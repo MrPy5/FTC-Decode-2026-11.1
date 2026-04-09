@@ -24,10 +24,15 @@ public class EncoderTest extends LinearOpMode {
     public void runOpMode() {
 
         DcMotorEx turretEncoder;
+        Servo testServo;
+
+        testServo = hardwareMap.get(Servo.class, "ts right");
 
         turretEncoder = hardwareMap.get(DcMotorEx.class, ConfigConstants.TURRET_ENCODER);
 
         turretEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double currentPosition = 0.5;
 
         waitForStart();
 
@@ -36,9 +41,35 @@ public class EncoderTest extends LinearOpMode {
             double rotations = (position / ConfigConstants.TICKS_PER_ENCODER_REVOLUTION) * (ConfigConstants.ENCODER_TEETH / ConfigConstants.TURRET_TEETH);
             double angle = rotations * 360;
 
+
+            if (gamepad1.rightBumperWasPressed()) {
+
+                currentPosition += .05;
+
+            }
+            if (gamepad1.leftBumperWasPressed()) {
+                currentPosition -= .05;
+
+            }
+
+            if (gamepad1.circleWasPressed()) {
+                currentPosition += .005;
+
+            }
+
+            if (gamepad1.squareWasPressed()) {
+                currentPosition -= .005;
+
+            }
+            if (gamepad1.psWasPressed()) {
+                turretEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+
+
+            testServo.setPosition(currentPosition);
+
+            telemetry.addData("Servo Angle", currentPosition);
             telemetry.addData("angle", angle);
-
-
             telemetry.update();
 
 

@@ -66,16 +66,20 @@ public class Shooter {
 
     //Util functions
     public void update() {
-        shooterRPM.add(robot.shooter.shooterMotorLeft.getRPM(), robot.getMilliseconds());
+        shooterRPM.add(robot.shooter.shooterMotorRight.getRPM(), robot.getMilliseconds());
 
         setShooterState(getShooterReady());
 
-      /*  if (shooterState == ShooterState.NOTREADY && shooting) {
+        if (shooting && targetShooterRPM - shooterRPM.average() > 30) {
             droppedActivateBangBang = true;
+            robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         else {
             droppedActivateBangBang = false;
-        }*/
+            robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
 
     }
@@ -134,7 +138,7 @@ public class Shooter {
     }
 
     public CachedMotor getShooterMotor() {
-        return shooterMotorLeft;
+        return shooterMotorRight;
     }
 
     public void increaseManualRPMAdjustment() {
@@ -146,7 +150,7 @@ public class Shooter {
 
 
     public void spinAtCalculatedSpeed(double range) {
-        setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
+        setRPM(calculateRPM(range)/* - (robot.chassis.getVoltageScalar() * 125)*/);
     }
     public double calculateRPM(double range) {
         if (range > ConfigConstants.NEAR_VS_FAR) {

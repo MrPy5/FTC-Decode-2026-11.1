@@ -319,11 +319,17 @@ public class Robot {
     public void doDashboard(TelemetryPacket packet) {
         packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM());
-        packet.put("max", 6000);
-        packet.put("voltage", transfer.getTransferMotor().getVelocity());
-        packet.put("min", 0);
-        packet.put("left", shooter.getShooterMotorLeft().getCurrent());
-        packet.put("right", shooter.getShooterMotorRight().getCurrent());
+        packet.put("max", 4000);
+        packet.put("min", 1000);
+       // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
+
+        packet.put("left", shooter.getShooterMotorLeft().getRPM());
+        packet.put("right", shooter.getShooterMotorRight().getRPM());
+
+        packet.put("voltL", shooter.getShooterMotorLeft().getCurrent());
+        packet.put("voltR", shooter.getShooterMotorRight().getCurrent());
+
+
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
       //  packet.put("dist", lindexer.getLindexerColor().getDistance());
