@@ -149,7 +149,7 @@ public class ConfigConstants {
     }};
 
         //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(130, 0, 1, 15);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14.5);
 
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
@@ -187,14 +187,14 @@ public class ConfigConstants {
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
-        put(50.0, 2400.0);
-        put(70.0, 2500.0);
-        put(85.0, 2600.0);
-        put(95.0, 2750.0);
-        put(140.0, 3100.0);
-        put(148.0, 3250.0);
-        put(158.0, 3300.0);
-        put(170.0, 3400.0);
+        put(50.0, 23500.0);
+        put(70.0, 2400.0);
+        put(85.0, 2450.0);
+        put(95.0, 2500.0);
+        put(140.0, 2900.0);
+        put(148.0, 3000.0);
+        put(158.0, 3100.0);
+        put(170.0, 3200.0);
     }};
 
     //Vision

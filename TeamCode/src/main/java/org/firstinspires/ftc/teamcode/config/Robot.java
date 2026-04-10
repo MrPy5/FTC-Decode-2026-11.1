@@ -318,7 +318,7 @@ public class Robot {
 
     public void doDashboard(TelemetryPacket packet) {
         packet.put("currentRPM", shooter.getShooterMotor().getRPM());
-        packet.put("targetRPM", shooter.getTargetShooterRPM());
+        packet.put("targetRPM", shooter.getTargetShooterRPM() + shooter.adder);
         packet.put("max", 4000);
         packet.put("min", 1000);
        // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);

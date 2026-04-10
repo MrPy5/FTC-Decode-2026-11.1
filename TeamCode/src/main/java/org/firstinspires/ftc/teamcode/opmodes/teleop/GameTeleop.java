@@ -249,7 +249,7 @@ public class GameTeleop extends LinearOpMode {
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && (robot.shooter.getShooterState() == Shooter.ShooterState.READY || startedShooting)) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && robot.turret.atAngle())|| startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -349,7 +349,7 @@ public class GameTeleop extends LinearOpMode {
                 robot.doDashboard();
                 //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //telemetry.addData("loop", loopTimes.average());
-
+                telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
                 telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("xrobot", robot.follower.getPose().getX());
@@ -364,6 +364,8 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addLine();
                 telemetry.addData("real angle", robot.turret.getEncoderAngle());
                 telemetry.addData("velocity", robot.turret.getEncoderVelocity());
+                telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
+                telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
                // telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
                // telemetry.addData("left", robot.lindexer.getLeftBall());
                // telemetry.addData("right", robot.lindexer.getRightBall());

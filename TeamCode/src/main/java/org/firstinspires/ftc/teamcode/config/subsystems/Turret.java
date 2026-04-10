@@ -80,7 +80,7 @@ public class Turret {
             double difference = angle - getEncoderAngle();
 
             if (Math.abs(difference) > 1) {
-                ticks = angleToTicks(wrapAngle(angle + (1 * Math.signum(difference))));
+                ticks = angleToTicks(wrapAngle(angle + (2 * Math.signum(difference))));
 
             }
         }
@@ -168,6 +168,15 @@ public class Turret {
         double angularVelcocity = (velocityTicks / ConfigConstants.TICKS_PER_ENCODER_REVOLUTION) * (ConfigConstants.ENCODER_TEETH / ConfigConstants.TURRET_TEETH);
         double velocity = angularVelcocity * 360;
         return velocity;
+    }
+
+    public boolean atAngle() {
+        if (Math.abs(angle - getEncoderAngle()) < 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }

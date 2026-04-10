@@ -35,10 +35,12 @@ public class Shooter {
 
     double targetShooterRPM = 0;
     double lastRPM = ConfigConstants.DEFAULT_RPM;
-    double manualAdjustment = 0;
+    double manualAdjustmentFront = 0;
+    double manualAdjustmentBack = 0;
     public boolean droppedActivateBangBang;
     boolean shooting;
     public double power;
+    public double adder = 0;
     CyclingList shooterRPM = new CyclingList(5);
 
 
@@ -50,12 +52,12 @@ public class Shooter {
         this.robot = robot;
 
         shooterMotorLeft = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_LEFT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
+        shooterMotorLeft.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
-        shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotorRight.setDirection(DcMotorEx.Direction.FORWARD);
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
 
@@ -72,13 +74,13 @@ public class Shooter {
 
         if (shooting && targetShooterRPM - shooterRPM.average() > 30) {
             droppedActivateBangBang = true;
-            robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            /*robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
         }
         else {
             droppedActivateBangBang = false;
-            robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            /*robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
         }
 
 
@@ -106,13 +108,16 @@ public class Shooter {
 
     public void updatePower() {
         if (!droppedActivateBangBang) {
-            shooterMotorLeft.setRPM(targetShooterRPM);
-            shooterMotorRight.setRPM(targetShooterRPM);
+            adder = 0;
+            shooterMotorLeft.setRPM(targetShooterRPM + adder);
+            shooterMotorRight.setRPM(targetShooterRPM + adder);
         }
         else {
-
-            shooterMotorLeft.setPower(1);
-            shooterMotorRight.setPower(1);
+            adder = 600;
+            shooterMotorLeft.setRPM(targetShooterRPM + adder);
+            shooterMotorRight.setRPM(targetShooterRPM + adder);
+          //  shooterMotorLeft.setPower(1);
+          //  shooterMotorRight.setPower(1);
         }
 
 
@@ -142,10 +147,20 @@ public class Shooter {
     }
 
     public void increaseManualRPMAdjustment() {
-        manualAdjustment += ConfigConstants.RPM_ADJUST_AMOUNT;
+        if (robot.chassis.inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+            manualAdjustmentBack += ConfigConstants.RPM_ADJUST_AMOUNT;
+        }
+        else {
+            manualAdjustmentFront += ConfigConstants.RPM_ADJUST_AMOUNT;
+        }
     }
     public void decreaseManualRPMAdjustment() {
-        manualAdjustment -= ConfigConstants.RPM_ADJUST_AMOUNT;
+        if (robot.chassis.inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+            manualAdjustmentBack -= ConfigConstants.RPM_ADJUST_AMOUNT;
+        }
+        else {
+            manualAdjustmentFront -= ConfigConstants.RPM_ADJUST_AMOUNT;
+        }
     }
 
 
@@ -154,10 +169,10 @@ public class Shooter {
     }
     public double calculateRPM(double range) {
         if (range > ConfigConstants.NEAR_VS_FAR) {
-            return multiRPM(range) + manualAdjustment;
+            return multiRPM(range) + manualAdjustmentBack;
         }
         else {
-            return multiRPM(range);
+            return multiRPM(range) + manualAdjustmentFront;
         }
 
     }
@@ -174,8 +189,11 @@ public class Shooter {
 
     }
 
-    public double getManualAdjustment() {
-        return manualAdjustment;
+    public double getManualAdjustmentFront() {
+        return manualAdjustmentFront;
+    }
+    public double getManualAdjustmentBack() {
+        return manualAdjustmentBack;
     }
 
     public void setShooting(boolean shooting) {
