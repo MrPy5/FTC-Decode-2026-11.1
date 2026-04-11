@@ -44,8 +44,10 @@ public class Commands {
 
         shootLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(500),
                 new InstantCommand(() -> robot.lindexer.moveToNextBall(robot.classifier.getNextColor(robot.getMotif()))),
-                new WaitTillLindexerReady(robot.lindexer),
+                //new WaitTillLindexerReady(robot.lindexer),
+                //new Wait(300),
                 new InstantCommand(() -> robot.classifier.addBall())
         );
 
@@ -72,8 +74,7 @@ public class Commands {
         );
 
         teleopMotif = new SequentialCommand(
-              shootLindexing,
-              new Wait(300)
+              shootLindexing
         );
         acceptCenterBall = new SequentialCommand(
                 new InstantCommand(() -> robot.lindexer.clear()),

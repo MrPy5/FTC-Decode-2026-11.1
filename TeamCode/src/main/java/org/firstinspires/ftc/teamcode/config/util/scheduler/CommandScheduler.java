@@ -26,6 +26,7 @@ public class CommandScheduler {
                 if (cmd.isFinished()) {
                     cmd.reset();
                     it.remove();
+
                 }
             }
         }
@@ -45,6 +46,13 @@ public class CommandScheduler {
     }
     public double length() {
         return commands.size();
+    }
+
+    public String latestCommand() {
+        if (!commands.isEmpty()) {
+            return commands.get(0).toString();
+        }
+        return null;
     }
 
 }

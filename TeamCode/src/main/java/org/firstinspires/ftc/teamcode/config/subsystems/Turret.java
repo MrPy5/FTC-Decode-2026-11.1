@@ -71,11 +71,11 @@ public class Turret {
         this.angle = angle;
         double ticks = angleToTicks(wrapAngle(angle));
 
-        if (Math.abs(getEncoderVelocity()) < .1) {
+        if (Math.abs(getEncoderVelocity()) < .05) {
             double difference = angle - getEncoderAngle();
 
             if (Math.abs(difference) > 1) {
-                ticks = angleToTicks(wrapAngle(angle + (Math.abs(difference * 2) * Math.signum(difference))));
+                ticks = angleToTicks(wrapAngle(angle + (Math.max(1, Math.abs(difference * 1.25)) * Math.signum(difference))));
 
             }
         }
@@ -166,7 +166,7 @@ public class Turret {
     }
 
     public boolean atAngle() {
-        if (Math.abs(angle - getEncoderAngle()) < 2) {
+        if (Math.abs(angle - getEncoderAngle()) < 5) {
             return true;
         }
         else {

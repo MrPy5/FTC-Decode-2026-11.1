@@ -61,49 +61,12 @@ public class AngleTurretTest extends LinearOpMode {
 
             while (opModeIsActive()) {
                 loopTimer.reset();
-
+                robot.intake.stopIntake();
+                robot.transfer.stop();
                 robot.updateGamepads();
-                c1 = robot.getC1();
 
                 //Get state of each component on robot
                 robot.update();
-
-                if (c1.psWasPressed()) {
-                    robot.intake.stopIntake();
-                    robot.transfer.stop();
-                }
-
-
-               /* if (c1.squareWasPressed()) {
-                    turretAngle -= 10;
-                    robot.turret.setAngle(turretAngle);
-                }
-                if (c1.circleWasPressed()) {
-                    turretAngle += 10;
-                    robot.turret.setAngle(turretAngle);
-                }*/
-                if (c1.dpadLeftWasPressed()) {
-                    turretAngle -= 1;
-                    robot.turret.setAngle(turretAngle);
-                }
-                if (c1.dpadRightWasPressed()) {
-                    turretAngle += 1;
-                    robot.turret.setAngle(turretAngle);
-                }
-
-                if (c1.circleWasPressed()) {
-                    turretAngle = -90;
-                    robot.turret.setAngle(turretAngle);
-                }
-                if (c1.squareWasPressed()) {
-                    turretAngle = 44.48;
-                    robot.turret.setAngle(turretAngle);
-                }
-                if (c1.triangleWasPressed()) {
-                    turretAngle = 0;
-                    robot.turret.setAngle(turretAngle);
-                }
-
 
 
 
@@ -111,12 +74,10 @@ public class AngleTurretTest extends LinearOpMode {
                 robot.doDashboard();
 
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
-                telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
-                telemetry.addData("turret Angle", turretAngle);
-                //telemetry.addData("left tick", robot.turret.angleToTicks(turretAngle));
+                telemetry.addData("angle", robot.turret.getAngle());
+                telemetry.addData("turret Angle", robot.turret.getEncoderAngle());
                 telemetry.addData("loop", loopTimes.average());
                 telemetry.addData("rpm", targetRPM);
-                telemetry.addData("turretAngle", robot.turret.getAngle());
                 telemetry.update();
 
             }

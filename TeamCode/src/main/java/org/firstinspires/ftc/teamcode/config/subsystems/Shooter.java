@@ -40,6 +40,7 @@ public class Shooter {
     public boolean droppedActivateBangBang;
     boolean shooting;
     public double power;
+    public boolean motifMode;
     public double adder = 0;
     CyclingList shooterRPM = new CyclingList(5);
 
@@ -72,7 +73,7 @@ public class Shooter {
 
         setShooterState(getShooterReady());
 
-        if (shooting && targetShooterRPM - shooterRPM.average() > 30) {
+        if (shooting && targetShooterRPM - shooterRPM.average() > 30 && !motifMode) {
             droppedActivateBangBang = true;
             /*robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
@@ -109,16 +110,15 @@ public class Shooter {
     public void updatePower() {
         if (!droppedActivateBangBang) {
             adder = 0;
-            shooterMotorLeft.setRPM(targetShooterRPM + adder);
-            shooterMotorRight.setRPM(targetShooterRPM + adder);
         }
         else {
             adder = 600;
-            shooterMotorLeft.setRPM(targetShooterRPM + adder);
-            shooterMotorRight.setRPM(targetShooterRPM + adder);
-          //  shooterMotorLeft.setPower(1);
-          //  shooterMotorRight.setPower(1);
         }
+        if (motifMode) {
+            adder = -100;
+        }
+        shooterMotorLeft.setRPM(targetShooterRPM + adder);
+        shooterMotorRight.setRPM(targetShooterRPM + adder);
 
 
     }

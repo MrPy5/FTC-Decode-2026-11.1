@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @TeleOp(name = "Two Servo Test")
-
+@Disabled
 
 public class TwoServoTest extends LinearOpMode {
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @TeleOp(name = "Arc Test")
+@Disabled
 //http://192.168.43.1:8080/dash
 public class ServoEncoderArcTest extends LinearOpMode {
 

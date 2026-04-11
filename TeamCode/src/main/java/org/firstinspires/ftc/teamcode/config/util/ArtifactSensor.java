@@ -17,25 +17,17 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 public class ArtifactSensor {
 
     RevColorSensorV3 colorSensor;
-    ElapsedTime ballTimer = new ElapsedTime();
+    Robot robot;
     CyclingList hueList = new CyclingList(5);
     public double hue = 0;
-    public double distance = 0;
-    boolean ballTimerStarted = false;
-    public double time = 50;
-    public ArtifactSensor(RevColorSensorV3 colorSensor) {
-       // this.colorSensorOne = colorSensorOne;
-        this.colorSensor= colorSensor;
 
-       // this.colorSensorOne.setGain(20);
+    public ArtifactSensor(RevColorSensorV3 colorSensor, Robot robot) {
+
+        this.colorSensor= colorSensor;
         this.colorSensor.setGain(5f);
+        this.robot = robot;
     }
     public void update() {
-       // hue = getHue();
-       //distance = getDistance();
-    }
-    public double getDistance() {
-        return colorSensor.getDistance(DistanceUnit.CM);
     }
 
 
@@ -51,41 +43,12 @@ public class ArtifactSensor {
         return hsvValues[0];
     }
 
-    public Color getBall(Robot robot) {
-
-        distance = getDistance();
-
-        if (distance < 4.7 && (ballTimer.milliseconds() > time  || !ballTimerStarted)) {
-            if (!ballTimerStarted) {
-                ballTimer.reset();
-                ballTimerStarted = true;
-                return Color.EMPTY;
-            }
-            else {
-                robot.log("color", String.valueOf(hueList.values.size()));
-                robot.log("color", String.valueOf(hueList.average()));
-                ballTimerStarted = false;
-
-
-                if (hueList.average() > 220) {
-                    hueList.reset();
-                    return Color.PURPLE;
-                } else {
-                    hueList.reset();
-                    return Color.GREEN;
-                }
-
-           }
-        }
-        else if (distance < 4.7 && ballTimerStarted) {
-            hue = getHue();
-            hueList.add(hue, 0);
-            return Color.EMPTY;
+    public Color getBall() {
+        if (getHue() > 220) {
+            return Color.PURPLE;
         }
         else {
-            ballTimerStarted = false;
-            hueList.reset();
-            return Color.EMPTY;
+            return Color.GREEN;
         }
 
     }

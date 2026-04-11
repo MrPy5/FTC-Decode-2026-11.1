@@ -23,8 +23,12 @@ public class ColorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        RevColorSensorV3 color = hardwareMap.get(RevColorSensorV3.class, "lindex color left");
-        color.setGain(5f);
+        RevColorSensorV3 colorLeft = hardwareMap.get(RevColorSensorV3.class, "lindex color left");
+        RevColorSensorV3 colorRight = hardwareMap.get(RevColorSensorV3.class, "lindex color right");
+        RevColorSensorV3 colorCenter = hardwareMap.get(RevColorSensorV3.class, "lindex color center");
+        colorLeft.setGain(5f);
+        colorRight.setGain(5f);
+        colorCenter.setGain(5f);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(50);
 
@@ -36,13 +40,17 @@ public class ColorTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            telemetry.addData("ball", getDistance(color) < 4.7 ? "yes" : "no");
-            telemetry.addData("ball", getHue(color) > 220 ? "purple" : "green");
+           // telemetry.addData("ball", getDistance(color) < 4.7 ? "yes" : "no");
+            telemetry.addData("ball", getHue(colorLeft) > 220 ? "purple" : "green");
+            telemetry.addData("ball", getHue(colorRight) > 220 ? "purple" : "green");
+            telemetry.addData("ball", getHue(colorCenter) > 220 ? "purple" : "green");
             telemetry.update();
 
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("dist", getDistance(color));
-            packet.put("hue", getHue(color));
+
+            packet.put("hueL", getHue(colorLeft));
+            packet.put("hueR", getHue(colorRight));
+            packet.put("hueC", getHue(colorCenter));
             dashboard.sendTelemetryPacket(packet);
 
 

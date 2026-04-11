@@ -43,6 +43,7 @@ public class ConfigConstants {
 
     public static final String LINDEX_COLOR_LEFT = "lindex color left";
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
+    public static final String LINDEX_COLOR_CENTER = "lindex color center";
 
     public static final String TURRET_LEFT = "ts left";
     public static final String TURRET_RIGHT = "ts right";
@@ -135,7 +136,7 @@ public class ConfigConstants {
     public static final PIDFCoefficients TRANSFER_PID = new PIDFCoefficients(100, 0, 1, 5);
 
     public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
-        put(-90.0, 0.0042);
+        put(-90.0, 0.0037);
         put(-67.5, 0.0038);
         put(-43.0, 0.004);
         put(-20.0, 0.0043);
@@ -146,13 +147,14 @@ public class ConfigConstants {
         put(20.0, 0.0043);
         put(43.0, 0.004);
         put(67.5, 0.0036);
+        put(90.0, 0.0037);
     }};
 
         //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14.5);
 
-    public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
-    public static final double RPM_DISTANCE_BOUND = 100; //
+    public static final double RPM_ROC_BOUND = 1.3; //0.8 rpm per millisecond  if average is less than this = ready
+    public static final double RPM_DISTANCE_BOUND = 150; //
 
     public static final double NEAR_VS_FAR = 130; //
 
@@ -187,7 +189,7 @@ public class ConfigConstants {
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
-        put(50.0, 23500.0);
+        put(50.0, 2350.0);
         put(70.0, 2400.0);
         put(85.0, 2450.0);
         put(95.0, 2500.0);

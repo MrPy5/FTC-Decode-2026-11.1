@@ -45,7 +45,7 @@ public class Chassis {
     public ElapsedTime turnTimer = new ElapsedTime();
 
     public Pose targetPointFar = new Pose(136,136);
-    public Pose targetPointClose = new Pose(136,133);
+    public Pose targetPointClose = new Pose(132,136);
 
     public Chassis(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
@@ -218,7 +218,7 @@ public class Chassis {
         double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
         double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
-        double airTime = robot.chassis.inchesAwayPinpoint() / 145;
+        double airTime = robot.chassis.inchesAwayPinpoint() / 130;
 
         double predictedX = x + (robotVx * airTime);
         double predictedY = y + (robotVy * airTime);

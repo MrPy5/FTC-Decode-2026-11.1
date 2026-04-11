@@ -36,7 +36,9 @@ public class Lindexer {
     Servo leftLindexer;
     Servo rightLindexer;
 
-    ArtifactSensor lindexerColor;
+    ArtifactSensor lindexerColorCenter;
+    ArtifactSensor lindexerColorLeft;
+    ArtifactSensor lindexerColorRight; // TODO integrate left and right together
 
     Color leftBall = Color.EMPTY;
     Color centerBall = Color.EMPTY;
@@ -54,7 +56,9 @@ public class Lindexer {
         rightLindexer = hardwareMap.get(Servo.class, ConfigConstants.RIGHT_LINDEXER);
 
 
-        lindexerColor = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT));
+        lindexerColorCenter = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_CENTER), robot);
+        lindexerColorLeft = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT), robot);
+        lindexerColorRight = new ArtifactSensor(hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT), robot);
 
 
     }
@@ -118,9 +122,9 @@ public class Lindexer {
                 waitTimer.reset();
                 waitStarted = true;
             }
-            if (waitTimer.milliseconds() > 0 && waitStarted) {
+            if (waitTimer.milliseconds() > 100 && waitStarted) {
                 rightCenter();
-                rightBall = Color.PURPLE;
+                leftBall = Color.PURPLE;
                 waitStarted = false;
             }
         }
@@ -214,7 +218,7 @@ public class Lindexer {
 
 
     public ArtifactSensor getLindexerColor() {
-        return lindexerColor;
+        return lindexerColorCenter;
     }
 
     public void setIndex(boolean index) {
@@ -261,9 +265,10 @@ public class Lindexer {
     }
 
     public void stopIntakingAndLindex() {
-        centerBall = Color.PURPLE;
-        leftBall = Color.GREEN;
-        rightBall = Color.PURPLE;
+
+        leftBall = lindexerColorLeft.getBall();
+        rightBall = lindexerColorCenter.getBall();
+        centerBall = assignCenterBall(leftBall, rightBall);
 
         Color nextBall = robot.classifier.getNextColor(robot.getMotif());
         robot.transfer.intakeTransfer();
@@ -277,5 +282,14 @@ public class Lindexer {
             robot.scheduler.schedule(robot.commands.acceptLeftBall, robot.getMilliseconds());
         }
 
+    }
+
+    public Color assignCenterBall(Color left, Color right) {
+        if (left == Color.GREEN || right == Color.GREEN) {
+            return Color.PURPLE;
+        }
+        else {
+            return Color.GREEN;
+        }
     }
 }

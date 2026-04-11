@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.config.util.OpMode;
 //take out reset pose button in robot
 
 @TeleOp(name="cr Turret Test")
+@Disabled
 public class CRTurretTest extends LinearOpMode {
 
         @Override

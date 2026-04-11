@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 
 @TeleOp(name = "Shooter Test")
+@Disabled
 //http://192.168.43.1:8080/dash
 public class ShooterTest extends LinearOpMode {
 
