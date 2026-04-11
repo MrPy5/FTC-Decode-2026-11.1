@@ -44,7 +44,7 @@ public class ServoEncoderArcTest extends LinearOpMode {
                 turretEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
 
-            if (gamepad1.triangleWasPressed()) {
+            if (gamepad1.triangleWasPressed() && curAngle < 9) {
                 curAngle += 1;
                 testServo.setPosition(angles[curAngle]);
             }
@@ -54,7 +54,9 @@ public class ServoEncoderArcTest extends LinearOpMode {
 
 
             telemetry.addData("angle", angle);
-            telemetry.addData("positions", positions.toString());
+            for (double[] pos : positions) {
+                telemetry.addData("pos", pos.toString());
+            }
             telemetry.update();
 
 

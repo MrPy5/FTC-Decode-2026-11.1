@@ -53,13 +53,8 @@ public class Turret {
             double x = robot.chassis.turretPose().getX();
             double y = robot.chassis.turretPose().getY();
 
-            double heading = robot.follower.getHeading(); // radians
-
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
-
-           // double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
-           // double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
             double airTime = robot.chassis.inchesAwayPinpoint() / 145;
 
@@ -80,7 +75,7 @@ public class Turret {
             double difference = angle - getEncoderAngle();
 
             if (Math.abs(difference) > 1) {
-                ticks = angleToTicks(wrapAngle(angle + (2 * Math.signum(difference))));
+                ticks = angleToTicks(wrapAngle(angle + (Math.abs(difference * 2) * Math.signum(difference))));
 
             }
         }

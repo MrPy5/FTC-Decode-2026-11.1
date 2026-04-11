@@ -44,6 +44,9 @@ public class Chassis {
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
 
+    public Pose targetPointFar = new Pose(136,136);
+    public Pose targetPointClose = new Pose(136,133);
+
     public Chassis(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
         this.robot = robot;
@@ -249,14 +252,14 @@ public class Chassis {
 
         if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(136 - y, 136 - x));
+                return Math.toDegrees(Math.atan2(targetPointFar.getY() - y, targetPointFar.getX() - x));
             } else {
                 return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
             }
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(136 - y, 136 - x)); //  (-(135 - y)) / (133 - x))
+                return Math.toDegrees(Math.atan2(targetPointClose.getY() - y, targetPointClose.getX() - x)); //  (-(135 - y)) / (133 - x))
             } else {
                 return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
             }

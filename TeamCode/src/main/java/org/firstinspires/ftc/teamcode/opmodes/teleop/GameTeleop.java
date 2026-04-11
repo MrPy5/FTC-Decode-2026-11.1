@@ -249,7 +249,7 @@ public class GameTeleop extends LinearOpMode {
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && robot.turret.atAngle())|| startedShooting)) {
+                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY)|| startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -334,7 +334,7 @@ public class GameTeleop extends LinearOpMode {
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
 
-                if (c1.touchpad) {
+             /*   if (c1.touchpad) {
                     Pose botPose = robot.limelightCamera.getPedroPose();
                     xPos.add(botPose.getX() - (10 * Math.cos(botPose.getHeading())), 0);
                     yPos.add(botPose.getY() - (10 * Math.sin(botPose.getHeading())), 0);
@@ -342,7 +342,7 @@ public class GameTeleop extends LinearOpMode {
                 }
                 if (c2.touchpadWasPressed()) {
                     robot.follower.setPose(new Pose(robot.follower.getPose().getX(), robot.follower.getPose().getY(), headingPos.average()));
-                }
+                }*/
 
                 //update everything
                 robot.updateHardware();
@@ -354,9 +354,6 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("xrobot", robot.follower.getPose().getX());
                 telemetry.addData("yrobot", robot.follower.getPose().getY());
-               // telemetry.addData("heading", Math.toDegrees(headingPos.average()));
-               // telemetry.addData("ylime", yPos.average());
-               // telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
                 telemetry.addLine();
                 telemetry.addData("offset", robot.chassis.degreeOffset);
                 telemetry.addData("angle", robot.turret.getAngle());

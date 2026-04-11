@@ -123,9 +123,9 @@ public class ConfigConstants {
         //Turret
     public static final double TURRET_ZERO = 0.516; // left ticks
     public static final double TURRET_NINETY = 0.182; // left ticks
-    public static final double TURRET_MAX = 0.88; // left ticks
-    public static final double TURRET_MIN = 0.13; // left ticks
-    public static final double TICKS_PER_TURRET_DEGREE = 0.0037111;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
+    public static final double TURRET_MAX = 0.85; // left ticks
+    public static final double TURRET_MIN = 0.18; // left ticks
+    public static final double TICKS_PER_TURRET_DEGREE = 0.00368;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
     public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
     public static final double TURRET_TEETH = 204;
@@ -154,7 +154,7 @@ public class ConfigConstants {
     public static final double RPM_ROC_BOUND = 0.9; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 100; //
 
-    public static final double NEAR_VS_FAR = 110; //
+    public static final double NEAR_VS_FAR = 130; //
 
     public static final double DEFAULT_RPM = 3000;
 
