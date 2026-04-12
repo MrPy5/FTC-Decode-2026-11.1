@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Ascent;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Color;
@@ -104,7 +105,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                     //Intake
-                else if ((c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.rightTriggerWasReleased()) && robot.getRobotState() != RobotState.INTAKE) {
+                else if ((c1.rightTriggerWasReleased()) && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
@@ -127,11 +128,14 @@ public class GameTeleop extends LinearOpMode {
                         robot.shooter.stop();
                         robot.intake.stopIntake();
                         robot.transfer.stop();
+                        robot.turret.setState(Turret.TurretState.HOLD);
+                        robot.turret.setAngle(0);
                     }
                     else {
                         robot.scheduler.clear();
                         robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                         robot.setRobotState(RobotState.INTAKE);
+                        robot.turret.setState(Turret.TurretState.TRACK);
 
                         if (motifMode) {
                             robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
@@ -231,14 +235,10 @@ public class GameTeleop extends LinearOpMode {
                     robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
                 }
 
-                if (c1.triangleWasPressed()) {
-                    robot.intake.stopIntake();
-                }
-
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY) || startedShooting)) {
+                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY) || startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -298,11 +298,11 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
                 else {
-                    if (c1.dpadLeftWasPressed()) {
+                    if (c2.dpadLeftWasPressed()) {
                         robot.chassis.degreeOffset += 0.5;
                         gamepad1.rumble(0, 1, 200);
                     }
-                    if (c1.dpadRightWasPressed()) {
+                    if (c2.dpadRightWasPressed()) {
                         robot.chassis.degreeOffset -= 0.5;
                         gamepad1.rumble(1, 0, 200);
                     }
@@ -338,7 +338,12 @@ public class GameTeleop extends LinearOpMode {
                 robot.doDashboard();
                 //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 //telemetry.addData("loop", loopTimes.average());
-                telemetry.addData("#", robot.classifier.getBallsOnClassifier());
+                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
+                telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
+                telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
+                telemetry.addLine();
+                telemetry.addData("offset", robot.chassis.degreeOffset);
+               /* telemetry.addData("#", robot.classifier.getBallsOnClassifier());
                 telemetry.addData("sched", robot.scheduler.isIdle());
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
                 telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
@@ -346,14 +351,13 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("xrobot", robot.follower.getPose().getX());
                 telemetry.addData("yrobot", robot.follower.getPose().getY());
                 telemetry.addLine();
-                telemetry.addData("offset", robot.chassis.degreeOffset);
                 telemetry.addData("angle", robot.turret.getAngle());
                 telemetry.addData("within degree?", Math.abs(robot.turret.getAngle() - robot.turret.getEncoderAngle()) < 1);
                 telemetry.addLine();
                 telemetry.addData("real angle", robot.turret.getEncoderAngle());
                 telemetry.addData("velocity", robot.turret.getEncoderVelocity());
                 telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
-                telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
+                telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());*/
                // telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
                // telemetry.addData("left", robot.lindexer.getLeftBall());
                // telemetry.addData("right", robot.lindexer.getRightBall());

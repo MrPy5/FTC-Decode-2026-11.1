@@ -150,6 +150,13 @@ public class ConfigConstants {
         put(90.0, 0.0037);
     }};
 
+    public static final Map<Double, Double> AIR_TIME_MAP = new HashMap<Double, Double>() {{
+        put(90.0, 0.5);
+        put(102.0, 0.58);
+        put(124.0, 0.66);
+        put(150.0, 0.93);
+    }};
+
         //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14.5);
 
