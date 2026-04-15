@@ -55,8 +55,10 @@ public class Turret {
 
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
-
-            double airTime = robot.chassis.inchesAwayPinpoint() / 145;
+            double airTime = 0;
+            if (!robot.chassis.inFar()) {
+                 airTime = robot.chassis.inchesAwayPinpoint() / 145;
+            }
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
@@ -66,6 +68,7 @@ public class Turret {
                             robot.chassis.degreesAwayTurret(new Pose(predictedX, predictedY))
             );
         }
+
     }
     public void setAngle(double angle) {
         this.angle = angle;

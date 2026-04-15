@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Storage;
+import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
@@ -14,8 +16,12 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollowerOrStuck;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametric;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitScheduler;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooter;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooterNotReady;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitUntil;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.close.ClosePaths;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
+
+import java.util.function.BooleanSupplier;
 
 @Autonomous(name = "Close")
 public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
@@ -45,19 +51,18 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
     @Override
     public void start() {
         robot.startAuto(ClosePaths::buildPaths, ClosePaths.startPose);
+        robot.turret.setState(Turret.TurretState.HOLD);
         SequentialCommand shoot = new SequentialCommand(
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
-                new Wait(350),
-                new WaitScheduler(robot.scheduler),
-                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
-                new Wait(750),
-                new WaitScheduler(robot.scheduler),
-                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
                 new Wait(700),
-                new WaitScheduler(robot.scheduler)
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
+                new Wait(500),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
+                new Wait(500)
         );
         SequentialCommand shootPreload = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2500)),
+                new InstantCommand(() -> robot.turret.setAngle(0)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -75,6 +80,7 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         );
         SequentialCommand spike1 = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2450)),
+                new InstantCommand(() -> robot.turret.setAngle(-40)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds())),
@@ -82,7 +88,7 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new WaitFollower(robot.follower),
                 new InstantCommand(() -> robot.follower.setMaxPower(0.5)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1)),
-                new WaitFollower(robot.follower),
+                new WaitParametric(robot.follower),
                 //new Wait(500),
                 new InstantCommand(() -> robot.follower.setMaxPower(0.7)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1ToGateTurn)),

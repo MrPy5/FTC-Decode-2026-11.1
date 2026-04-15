@@ -97,7 +97,7 @@ public class ConfigConstants {
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
-    public static final double INTAKE_LIFT = 0.135;
+    public static final double INTAKE_LIFT = 0.265;
     public static final double INTAKE_DROP = 0.385;
 
         //Intake Blocker

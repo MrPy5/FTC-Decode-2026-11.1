@@ -16,7 +16,7 @@ public class IntakeArtifactSensor {
     DigitalChannel distanceSensor;
     ElapsedTime ballTimer = new ElapsedTime();
 
-    CyclingList distanceList = new CyclingList(20);
+    CyclingList distanceList = new CyclingList(10);
 
     public double distance = 0;
     boolean ballTimerStarted = false;

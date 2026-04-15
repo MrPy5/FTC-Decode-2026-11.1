@@ -147,7 +147,7 @@ public class Shooter {
     }
 
     public void increaseManualRPMAdjustment() {
-        if (robot.chassis.inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+        if (robot.chassis.inFar()) {
             manualAdjustmentBack += ConfigConstants.RPM_ADJUST_AMOUNT;
         }
         else {
@@ -155,7 +155,7 @@ public class Shooter {
         }
     }
     public void decreaseManualRPMAdjustment() {
-        if (robot.chassis.inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+        if (robot.chassis.inFar()) {
             manualAdjustmentBack -= ConfigConstants.RPM_ADJUST_AMOUNT;
         }
         else {

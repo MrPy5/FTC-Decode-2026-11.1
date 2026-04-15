@@ -110,6 +110,7 @@ public class ClosePaths {
         spike1 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike1Pose, spike1EndPose))
                 .setLinearHeadingInterpolation(spike1Pose.getHeading(), spike1EndPose.getHeading())
+                .setTValueConstraint(0.9)
                 .build();
         spike1ToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike1EndPose, shootPose))

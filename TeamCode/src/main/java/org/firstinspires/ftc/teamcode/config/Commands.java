@@ -44,10 +44,8 @@ public class Commands {
 
         shootLindexing = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
-                new Wait(300),
                 new InstantCommand(() -> robot.lindexer.moveToNextBall(robot.classifier.getNextColor(robot.getMotif()))),
-                //new WaitTillLindexerReady(robot.lindexer),
-                //new Wait(300),
+
                 new InstantCommand(() -> robot.classifier.addBall())
         );
 

@@ -207,30 +207,35 @@ public class Chassis {
     }
 
     public double predictedInchesAway() {
-        double x = robot.chassis.turretPose().getX();
-        double y = robot.chassis.turretPose().getY();
+        if (!inFar()) {
+            double x = robot.chassis.turretPose().getX();
+            double y = robot.chassis.turretPose().getY();
 
-        double heading = robot.follower.getHeading(); // radians
+            double heading = robot.follower.getHeading(); // radians
 
-        double robotVx = robot.follower.getVelocity().getXComponent();
-        double robotVy = robot.follower.getVelocity().getYComponent();
+            double robotVx = robot.follower.getVelocity().getXComponent();
+            double robotVy = robot.follower.getVelocity().getYComponent();
 
-        double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
-        double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
+            //double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
+            //double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
 
-        double airTime = robot.chassis.inchesAwayPinpoint() / 130;
+            double airTime = robot.chassis.inchesAwayPinpoint() / 130;
 
-        double predictedX = x + (robotVx * airTime);
-        double predictedY = y + (robotVy * airTime);
+            double predictedX = x + (robotVx * airTime);
+            double predictedY = y + (robotVy * airTime);
 
-        x = predictedX;
-        y = predictedY;
-        return Math.sqrt((((144 - x) * (144 - x))   + ((144 - y) * (144 - y))));
+            x = predictedX;
+            y = predictedY;
+            return Math.sqrt((((144 - x) * (144 - x)) + ((144 - y) * (144 - y))));
+        }
+        else {
+            return inchesAwayPinpoint();
+        }
     }
     public double degreesAwayPinpoint() {
         double x = robot.follower.getPose().getX();
         double y = robot.follower.getPose().getY();
-        if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+        if (inFar()) {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
             } else {
@@ -250,7 +255,7 @@ public class Chassis {
         double x = position.getX();
         double y = position.getY();
 
-        if (inchesAwayPinpoint() > ConfigConstants.NEAR_VS_FAR) {
+        if (inFar()) {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan2(targetPointFar.getY() - y, targetPointFar.getX() - x));
             } else {
@@ -417,6 +422,10 @@ public class Chassis {
         y = newY;
 
         return new Pose(x, y, heading);
+    }
+
+    public boolean inFar() {
+        return robot.follower.getPose().getX() < 45;
     }
 
 }

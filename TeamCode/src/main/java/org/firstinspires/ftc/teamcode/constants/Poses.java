@@ -5,16 +5,16 @@ import com.pedropathing.geometry.Pose;
 public class Poses {
     public static final Pose startPoseBlueFar = new Pose(1.2, 94.5, 0);
     public static final Pose startPoseRedFar = new Pose(1.2, 62.5, 0);
-    public static final Pose startPoseBlueClose = new Pose(122.14, 120.7, (0.896));
+    public static final Pose startPoseBlueClose = new Pose(128, 115, (0.87));
     public static final Pose startPoseRedClose = new Pose(121, 34.5, Math.toRadians(309));
 
-    public static final Pose detectPoseBlue = new Pose(80, 86.5, Math.toRadians(-15));
+    public static final Pose detectPoseBlue = new Pose(96.2, 85, Math.toRadians(-15));
     public static final Pose detectPoseRed = new Pose(78, 65.5, Math.toRadians(15));
 
     public static final Pose shootPoseRedFar = new Pose(10.1, 64.5, Math.toRadians(-23));
     public static final Pose shootPoseBlueFar = new Pose(10.1, 92.5, Math.toRadians(22));
-    public static final Pose shootPoseBlueClose = new Pose(80, 83.5, Math.toRadians(90));
-    public static final Pose parkPoseBlueClose = new Pose(95, 90.5, Math.toRadians(0));
+    public static final Pose shootPoseBlueClose = new Pose(86, 78, Math.toRadians(90));
+    public static final Pose parkPoseBlueClose = new Pose(105, 90.5, Math.toRadians(0));
     public static final Pose parkPoseRedClose = new Pose(95, 66.5, Math.toRadians(0));
     public static final Pose shootPoseRedClose = new Pose(83.5, 65.5, Math.toRadians(312.5));
 
@@ -24,8 +24,8 @@ public class Poses {
     public static final Pose gateTurn1Red = new Pose(68, 28.5, Math.toRadians(0));
     public static final Pose gatePush1Red = new Pose(68, 21.5, Math.toRadians(0));
 
-    public static final Pose gateTurn1Blue = new Pose(68, 124.5, Math.toRadians(0));
-    public static final Pose gatePush1Blue = new Pose(68, 136.5, Math.toRadians(0));
+    public static final Pose gateTurn1Blue = new Pose(74, 124.5, Math.toRadians(0));
+    public static final Pose gatePush1Blue = new Pose(74, 136.5, Math.toRadians(0));
 
     public static final Pose gateTurn2Red = new Pose(-2, -38.5, Math.toRadians(180));
     public static final Pose gatePush2Red = new Pose(-2, -50.5, Math.toRadians(180));
@@ -34,16 +34,16 @@ public class Poses {
     public static final Pose gatePush2Blue = new Pose(-2, 63.5, Math.toRadians(180));
 
     // close
-    public static final Pose spike1PoseBlue = new Pose(79.2, 101.5, 1.56);
-    public static final Pose spike1EndPoseBlue = new Pose(79.2, 128.5, 1.56);
+    public static final Pose spike1PoseBlue = new Pose(85, 100, 1.56);
+    public static final Pose spike1EndPoseBlue = new Pose(85, 115, 1.56);
 
-    public static final Pose spike2PoseBlue = new Pose(56.5, 101.5, 1.56);
-    public static final Pose spike2EndPoseBlue = new Pose(56.5, 135.5, 1.56);
-    public static final Pose spike2BezierPoseBlue = new Pose(45, 86.5, Math.toRadians(90));
-    public static final Pose spike2EndPoseFastBlue = new Pose(55, 26.5, Math.toRadians(-90));
+    public static final Pose spike2PoseBlue = new Pose(62, 101.5, 1.56);
+    public static final Pose spike2EndPoseBlue = new Pose(62, 115, 1.56);
+    public static final Pose spike2BezierPoseBlue = new Pose(51, 86.5, Math.toRadians(90));
+    public static final Pose spike2EndPoseFastBlue = new Pose(61, 26.5, Math.toRadians(-90));
 
-    public static final Pose spike3PoseBlue = new Pose(31.5, 101.5, 1.56);
-    public static final Pose spike3EndPoseBlue = new Pose(31.5, 135.5, 1.56);
+    public static final Pose spike3PoseBlue = new Pose(37.5, 101.5, 1.56);
+    public static final Pose spike3EndPoseBlue = new Pose(37.5, 115, 1.56);
 
     public static final Pose tunnelPoseBlue = new Pose(-22, 67.5, Math.toRadians(90));
     public static final Pose tunnelPoseRed = new Pose(-22, -54.5, Math.toRadians(90));

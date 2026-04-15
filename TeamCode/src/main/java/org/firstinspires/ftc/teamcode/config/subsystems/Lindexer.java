@@ -122,7 +122,7 @@ public class Lindexer {
                 waitTimer.reset();
                 waitStarted = true;
             }
-            if (waitTimer.milliseconds() > 100 && waitStarted) {
+            if (waitTimer.milliseconds() > 0 && waitStarted) {
                 rightCenter();
                 leftBall = Color.PURPLE;
                 waitStarted = false;
