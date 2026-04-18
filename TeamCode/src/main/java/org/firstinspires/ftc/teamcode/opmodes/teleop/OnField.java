@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.config.Robot;
@@ -22,6 +23,7 @@ public class OnField extends OpMode {
     @Override
     public void start() {
         robot.follower.update();
+        robot.follower.setPose(new Pose(77.5,71,0));
     }
 
     @Override

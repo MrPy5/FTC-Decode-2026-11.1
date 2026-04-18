@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollower;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
 
 @Autonomous(name = "reset")
+@Disabled
 public class Reset extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
 
 

@@ -13,7 +13,7 @@ public class Poses {
 
     public static final Pose shootPoseRedFar = new Pose(10.1, 64.5, Math.toRadians(-23));
     public static final Pose shootPoseBlueFar = new Pose(10.1, 92.5, Math.toRadians(22));
-    public static final Pose shootPoseBlueClose = new Pose(86, 78, Math.toRadians(90));
+    public static final Pose shootPoseBlueClose = new Pose(86, 78, Math.toRadians(115));
     public static final Pose parkPoseBlueClose = new Pose(105, 90.5, Math.toRadians(0));
     public static final Pose parkPoseRedClose = new Pose(95, 66.5, Math.toRadians(0));
     public static final Pose shootPoseRedClose = new Pose(83.5, 65.5, Math.toRadians(312.5));
@@ -35,12 +35,12 @@ public class Poses {
 
     // close
     public static final Pose spike1PoseBlue = new Pose(85, 100, 1.56);
-    public static final Pose spike1EndPoseBlue = new Pose(85, 115, 1.56);
+    public static final Pose spike1EndPoseBlue = new Pose(85, 125, 1.56);
 
-    public static final Pose spike2PoseBlue = new Pose(62, 101.5, 1.56);
-    public static final Pose spike2EndPoseBlue = new Pose(62, 115, 1.56);
-    public static final Pose spike2BezierPoseBlue = new Pose(51, 86.5, Math.toRadians(90));
-    public static final Pose spike2EndPoseFastBlue = new Pose(61, 26.5, Math.toRadians(-90));
+    public static final Pose spike2PoseBlue = new Pose(63, 101.5, 1.56);
+    public static final Pose spike2EndPoseBlue = new Pose(63, 115, 1.56);
+    public static final Pose spike2BezierPoseBlue = new Pose(63, 80, Math.toRadians(90));
+    public static final Pose spike2EndPoseFastBlue = new Pose(63, 130, Math.toRadians(90));
 
     public static final Pose spike3PoseBlue = new Pose(37.5, 101.5, 1.56);
     public static final Pose spike3EndPoseBlue = new Pose(37.5, 115, 1.56);
@@ -59,10 +59,10 @@ public class Poses {
     public static final Pose spike3PoseRed = new Pose(31, 55.5, Math.toRadians(-90));
     public static final Pose spike3EndPoseRed = new Pose(31, 19.5, Math.toRadians(-90));
 
-    public static final Pose gatePushAngleBlue = new Pose(-11.5, 66.5, Math.toRadians(62));
-    public static final Pose gatePushAngleBezierBlue = new Pose(-20, 16.5, Math.toRadians(62));
+    public static final Pose gatePushAngleBlue = new Pose(61, 132, 0.85);
+    public static final Pose gatePushAngleBezierBlue = new Pose(62, 80, Math.toRadians(62));
 
-    public static final Pose gateBackupAngleBlue = new Pose(-11.5, 68.5, Math.toRadians(58));
+    public static final Pose gateBackupAngleBlue = new Pose(54, 133, 0.6);
 
     public static final Pose gatePushAngleRed = new Pose(55, 21.5, -1);
     public static final Pose gatePushAngleBezierRed = new Pose(53, 56.5, Math.toRadians(0));

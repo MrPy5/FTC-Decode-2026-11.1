@@ -27,6 +27,7 @@ public class Turret {
     HardwareMap hardwareMap;
     Servo turretLeft;
     Servo turretRight;
+    boolean sotm = false;
 
     TurretState turretState = TurretState.TRACK;
 
@@ -56,9 +57,9 @@ public class Turret {
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
             double airTime = 0;
-            /*if (!robot.chassis.inFar()) {
+            if (!robot.chassis.inFar() && sotm) {
                  airTime = robot.chassis.inchesAwayPinpoint(new Pose(x, y)) / 135;
-            }*/
+            }
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
@@ -186,5 +187,8 @@ public class Turret {
         else {
             return false;
         }
+    }
+    public void setSOTM(boolean set) {
+        sotm = set;
     }
 }

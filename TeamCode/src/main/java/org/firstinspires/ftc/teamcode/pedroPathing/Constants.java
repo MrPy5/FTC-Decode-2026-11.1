@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -17,28 +18,22 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 @Configurable
-@Config
+@Config // mass 10.9
+
+//.headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.08, 0.01))
+
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(10.9)
-            .forwardZeroPowerAcceleration(-25.74251)
-            .lateralZeroPowerAcceleration(-59.60297)
-
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0, 0.015, 0.01))
-           // .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.09, 0, 0.005, 0.05))
-           // .useSecondaryTranslationalPIDF(true)
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.15, 0.1421, 0.000222))
 
             .headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.08, 0.01))
-           // .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.025, 0.07))
-           // .useSecondaryHeadingPIDF(true)
 
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015, 0, 0.00001, 0.6, 0.01))
 
             .automaticHoldEnd(true)
-            .turnHeadingErrorThreshold(0.02)
-            .centripetalScaling(0.0000000005);
+            .centripetalScaling(0);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.9, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .useBrakeModeInTeleOp(ConfigConstants.USE_BRAKE_MODE)
@@ -51,9 +46,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-
-            .xVelocity(86.60169)
-            .yVelocity(68.28731);
+            .xVelocity(81.86)
+            .yVelocity(63.85);
 
 
 

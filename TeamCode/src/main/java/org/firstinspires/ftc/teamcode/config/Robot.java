@@ -149,6 +149,7 @@ public class Robot {
     public void initAutoPositions() {
 
         shooter.unblock();
+        turret.setAngle(0);
     }
     public void initLoopAuto(Runnable useBluePaths, Runnable useRedPaths, boolean scanMotif) {
         updateGamepads();
@@ -186,7 +187,7 @@ public class Robot {
         follower.setStartingPose(startPose);
 
         buildPaths.accept(this);
-
+        intake.reset();
         gameTimer.reset();
     }
 

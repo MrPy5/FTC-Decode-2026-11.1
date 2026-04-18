@@ -100,7 +100,7 @@ public class ConfigConstants {
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
     public static final double INTAKE_LIFT = 0.21;
-    public static final double INTAKE_DROP = 0.385;
+    public static final double INTAKE_DROP = 0.38;
 
 
         //Lindexer

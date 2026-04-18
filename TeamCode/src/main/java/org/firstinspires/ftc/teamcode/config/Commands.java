@@ -23,7 +23,8 @@ public class Commands {
 
 
         stopIntaking = new SequentialCommand(
-                new InstantCommand(() -> robot.transfer.stop()));
+                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.shooter.unblock()));
 
         startIntaking = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.intake()),
