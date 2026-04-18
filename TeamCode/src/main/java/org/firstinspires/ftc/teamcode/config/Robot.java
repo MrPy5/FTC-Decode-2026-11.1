@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.config.subsystems.Ascent;
 import org.firstinspires.ftc.teamcode.config.subsystems.Chassis;
 import org.firstinspires.ftc.teamcode.config.subsystems.CrTurret;
+import org.firstinspires.ftc.teamcode.config.subsystems.Indicator;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
@@ -66,6 +67,7 @@ public class Robot {
     public Ascent ascent;
     public Turret turret;
     public Follower follower;
+    public Indicator indicator;
 
 
     public LimelightCamera limelightCamera;
@@ -126,6 +128,7 @@ public class Robot {
         ascent = new Ascent(hardwareMap);
         turret = new Turret(hardwareMap, this);
         limelightCamera = new LimelightCamera(hardwareMap);
+        indicator = new Indicator(hardwareMap, this);
 
 
         commands = new Commands(this);
@@ -260,6 +263,7 @@ public class Robot {
         follower.update();
         transfer.update();
         turret.update();
+        indicator.update();
 
         scheduler.update(getMilliseconds());
     }
@@ -267,7 +271,6 @@ public class Robot {
     public void updateHardware() {
         shooter.updatePower();
         intake.updatePower();
-        transfer.updatePower();
     }
 
 
@@ -319,8 +322,8 @@ public class Robot {
     public void doDashboard(TelemetryPacket packet) {
         packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM() + shooter.adder);
-        packet.put("max", 4000);
-        packet.put("min", 1000);
+        packet.put("max", 3200);
+        packet.put("min", 2600);
        // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
 
         packet.put("left", shooter.getShooterMotorLeft().getRPM());

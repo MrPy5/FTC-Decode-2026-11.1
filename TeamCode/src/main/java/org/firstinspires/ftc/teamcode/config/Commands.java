@@ -26,12 +26,12 @@ public class Commands {
                 new InstantCommand(() -> robot.transfer.stop()));
 
         startIntaking = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.block()),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new InstantCommand(() -> robot.shooter.block()),
                 new Wait(800),
                 new InstantCommand(() -> robot.transfer.startCheckingNow()));
 

@@ -40,12 +40,9 @@ public class Chassis {
     public boolean turnCompleted = true;
     public double targetHeading = 0;
     public double degreeOffset = 0;
-    public double parkHeading = 0;
+    public double parkHeading = 180;
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
-
-    public Pose targetPointFar = new Pose(136,136);
-    public Pose targetPointClose = new Pose(132,136);
 
     public Chassis(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
@@ -60,251 +57,64 @@ public class Chassis {
         return clamp(voltageSensor.getVoltage(), 11, 13);
     }
 
-    public double getClosestVal(List<Double> values, double inputVal) {
-        double distance = Math.abs(values.get(0) - inputVal);
-        int idx = 0;
-        for (int c = 1; c < values.size(); c++) {
-            double cdistance = Math.abs(values.get(c) - inputVal);
-            if (cdistance < distance) {
-                idx = c;
-                distance = cdistance;
-            }
-        }
-
-        return values.get(idx);
-    }
-    public static double getInterpolatedOffset(Map<Double, Double> angleMap, double inputAngle) {
-
-        if (angleMap == null || angleMap.size() < 2) {
-            throw new IllegalArgumentException("Map must contain at least two points.");
-        }
-
-        // Sort the angle keys
-        List<Double> angles = new ArrayList<>(angleMap.keySet());
-        Collections.sort(angles);
-
-        // Clamp if outside range
-        if (inputAngle <= angles.get(0)) {
-            return angleMap.get(angles.get(0));
-        }
-
-        if (inputAngle >= angles.get(angles.size() - 1)) {
-            return angleMap.get(angles.get(angles.size() - 1));
-        }
-
-        // Find surrounding angles
-        for (int i = 0; i < angles.size() - 1; i++) {
-            double lowerAngle = angles.get(i);
-            double upperAngle = angles.get(i + 1);
-
-            if (inputAngle >= lowerAngle && inputAngle <= upperAngle) {
-
-                double lowerOffset = angleMap.get(lowerAngle);
-                double upperOffset = angleMap.get(upperAngle);
-
-                // Linear interpolation
-                double t = (inputAngle - lowerAngle) / (upperAngle - lowerAngle);
-
-                return lowerOffset + t * (upperOffset - lowerOffset);
-            }
-        }
-
-        // Should never happen
-        return 0;
-    }
-
-    public double calculateOffset(TagCamera tagCamera) {
-
-        double combined = tagCamera.combined();
-
-        double offset;
-        if (tagCamera.range() > ConfigConstants.NEAR_VS_FAR) {
-            if (robot.getAlliance() == BLUE) {
-
-                offset = getInterpolatedOffset(ConfigConstants.FAR_OFFSET_MAP_BLUE, combined);
-            }
-            else {
 
 
-                offset = getInterpolatedOffset(ConfigConstants.FAR_OFFSET_MAP_RED, combined);
-            }
-
-
+    public double inchesAwayPinpoint(Pose position) {
+        double x = position.getX();
+        double y = position.getY();
+        if (robot.getAlliance() == BLUE) {
+            return Math.sqrt((((ConfigConstants.GOAL_BLUE.getX() - x) * (ConfigConstants.GOAL_BLUE.getX() - x)) + ((ConfigConstants.GOAL_BLUE.getY() - y) * (ConfigConstants.GOAL_BLUE.getY() - y))));
         }
         else {
-            if (robot.getAlliance() == BLUE) {
-
-                offset = getInterpolatedOffset(ConfigConstants.CLOSE_OFFSET_MAP_BLUE, combined);
-            }
-            else {
-
-                offset = getInterpolatedOffset(ConfigConstants.CLOSE_OFFSET_MAP_RED, combined);
-            }
-
+            return Math.sqrt((((ConfigConstants.GOAL_RED.getX() - x) * (ConfigConstants.GOAL_RED.getX() - x)) + ((ConfigConstants.GOAL_RED.getY() - y) * (ConfigConstants.GOAL_RED.getY() - y))));
 
         }
-
-        return offset;
-    }
-
-    public double turnPower(TagCamera tagCamera) {
-
-
-        if (!justLetGoOfStick) {
-            double degrees = tagCamera.degreesAway(calculateOffset(tagCamera));
-
-            if (tagCamera.hasTag() && tagCamera.tagValid(robot)) {
-
-                firstTurn = false;
-                if (noSticks) {
-                    if (turnCompleted && turnTimer.milliseconds() > 0) {
-                        targetHeading = robot.follower.getHeading() + Math.toRadians(degrees);
-                        turnCompleted = false;
-                        turnTimer.reset();
-                    }
-                } else {
-                    targetHeading = robot.follower.getHeading() + (Math.toRadians(degrees) * 1.3);
-                }
-            }
-
-            double error = getHeadingError();
-            double sign = error / Math.abs(error);
-            double kd = ConfigConstants.TURN_kD;
-            double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd);
-
-            double degreeError = Math.toDegrees(error);
-
-            double boost = ConfigConstants.BOOST_MULTIPLIER * sign * Math.min(1, Math.abs(error) / 12);
-            powerError += boost;
-
-            double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.07) {
-                clampedPowerError = 0.07 * sign;
-            }
-
-            if (Math.abs(degreeError) < 1 && !turnCompleted) {
-                turnCompleted = true;
-                turnTimer.reset();
-            }
-
-
-            if (Math.abs(degreeError) < 0.5) {
-                return 0;
-            }
-            else {
-                return clampedPowerError * getVoltageMultiplier();
-            }
-        }
-        else {
-            return 0;
-        }
-
-    }
-    public double inchesAwayPinpoint() { //TODO make color based
-        double x = turretPose().getX();
-        double y = turretPose().getY();
-        return Math.sqrt((((144 - x) * (144 - x))   + ((144 - y) * (144 - y))));
     }
 
     public double predictedInchesAway() {
+        double x = turretPose().getX();
+        double y = turretPose().getY();
         if (!inFar()) {
-            double x = robot.chassis.turretPose().getX();
-            double y = robot.chassis.turretPose().getY();
 
-            double heading = robot.follower.getHeading(); // radians
 
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
 
-            //double fieldVx = robotVx * Math.cos(heading) - robotVy * Math.sin(heading);
-            //double fieldVy = robotVx * Math.sin(heading) + robotVy * Math.cos(heading);
-
-            double airTime = robot.chassis.inchesAwayPinpoint() / 130;
+            double airTime = inchesAwayPinpoint(new Pose(x, y)) / 130;
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
 
             x = predictedX;
             y = predictedY;
-            return Math.sqrt((((144 - x) * (144 - x)) + ((144 - y) * (144 - y))));
+            return inchesAwayPinpoint(new Pose(x, y));
         }
         else {
-            return inchesAwayPinpoint();
+            return inchesAwayPinpoint(new Pose(x, y));
         }
     }
-    public double degreesAwayPinpoint() {
-        double x = robot.follower.getPose().getX();
-        double y = robot.follower.getPose().getY();
-        if (inFar()) {
-            if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(137 - y)) / (140 - x))) * -1;
-            } else {
-                return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
-            }
-        }
-        else {
-            if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan((-(135 - y)) / (133 - x))) * -1; //  (-(135 - y)) / (133 - x))
-            } else {
-                return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
-            }
-        }
-    }
-
     public double degreesAwayTurret(Pose position) {
         double x = position.getX();
         double y = position.getY();
 
         if (inFar()) {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(targetPointFar.getY() - y, targetPointFar.getX() - x));
+                return Math.toDegrees(Math.atan2(ConfigConstants.targetPointFarBlue.getY() - y, ConfigConstants.targetPointFarBlue.getX() - x));
             } else {
-                return Math.toDegrees(Math.atan(((y - 3)) / (140 - x))) * -1;
+                return Math.toDegrees(Math.atan2(ConfigConstants.targetPointFarRed.getY() - y, ConfigConstants.targetPointFarRed.getX() - x));
+
             }
         }
         else {
             if (robot.getAlliance() == BLUE) {
-                return Math.toDegrees(Math.atan2(targetPointClose.getY() - y, targetPointClose.getX() - x)); //  (-(135 - y)) / (133 - x))
+                return Math.toDegrees(Math.atan2(ConfigConstants.targetPointCloseBlue.getY() - y, ConfigConstants.targetPointCloseBlue.getX() - x));
             } else {
-                return Math.toDegrees(Math.atan(((y - 5)) / (133 - x))) * -1;
+                return Math.toDegrees(Math.atan2(ConfigConstants.targetPointCloseRed.getY() - y, ConfigConstants.targetPointCloseRed.getX() - x));
+
             }
         }
     }
 
-    public double turnPowerWithPinpoint() {
-
-
-        if (!justLetGoOfStick) {
-            double degrees = degreesAwayPinpoint() - degreeOffset;
-
-
-            targetHeading = Math.toRadians(degrees);
-
-
-
-
-            double error = getHeadingError();
-            double sign = error / Math.abs(error);
-            double kd = ConfigConstants.TURN_kD;
-            double powerError = (error * ConfigConstants.TURN_kP) - (robot.follower.getAngularVelocity() * kd) ;
-            double degreeError = Math.toDegrees(error);
-            double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.06) {
-                clampedPowerError = 0.06 * sign;
-            }
-
-            if (Math.abs(degreeError) < 0.5) {
-                return 0;
-            }
-            else {
-                return clampedPowerError/* * getVoltageMultiplier()*/;
-            }
-        }
-        else {
-            return 0;
-        }
-
-    }
     public double turnPowerWithPinpointToPark() {
 
         if (!justLetGoOfStick) {
@@ -350,15 +160,10 @@ public class Chassis {
         double drivePower;
         double strafePower;
         double turnPower;
-        if (robot.getRobotState() == Robot.RobotState.PARK) {
-            driveDampeneing = 0.3;
-            strafeDampening = 0.3;
-            turnDampening = 0.3;
-        }
-        if (c1.left_trigger_pressed) {
-            driveDampeneing = 0.3;
-            strafeDampening = 0.3;
-            turnDampening = 0.3;
+        if (robot.getRobotState() == Robot.RobotState.PARK && c1.leftBumperWasPressed()) {
+            driveDampeneing = 0.15;
+            strafeDampening = 0.2;
+            turnDampening = 0.1;
         }
         drivePower = -c1.left_stick_y * driveDampeneing;
         strafePower = -c1.left_stick_x * strafeDampening;

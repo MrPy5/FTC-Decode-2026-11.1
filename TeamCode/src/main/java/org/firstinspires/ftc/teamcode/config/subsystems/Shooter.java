@@ -42,7 +42,7 @@ public class Shooter {
     public double power;
     public boolean motifMode;
     public double adder = 0;
-    CyclingList shooterRPM = new CyclingList(5);
+    public CyclingList shooterRPM = new CyclingList(5);
 
 
 
@@ -112,7 +112,7 @@ public class Shooter {
             adder = 0;
         }
         else {
-            adder = 600;
+            adder = 0;
         }
         if (motifMode) {
             adder = -100;
@@ -147,25 +147,21 @@ public class Shooter {
     }
 
     public void increaseManualRPMAdjustment() {
-        if (robot.chassis.inFar()) {
-            manualAdjustmentBack += ConfigConstants.RPM_ADJUST_AMOUNT;
-        }
-        else {
-            manualAdjustmentFront += ConfigConstants.RPM_ADJUST_AMOUNT;
-        }
+
+        manualAdjustmentBack += ConfigConstants.RPM_ADJUST_AMOUNT;
+
+
     }
     public void decreaseManualRPMAdjustment() {
-        if (robot.chassis.inFar()) {
-            manualAdjustmentBack -= ConfigConstants.RPM_ADJUST_AMOUNT;
-        }
-        else {
-            manualAdjustmentFront -= ConfigConstants.RPM_ADJUST_AMOUNT;
-        }
+
+        manualAdjustmentBack -= ConfigConstants.RPM_ADJUST_AMOUNT;
+
+
     }
 
 
     public void spinAtCalculatedSpeed(double range) {
-        setRPM(calculateRPM(range)/* - (robot.chassis.getVoltageScalar() * 125)*/);
+        setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
     }
     public double calculateRPM(double range) {
         if (range > ConfigConstants.NEAR_VS_FAR) {

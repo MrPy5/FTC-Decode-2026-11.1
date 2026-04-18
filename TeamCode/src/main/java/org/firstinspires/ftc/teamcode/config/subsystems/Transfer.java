@@ -49,33 +49,23 @@ public class Transfer {
         }
 
     }
-    public void updatePower() {
-
-        transferMotor.setPower(transferPower);
-    }
 
     public void intakeTransfer() {
-        setTransferPower(ConfigConstants.TRANSFER_INTAKE_RPM);
+        transferMotor.setPower(ConfigConstants.TRANSFER_INTAKE_RPM);
+    }
+    public void shoot() {
+        if (robot.chassis.inFar()) {
+            transferMotor.setPower(0.8);
+        }
+        else {
+            transferMotor.setPower(1);
+        }
     }
 
-    public void intakeTransferSlow() {
-        setTransferPower(ConfigConstants.TRANSFER_INTAKE_SLOW_RPM);
-    }
-
-    public void outtakeTransfer() {
-        setTransferPower(ConfigConstants.TRANSFER_OUTTAKE_RPM);
-    }
     public void stop() {
-        setTransferPower(0);
+        transferMotor.setPower(0);
     }
 
-    public void setTransferRPM(double rpm) {
-        transferRPM = rpm;
-    }
-
-    public void setTransferPower(double transferPower) {
-        this.transferPower = transferPower;
-    }
 
     public void block() {
         transferBlocker.setPosition(ConfigConstants.TRANSFER_BLOCK);

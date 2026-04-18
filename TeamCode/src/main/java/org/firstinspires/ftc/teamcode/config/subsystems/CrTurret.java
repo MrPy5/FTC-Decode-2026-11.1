@@ -62,7 +62,7 @@ public class CrTurret {
             double fieldVx = robotVx * Math.cos(-heading) + robotVy * Math.sin(-heading);
             double fieldVy = -robotVx * Math.sin(-heading) + robotVy * Math.cos(-heading);
 
-            double airTime = robot.chassis.inchesAwayPinpoint() / 90;
+            double airTime = robot.chassis.inchesAwayPinpoint(new Pose(x, y)) / 90;
 
             double predictedX = x + (fieldVx * airTime);
             double predictedY = y + (fieldVy * airTime);

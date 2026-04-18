@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 
+import android.view.WindowId;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -101,9 +103,6 @@ public class GameTeleop extends LinearOpMode {
                     else {
                         robot.shooter.unblock();
                     }
-
-                    robot.chassis.targetHeading = Math.toRadians(robot.chassis.degreesAwayPinpoint());
-                    gamepad2.rumble(500);
 
                     robot.transfer.motorStopped = false;
 
@@ -237,19 +236,19 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot.chassis.turretPose()));
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY) || startedShooting)) {
+                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && robot.turret.atAngle()) || startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
                                 robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
                             }
                             if (!motifMode) {
-                                robot.transfer.intakeTransfer();
+                                robot.transfer.shoot();
                                 robot.intake.intake();
                             }
                         }
@@ -257,12 +256,8 @@ public class GameTeleop extends LinearOpMode {
                     }
                     else {
                         startedShooting = false;
-                        if (!motifMode) {
-                            robot.transfer.stop();
-                        }
                         robot.shooter.setShooting(false);
                     }
-
 
                 }
 
@@ -304,11 +299,11 @@ public class GameTeleop extends LinearOpMode {
                 else {
                     if (c2.dpadLeftWasPressed()) {
                         robot.chassis.degreeOffset += 0.5;
-                        gamepad1.rumble(0, 1, 200);
+                        gamepad2.rumble(0, 1, 200);
                     }
                     if (c2.dpadRightWasPressed()) {
                         robot.chassis.degreeOffset -= 0.5;
-                        gamepad1.rumble(1, 0, 200);
+                        gamepad2.rumble(1, 0, 200);
                     }
                 }
 
@@ -347,6 +342,8 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
                 telemetry.addLine();
                 telemetry.addData("offset", robot.chassis.degreeOffset);
+                telemetry.addLine();
+                telemetry.addData("rpm", robot.shooter.shooterRPM.average());
                /* telemetry.addData("#", robot.classifier.getBallsOnClassifier());
                 telemetry.addData("sched", robot.scheduler.isIdle());
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());

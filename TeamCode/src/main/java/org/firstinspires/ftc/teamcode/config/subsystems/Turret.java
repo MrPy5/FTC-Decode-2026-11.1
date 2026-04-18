@@ -56,9 +56,9 @@ public class Turret {
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
             double airTime = 0;
-            if (!robot.chassis.inFar()) {
-                 airTime = robot.chassis.inchesAwayPinpoint() / 145;
-            }
+            /*if (!robot.chassis.inFar()) {
+                 airTime = robot.chassis.inchesAwayPinpoint(new Pose(x, y)) / 135;
+            }*/
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
@@ -177,4 +177,14 @@ public class Turret {
         }
     }
 
+    public boolean passedBounds() {
+        double ticks = ConfigConstants.TURRET_ZERO + (angle * getInterpolatedOffset(ConfigConstants.TICKS_PER_TURRET_DEGREE_MAP, angle));
+
+        if (ticks > ConfigConstants.TURRET_MAX || ticks < ConfigConstants.TURRET_MIN) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

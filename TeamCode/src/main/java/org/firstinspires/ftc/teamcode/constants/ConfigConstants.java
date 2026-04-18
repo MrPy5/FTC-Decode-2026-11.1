@@ -45,6 +45,8 @@ public class ConfigConstants {
     public static final String LINDEX_COLOR_RIGHT = "lindex color right";
     public static final String LINDEX_COLOR_CENTER = "lindex color center";
 
+    public static final String RGB_INDICATOR = "rgb";
+
     public static final String TURRET_LEFT = "ts left";
     public static final String TURRET_RIGHT = "ts right";
 
@@ -97,12 +99,9 @@ public class ConfigConstants {
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
-    public static final double INTAKE_LIFT = 0.265;
+    public static final double INTAKE_LIFT = 0.21;
     public static final double INTAKE_DROP = 0.385;
 
-        //Intake Blocker
-    public static final double INTAKE_BLOCK = 0.4;
-    public static final double INTAKE_UNBLOCK = 0.22;
 
         //Lindexer
     public static final double LEFT_LIN_IN = 0.37;
@@ -123,7 +122,6 @@ public class ConfigConstants {
 
         //Turret
     public static final double TURRET_ZERO = 0.516; // left ticks
-    public static final double TURRET_NINETY = 0.182; // left ticks
     public static final double TURRET_MAX = 0.85; // left ticks
     public static final double TURRET_MIN = 0.18; // left ticks
     public static final double TICKS_PER_TURRET_DEGREE = 0.00368;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
@@ -131,8 +129,6 @@ public class ConfigConstants {
     public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
     public static final double TURRET_TEETH = 204;
     public static final double ENCODER_TEETH = 34;
-    public static final double P = (1/45);
-    public static final double D = 0;
     public static final PIDFCoefficients TRANSFER_PID = new PIDFCoefficients(100, 0, 1, 5);
 
     public static final Map<Double, Double> TICKS_PER_TURRET_DEGREE_MAP = new HashMap<Double, Double>() {{
@@ -158,12 +154,12 @@ public class ConfigConstants {
     }};
 
         //Shooter
-    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14.5);
+    public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14);
 
     public static final double RPM_ROC_BOUND = 1.3; //0.8 rpm per millisecond  if average is less than this = ready
     public static final double RPM_DISTANCE_BOUND = 150; //
 
-    public static final double NEAR_VS_FAR = 130; //
+    public static final double NEAR_VS_FAR = 130;
 
     public static final double DEFAULT_RPM = 3000;
 
@@ -180,20 +176,6 @@ public class ConfigConstants {
     public static final double DESCEND_RIGHT = 0.83;
     public static final double DESCEND_LEFT = 0.25;
 
-   /* public static final Map<Double, Double> RPM_MAP_CLOSE = new HashMap<Double, Double>() {{
-        put(0.0, 2300.0);
-        put(50.0, 2400.0);
-        put(70.0, 2500.0);
-        put(85.0, 2600.0);
-        put(95.0, 2750.0);
-    }};
-    public static final Map<Double, Double> RPM_MAP_FAR = new HashMap<Double, Double>() {{
-
-        put(126.0, 3200.0);
-        put(140.0, 3300.0);
-        put(154.0, 3400.0);
-    }};*/
-
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
         put(50.0, 2350.0);
@@ -201,44 +183,16 @@ public class ConfigConstants {
         put(85.0, 2450.0);
         put(95.0, 2500.0);
         put(140.0, 2900.0);
-        put(148.0, 3000.0);
-        put(158.0, 3100.0);
-        put(170.0, 3200.0);
+        put(148.0, 3100.0);
+        put(158.0, 3200.0);
+        put(170.0, 3300.0);
     }};
 
     //Vision
         //Tag Camera
     public static final double TAG_DEGREE_TOLERANCE = 0.7; //aligns to april tag within .7 degrees
 
-    public static final Map<Double, Double> CLOSE_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
-        put(-7.0, -1.0); //-3
-        put(0.0, 0.0); //-3
-        put(17.0, 0.5); // 0
-        put(28.0, 2.0); // 0
-        put(36.0, 4.0); // 2
-    }};
-    public static final Map<Double, Double> CLOSE_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
-        put(7.0, 0.0); //-3
-        put(0.0, 0.0); //-3
-        put(-17.0, -1.0); // 0
-        put(-28.0, -3.0); // 0
-        put(-36.0, -4.0); // 2
-    }};
 
-    public static final Map<Double, Double> FAR_OFFSET_MAP_BLUE = new HashMap<Double, Double>() {{
-        //Negative is left
-        put(-19.0, -0.5); //-2 RIGHT SIDE OF FIELD
-        put(-23.0, 0.5); //-2
-        put(-28.0, 0.0); // -1
-        put(-34.0, 0.0); // -1
-        put(-38.0, -2.0); // -1.2  LEFT SIDE OF FIELD
-    }};
-    public static final Map<Double, Double> FAR_OFFSET_MAP_RED = new HashMap<Double, Double>() {{
-        put(23.0, -0.5); //-2
-        put(28.0, 1.0); // -1
-        put(34.0, 1.0); // -1
-        put(38.0, 0.0); // -1.2
-    }};
 
     public static final Pose BLUE_FIELD_RESET = new Pose(1.5, 11.5, 0);
     public static final Pose RED_FIELD_RESET = new Pose(1.5, 136, 0);
@@ -247,6 +201,16 @@ public class ConfigConstants {
     public static final double AUTO_CLOSE_RPM_BLUE = 2800;
     public static final double AUTO_CLOSE_RPM = 2800;
     public static final double AUTO_FAR_RPM = 3300;
+
+    //Positions
+    public static final Pose GOAL_BLUE = new Pose(144,144);
+    public static final Pose GOAL_RED = new Pose(144,0);
+
+    public static final Pose targetPointFarBlue = new Pose(136,136);
+    public static final Pose targetPointCloseBlue = new Pose(133,133);
+
+    public static final Pose targetPointFarRed = new Pose(136,10);
+    public static final Pose targetPointCloseRed = new Pose(133,7);
 
 
 }

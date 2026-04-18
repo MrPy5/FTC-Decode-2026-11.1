@@ -52,7 +52,7 @@ public class IntakeArtifactSensor {
 
     }
 
-    public boolean getBall(Robot robot) {
+    public boolean getBall() {
         return distanceSensor.getState();
 
 
