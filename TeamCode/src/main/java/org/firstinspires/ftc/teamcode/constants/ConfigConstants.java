@@ -80,11 +80,8 @@ public class ConfigConstants {
 
     //Controller
     public static final double TRIGGER_SENSITIVITY = 0.01;   // Anything less than this number is considered 0
-    public static final double STICK_AT_ZERO_DISTANCE = 0.01;  // Anything less than this number is considered 0
-    public static final double IGNORE_LEFT_STICK_X = 0.15;   // Dead zone between .1 and 0
-    //Field
-    public static final double FIELD_WIDTH = 143;
-    public static final double FIELD_LENGTH = 143;
+
+
     //Subsystems
         //Driving
     public static final double DRIVE_DAMPENING = 1; //slows the robot down for motors
@@ -92,14 +89,10 @@ public class ConfigConstants {
     public static final double TURN_DAMPENING = 0.8; //slows the robot down for motors
     public static final boolean USE_BRAKE_MODE = true;
 
-    public static double TURN_kP = 1.3;   // 0.01 – 0.025
-    public static double TURN_kD = 0.16;   // 0.001 – 0.006
-    public static final double BOOST_MULTIPLIER = 0.15;   // 0.001 – 0.006
-
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
-    public static final double INTAKE_LIFT = 0.21;
+    public static final double INTAKE_LIFT = 0.15;
     public static final double INTAKE_DROP = 0.38;
 
 
@@ -112,8 +105,6 @@ public class ConfigConstants {
 
         //Transfer
     public static final double TRANSFER_INTAKE_RPM = 1;
-    public static final double TRANSFER_INTAKE_SLOW_RPM = 1;
-    public static final double TRANSFER_OUTTAKE_RPM = -1;
 
         //Transfer Blocker
     public static final double TRANSFER_CPR = 103.8;
@@ -124,7 +115,6 @@ public class ConfigConstants {
     public static final double TURRET_ZERO = 0.516; // left ticks
     public static final double TURRET_MAX = 0.85; // left ticks
     public static final double TURRET_MIN = 0.18; // left ticks
-    public static final double TICKS_PER_TURRET_DEGREE = 0.00368;//(TURRET_NINETY - TURRET_ZERO) / 90; // 0.0035722
     public static final double TURRET_TICK_OFFSET_FOR_RIGHT = 0; //0.5
     public static final double TICKS_PER_ENCODER_REVOLUTION = 8192;
     public static final double TURRET_TEETH = 204;
@@ -146,12 +136,6 @@ public class ConfigConstants {
         put(90.0, 0.0037);
     }};
 
-    public static final Map<Double, Double> AIR_TIME_MAP = new HashMap<Double, Double>() {{
-        put(90.0, 0.5);
-        put(102.0, 0.58);
-        put(124.0, 0.66);
-        put(150.0, 0.93);
-    }};
 
         //Shooter
     public static final PIDFCoefficients SHOOTER_PID = new PIDFCoefficients(200, 0, 1, 14);
@@ -183,24 +167,15 @@ public class ConfigConstants {
         put(85.0, 2450.0);
         put(95.0, 2500.0);
         put(140.0, 2900.0);
-        put(148.0, 3100.0);
-        put(158.0, 3200.0);
-        put(170.0, 3300.0);
+        put(170.0, 3100.0);
     }};
 
     //Vision
-        //Tag Camera
-    public static final double TAG_DEGREE_TOLERANCE = 0.7; //aligns to april tag within .7 degrees
-
 
 
     public static final Pose BLUE_FIELD_RESET = new Pose(1.5, 11.5, 0);
     public static final Pose RED_FIELD_RESET = new Pose(1.5, 136, 0);
-    //Auto
-    public static final double AUTO_CLOSE_RPM_RED = 2600;
-    public static final double AUTO_CLOSE_RPM_BLUE = 2800;
-    public static final double AUTO_CLOSE_RPM = 2800;
-    public static final double AUTO_FAR_RPM = 3300;
+
 
     //Positions
     public static final Pose GOAL_BLUE = new Pose(144,144);

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.constants;
 import com.pedropathing.geometry.Pose;
 
 public class Poses {
-    public static final Pose startPoseBlueFar = new Pose(1.2, 94.5, 0);
+    public static final Pose startPoseBlueFar = new Pose(10.66, 88, 1.56);
     public static final Pose startPoseRedFar = new Pose(1.2, 62.5, 0);
     public static final Pose startPoseBlueClose = new Pose(128, 115, (0.87));
     public static final Pose startPoseRedClose = new Pose(121, 34.5, Math.toRadians(309));
@@ -12,8 +12,8 @@ public class Poses {
     public static final Pose detectPoseRed = new Pose(78, 65.5, Math.toRadians(15));
 
     public static final Pose shootPoseRedFar = new Pose(10.1, 64.5, Math.toRadians(-23));
-    public static final Pose shootPoseBlueFar = new Pose(10.1, 92.5, Math.toRadians(22));
-    public static final Pose shootPoseBlueClose = new Pose(86, 78, Math.toRadians(115));
+    public static final Pose shootPoseBlueFar = new Pose(13.9, 88.59, 1.56);
+    public static final Pose shootPoseBlueClose = new Pose(92, 84, Math.toRadians(115));
     public static final Pose parkPoseBlueClose = new Pose(105, 90.5, Math.toRadians(0));
     public static final Pose parkPoseRedClose = new Pose(95, 66.5, Math.toRadians(0));
     public static final Pose shootPoseRedClose = new Pose(83.5, 65.5, Math.toRadians(312.5));
@@ -37,10 +37,10 @@ public class Poses {
     public static final Pose spike1PoseBlue = new Pose(85, 100, 1.56);
     public static final Pose spike1EndPoseBlue = new Pose(85, 125, 1.56);
 
-    public static final Pose spike2PoseBlue = new Pose(63, 101.5, 1.56);
-    public static final Pose spike2EndPoseBlue = new Pose(63, 115, 1.56);
-    public static final Pose spike2BezierPoseBlue = new Pose(63, 80, Math.toRadians(90));
-    public static final Pose spike2EndPoseFastBlue = new Pose(63, 130, Math.toRadians(90));
+    public static final Pose spike2PoseBlue = new Pose(61, 101.5, 1.56);
+    public static final Pose spike2EndPoseBlue = new Pose(61, 115, 1.56);
+    public static final Pose spike2BezierPoseBlue = new Pose(61, 80, Math.toRadians(90));
+    public static final Pose spike2EndPoseFastBlue = new Pose(61, 130, Math.toRadians(90));
 
     public static final Pose spike3PoseBlue = new Pose(37.5, 101.5, 1.56);
     public static final Pose spike3EndPoseBlue = new Pose(37.5, 115, 1.56);
@@ -59,7 +59,7 @@ public class Poses {
     public static final Pose spike3PoseRed = new Pose(31, 55.5, Math.toRadians(-90));
     public static final Pose spike3EndPoseRed = new Pose(31, 19.5, Math.toRadians(-90));
 
-    public static final Pose gatePushAngleBlue = new Pose(61, 132, 0.85);
+    public static final Pose gatePushAngleBlue = new Pose(61, 132, 1.1);
     public static final Pose gatePushAngleBezierBlue = new Pose(62, 80, Math.toRadians(62));
 
     public static final Pose gateBackupAngleBlue = new Pose(54, 133, 0.6);
@@ -73,34 +73,29 @@ public class Poses {
     public static final Pose gatePoseSpikeRed = new Pose(63, 27.5, Math.toRadians(-90));
 
     // far
-    public static final Pose spike2PoseBlueFar = new Pose(-16.5, 26.5, Math.toRadians(90));
-    public static final Pose spike2EndPoseBlueFar = new Pose(-16.5, 56.5, Math.toRadians(90));
+    public static final Pose spike3PoseBlueFar = new Pose(39, 90, 1.56);
+    public static final Pose spike3EndPoseBlueFar = new Pose(38.7, 130, 1.56);
 
-    public static final Pose spike3PoseBlueFar = new Pose(31, 101.5, 1.56);
-    public static final Pose spike3EndPoseBlueFar = new Pose(31, 133.5, 1.56);
-
-    public static final Pose spike2PoseRedFar = new Pose(-16, -13.5, Math.toRadians(-90));
-    public static final Pose spike2EndPoseRedFar = new Pose(-16, -45.5, Math.toRadians(-90));
 
     public static final Pose spike3PoseRedFar = new Pose(29.5, 55.5, Math.toRadians(-90));
     public static final Pose spike3EndPoseRedFar = new Pose(29.5, 23.5, Math.toRadians(-90));
 
-    public static final Pose parkPoseBlueFar = new Pose(30, 92.5, Math.toRadians(90));
+    public static final Pose parkPoseBlueFar = new Pose(27.7, 111, Math.toRadians(90));
     public static final Pose parkPoseRedFar = new Pose(30, 64.5, Math.toRadians(-90));
 
     public static final Pose hpPoseRed = new Pose(5, 20.5, Math.toRadians(-90));
-    public static final Pose hpPoseBlue = new Pose(5, 136.5, Math.toRadians(90));
+    public static final Pose hpPoseBlue = new Pose(11, 131, Math.toRadians(90));
 
     public static final Pose hpBezierPoseRed = new Pose(0, 60.5, Math.toRadians(-90));
-    public static final Pose hpBezierPoseBlue = new Pose(0, 96.5, Math.toRadians(90));
+    public static final Pose hpBezierPoseBlue = new Pose(11, 96.5, Math.toRadians(90));
 
     public static final Pose backupHPPoseRed = new Pose(5, 25.5, Math.toRadians(-90));
-    public static final Pose backupHPPoseBlue = new Pose(5, 131.5, Math.toRadians(90));
+    public static final Pose backupHPPoseBlue = new Pose(11, 125, Math.toRadians(90));
 
-    public static final Pose gateOverFlowPoseBlueFar = new Pose(3, 136.5, Math.toRadians(35));
+    public static final Pose gateOverFlowPoseBlueFar = new Pose(13, 130.5, Math.toRadians(35));
     public static final Pose gateOverFlowPoseRedFar = new Pose(3, 20.5, Math.toRadians(-35));
 
-    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(30, 136.5, Math.toRadians(35));
+    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(40, 130.5, Math.toRadians(35));
     public static final Pose gateOverFlowEndPoseRedFar = new Pose(30, 20.5, Math.toRadians(-35));
 
     // Test

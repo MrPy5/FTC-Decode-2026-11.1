@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
+import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
@@ -15,8 +16,11 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametric;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitParametricOrThreeBalls;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitScheduler;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitShooter;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitUntil;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.close.ClosePaths;
 import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
+
+import java.util.function.BooleanSupplier;
 
 @Autonomous(name = "Far")
 public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
@@ -46,38 +50,17 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
     @Override
     public void start() {
         robot.startAuto(FarPaths::buildPaths, FarPaths.startPose);
+        robot.turret.setState(Turret.TurretState.TRACK);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(3100)),
+                new InstantCommand(() -> robot.shooter.setRPM(3000)),
+
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.shootPreload)),
-                new WaitFollower(robot.follower),
                 new WaitShooter(robot.shooter),
                 new InstantCommand(() ->robot.transfer.intakeTransfer()),
-                new Wait(500),
-                new InstantCommand(() -> robot.transfer.stop())
-        );
-        SequentialCommand humanPlayer = new SequentialCommand(
-                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
-                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.7)),
-                new WaitParametric(robot.follower),
-                new Wait(750),
-               /* new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
-                new WaitParametric(robot.follower),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.returnHP)),
-                new WaitParametric(robot.follower),
-                new Wait(500),*/
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
-                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
-                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
-                new WaitFollower(robot.follower),
-                new InstantCommand(() -> robot.transfer.intakeTransfer()),
-                new Wait(500),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
         );
 
@@ -85,60 +68,65 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToSpike3)),
-                new WaitFollower(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.7)),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.spike3)),
-                new WaitFollower(robot.follower),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.getCurrentTValue() > 0.5;
+                    }
+                }),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.5)),
+                new WaitParametric(robot.follower),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.spike3ToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
-                new WaitFollower(robot.follower),
-                new Wait(300),
+                new WaitParametric(robot.follower),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
-                new Wait(500),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
         );
 
         SequentialCommand getGateBall = new SequentialCommand(
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToGateOverflow)),
-                new WaitFollowerOrStuck(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.getCurrentTValue() > 0.9;
+                    }
+                }),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlow)),
-                new WaitFollowerOrThreeBalls(robot.follower, robot),
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new WaitParametric(robot.follower),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlowToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
-                new WaitFollower(robot.follower),
-                new Wait(300),
+                new WaitParametric(robot.follower),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
-                new Wait(500),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
         );
         SequentialCommand humanPlayer2 = new SequentialCommand(
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
-                new WaitFollowerOrStuck(robot.follower),
-                new Wait(500),
+                new WaitParametric(robot.follower),
+                new Wait(300),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
-                new WaitFollowerOrStuck(robot.follower),
+                new WaitParametric((robot.follower)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.returnHP)),
-                new WaitFollowerOrStuck(robot.follower),
-                new Wait(500),
-                new InstantCommand(() -> robot.follower.setMaxPower(1)),
+                new WaitParametric(robot.follower),
+                new Wait(200),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
-                new WaitFollower(robot.follower),
-                new Wait(300),
+                new WaitParametric(robot.follower),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
-                new Wait(500),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
         );
 
@@ -151,7 +139,9 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 shootPreload,
                 humanPlayer2,
                 spike3,
-                humanPlayer2,
+                getGateBall,
+                getGateBall,
+                getGateBall,
                 getGateBall,
                 park
         );
@@ -163,7 +153,6 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         pathSchedule.update(robot.getMilliseconds());
         robot.update();
         robot.updateHardware();
-
     }
     @Override
     public void stop() {

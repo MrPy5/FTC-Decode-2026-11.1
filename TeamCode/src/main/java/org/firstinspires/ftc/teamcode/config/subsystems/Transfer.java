@@ -55,7 +55,7 @@ public class Transfer {
     }
     public void shoot() {
         if (robot.chassis.inFar()) {
-            transferMotor.setPower(0.8);
+            transferMotor.setPower(1);
         }
         else {
             transferMotor.setPower(1);

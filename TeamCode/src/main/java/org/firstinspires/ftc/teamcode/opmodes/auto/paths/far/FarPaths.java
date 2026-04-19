@@ -15,8 +15,6 @@ public class FarPaths {
 
     public static Pose startPose = Poses.startPoseBlueFar;
     static Pose shootPose = Poses.shootPoseBlueFar;
-    static Pose spike2Pose = Poses.spike2PoseBlueFar;
-    static Pose spike2EndPose = Poses.spike2EndPoseBlueFar;
     static Pose spike3Pose = Poses.spike3PoseBlueFar;
     static Pose spike3EndPose = Poses.spike3EndPoseBlueFar;
     static Pose gateOverFlowPose = Poses.gateOverFlowPoseBlueFar;
@@ -34,8 +32,6 @@ public class FarPaths {
         spike3Pose = Poses.spike3PoseBlueFar;
         spike3EndPose = Poses.spike3EndPoseBlueFar;
 
-        spike2Pose = Poses.spike2PoseBlueFar;
-        spike2EndPose = Poses.spike2EndPoseBlueFar;
 
         parkPose = Poses.parkPoseBlueFar;
 
@@ -54,8 +50,6 @@ public class FarPaths {
         spike3Pose = Poses.spike3PoseRedFar;
         spike3EndPose = Poses.spike3EndPoseRedFar;
 
-        spike2Pose = Poses.spike2PoseRedFar;
-        spike2EndPose = Poses.spike2EndPoseRedFar;
 
         parkPose = Poses.parkPoseRedFar;
 
@@ -81,42 +75,23 @@ public class FarPaths {
         backupHP = robot.follower.pathBuilder()
                 .addPath(new BezierLine(hpPose, backupHPPose))
                 .setLinearHeadingInterpolation(hpPose.getHeading(), backupHPPose.getHeading())
-                .setTValueConstraint(0.7)
                 .build();
 
         returnHP = robot.follower.pathBuilder()
                 .addPath(new BezierLine(backupHPPose, hpPose))
                 .setLinearHeadingInterpolation(backupHPPose.getHeading(), hpPose.getHeading())
-                .setTValueConstraint(0.7)
                 .build();
         hpToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(hpPose, shootPose))
-                .setConstantHeadingInterpolation(shootPose.getHeading() - Math.toRadians(robot.getAlliance() == Alliance.BLUE ? 1 : -1))
+                .setConstantHeadingInterpolation(shootPose.getHeading())
                 .build();
 
-        driveToSpike2 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(shootPose, spike2Pose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), spike2Pose.getHeading())
-                .build();
 
-        spike2 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(spike2Pose, spike2EndPose))
-                .setLinearHeadingInterpolation(spike2Pose.getHeading(), spike2EndPose.getHeading())
-                .build();
-
-        spike2ToShoot = robot.follower.pathBuilder()
-                .addPath(new BezierLine(spike2EndPose, shootPose))
-                .setLinearHeadingInterpolation(spike2EndPose.getHeading(), shootPose.getHeading())
-                .build();
         driveToSpike3 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(shootPose, spike3Pose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), spike2Pose.getHeading())
+                .addPath(new BezierCurve(shootPose, spike3Pose, spike3EndPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), spike3Pose.getHeading())
                 .build();
 
-        spike3 = robot.follower.pathBuilder()
-                .addPath(new BezierLine(spike3Pose, spike3EndPose))
-                .setLinearHeadingInterpolation(spike2Pose.getHeading(), spike3EndPose.getHeading())
-                .build();
 
         spike3ToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike3EndPose, shootPose))
@@ -142,7 +117,7 @@ public class FarPaths {
 
         gateOverFlowToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(gateOverFlowEndPose, shootPose))
-                .setConstantHeadingInterpolation(shootPose.getHeading() - Math.toRadians(robot.getAlliance() == Alliance.BLUE ? 2 : -2))
+                .setConstantHeadingInterpolation(shootPose.getHeading())
                 .build();
 
     }

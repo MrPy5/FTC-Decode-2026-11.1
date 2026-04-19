@@ -16,7 +16,7 @@ public class IntakeArtifactSensor {
     DigitalChannel distanceSensor;
     ElapsedTime ballTimer = new ElapsedTime();
 
-    CyclingList distanceList = new CyclingList(10);
+    CyclingList distanceList = new CyclingList(5);
 
     public double distance = 0;
     boolean ballTimerStarted = false;
@@ -29,20 +29,6 @@ public class IntakeArtifactSensor {
         this.distanceSensor.setMode(DigitalChannel.Mode.INPUT);
     }
     public void update() {
-       /*if (distanceSensor.getState() && !ballTimerStarted && !ball) {
-           ballTimer.reset();
-           ballTimerStarted = true;
-       }
-       if (ballTimerStarted && ballTimer.milliseconds() > 200 && distanceSensor.getState()) {
-           ball = true;
-           ballTimerStarted = false;
-           ballTimer.reset();
-       }
-       if (!distanceSensor.getState()) {
-           ball = false;
-           ballTimerStarted = false;
-           ballTimer.reset();
-       }*/
 
         distanceList.add(distanceSensor.getState() ? 1 : 0, 0);
 

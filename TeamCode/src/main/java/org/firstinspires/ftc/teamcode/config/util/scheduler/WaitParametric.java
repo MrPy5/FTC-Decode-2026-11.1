@@ -16,7 +16,7 @@ public class WaitParametric extends Command {
 
     @Override
     public void update(double time) {
-        if (follower.atParametricEnd()) finished = true;
+        if (follower.atParametricEnd() || (follower.getCurrentTValue() > 0.5 && follower.getVelocity().getMagnitude() < 2)) finished = true;
     }
 
     @Override

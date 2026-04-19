@@ -160,7 +160,7 @@ public class Chassis {
         double drivePower;
         double strafePower;
         double turnPower;
-        if (robot.getRobotState() == Robot.RobotState.PARK && c1.leftBumperWasPressed()) {
+        if (robot.getRobotState() == Robot.RobotState.PARK) {
             driveDampeneing = 0.15;
             strafeDampening = 0.2;
             turnDampening = 0.1;
