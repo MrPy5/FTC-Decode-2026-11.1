@@ -75,13 +75,10 @@ public class Shooter {
 
         if (shooting && targetShooterRPM - shooterRPM.average() > 30 && !motifMode) {
             droppedActivateBangBang = true;
-            /*robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
+
         }
         else {
             droppedActivateBangBang = false;
-            /*robot.shooter.getShooterMotorLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shooter.getShooterMotorRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
         }
 
 
@@ -112,7 +109,7 @@ public class Shooter {
             adder = 0;
         }
         else {
-            adder = 0;
+            adder = 600;
         }
         if (motifMode) {
             adder = -100;

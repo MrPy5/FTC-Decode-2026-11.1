@@ -38,7 +38,7 @@ public class Lindexer {
 
     ArtifactSensor lindexerColorCenter;
     ArtifactSensor lindexerColorLeft;
-    ArtifactSensor lindexerColorRight; // TODO integrate left and right together
+    ArtifactSensor lindexerColorRight;
 
     Color leftBall = Color.EMPTY;
     Color centerBall = Color.EMPTY;
@@ -65,57 +65,6 @@ public class Lindexer {
 
     //Util functions
     public void update() {
-        /*
-        if (lindexerState == LindexerState.READY) {
-            if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() != 3) {
-
-                Color ballColor = lindexerColor.getBall(robot);
-                if (ballColor != Color.EMPTY) {
-                    if ((ballColor == robot.classifier.getNextColor(robot.getMotif()) && centerBall == Color.EMPTY) || (leftBall != Color.EMPTY && rightBall != Color.EMPTY)) {
-                        robot.transfer.unblock();
-                        centerBall = ballColor;
-                        lindexerState = LindexerState.NOTREADY;
-                        robot.log("color", "moved ball to center");
-                    }
-                    else if (ballColor != robot.classifier.getNextColor(robot.getMotif()) || centerBall != Color.EMPTY) {
-                        if (lindexerPosition == LindexerPosition.LEFT) {
-                            if (rightBall != Color.EMPTY) {
-                                clear();
-                                robot.log("color", "cleared");
-                            }
-                            else {
-                                rightCenter();
-                                robot.log("color", "right");
-                            }
-                            leftBall = ballColor;
-                        } else if (lindexerPosition == LindexerPosition.RIGHT) {
-                            if (leftBall != Color.EMPTY) {
-                                clear();
-                                robot.log("color", "cleared");
-                            }
-                            else {
-                                leftCenter();
-                                robot.log("color", "left");
-                            }
-                            rightBall = ballColor;
-                        }
-                    }
-
-                }
-
-
-            }
-        }
-        else if (lindexerState == LindexerState.NOTREADY) {
-            moveTime.reset();
-            lindexerState = LindexerState.WAITING;
-        }
-        else if (lindexerState == LindexerState.WAITING && moveTime.milliseconds() > ConfigConstants.MOVE_MILLISECONDS)  {
-            lindexerState = LindexerState.READY;
-            if (centerBall != Color.EMPTY && robot.getRobotState() == RobotState.INTAKE) {
-                robot.transfer.block();
-            }
-        }*/
 
         if (lindexerState == LindexerState.READY) {
             if (index && robot.getRobotState() == RobotState.INTAKE && numOfBalls() == 0 && robot.intake.getArtifactSensor().getState() && !waitStarted) {

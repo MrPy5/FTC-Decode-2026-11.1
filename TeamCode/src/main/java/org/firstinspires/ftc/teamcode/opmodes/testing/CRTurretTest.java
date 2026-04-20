@@ -11,8 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Storage;
-import org.firstinspires.ftc.teamcode.config.subsystems.CrTurret;
-import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 

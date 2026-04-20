@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.config.util.scheduler;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 
 public class WaitShooterNotReady extends Command {
-    private Shooter shooter;
+    private final Shooter shooter;
+    private ElapsedTime timer = new ElapsedTime();
 
     public WaitShooterNotReady(Shooter shooter) {
         this.shooter = shooter;
@@ -11,12 +14,12 @@ public class WaitShooterNotReady extends Command {
 
     @Override
     public void start() {
-
+        timer.reset();
     }
 
     @Override
     public void update(double time) {
-    if (shooter.getShooterState() == Shooter.ShooterState.NOTREADY) finished = true;
+        if (timer.milliseconds() >= 500 || shooter.getShooterState() == Shooter.ShooterState.NOTREADY) finished = true;
     }
 
     @Override

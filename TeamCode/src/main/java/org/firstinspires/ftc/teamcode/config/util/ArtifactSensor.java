@@ -27,8 +27,6 @@ public class ArtifactSensor {
         this.colorSensor.setGain(5f);
         this.robot = robot;
     }
-    public void update() {
-    }
 
 
     public double getHue() {

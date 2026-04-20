@@ -92,6 +92,14 @@ public class GameTeleop extends LinearOpMode {
                 else {
                     robot.intake.drop();
                 }
+
+                if (c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                    robot.turret.setSOTM(true);
+                }
+                else {
+                    robot.turret.setSOTM(false);
+                }
+
                 if (((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) || robot.transfer.motorStopped) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
@@ -236,12 +244,12 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.inchesAwayPinpoint(robot.chassis.turretPose()));
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && robot.turret.atAngle()) || startedShooting)) {
+                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && (robot.turret.atAngle() || robot.turret.getSOTM())) || startedShooting)) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -344,32 +352,11 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("offset", robot.chassis.degreeOffset);
                 telemetry.addLine();
                 telemetry.addData("rpm", robot.shooter.shooterRPM.average());
-               /* telemetry.addData("#", robot.classifier.getBallsOnClassifier());
-                telemetry.addData("sched", robot.scheduler.isIdle());
-                telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
-                telemetry.addData("distance", robot.chassis.inchesAwayPinpoint());
-                telemetry.addData("angle", Math.toDegrees(robot.follower.getHeading()));
-                telemetry.addData("xrobot", robot.follower.getPose().getX());
-                telemetry.addData("yrobot", robot.follower.getPose().getY());
                 telemetry.addLine();
-                telemetry.addData("angle", robot.turret.getAngle());
-                telemetry.addData("within degree?", Math.abs(robot.turret.getAngle() - robot.turret.getEncoderAngle()) < 1);
-                telemetry.addLine();
-                telemetry.addData("real angle", robot.turret.getEncoderAngle());
-                telemetry.addData("velocity", robot.turret.getEncoderVelocity());
-                telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
-                telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());*/
-               // telemetry.addData("ticks", robot.turret.angleToTicks(-Math.toDegrees(robot.follower.getHeading())));
-               // telemetry.addData("left", robot.lindexer.getLeftBall());
-               // telemetry.addData("right", robot.lindexer.getRightBall());
-              //  telemetry.addData("center", robot.lindexer.getCenterBall());
-                telemetry.addLine();
-
-              /*  telemetry.addData("motifMode", motifMode);
-                telemetry.addData("RPM addition", robot.shooter.getManualAdjustment());
+                telemetry.addData("motifMode", motifMode);
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();
-                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());*/
+                telemetry.addData("balls on ramp", robot.classifier.getBallsOnClassifier());
 
 
                 telemetry.update();

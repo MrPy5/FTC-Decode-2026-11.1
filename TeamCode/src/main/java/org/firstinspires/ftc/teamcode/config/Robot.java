@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.config.subsystems.Ascent;
 import org.firstinspires.ftc.teamcode.config.subsystems.Chassis;
-import org.firstinspires.ftc.teamcode.config.subsystems.CrTurret;
 import org.firstinspires.ftc.teamcode.config.subsystems.Indicator;
 import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
@@ -30,7 +29,6 @@ import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.CommandScheduler;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.List;
 import java.util.function.Consumer;

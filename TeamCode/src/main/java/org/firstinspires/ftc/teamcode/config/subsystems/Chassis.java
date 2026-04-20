@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
-import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.CachedMotor;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
@@ -74,7 +73,7 @@ public class Chassis {
     public double predictedInchesAway() {
         double x = turretPose().getX();
         double y = turretPose().getY();
-        if (!inFar()) {
+        if (!inFar() && robot.turret.getSOTM()) {
 
 
             double robotVx = robot.follower.getVelocity().getXComponent();
@@ -188,17 +187,6 @@ public class Chassis {
             justLetGoOfStick = false;
             turnCompleted = true;
         }
-
-
-        /*
-        if (robot.getRobotState() == Robot.RobotState.SHOOT) {
-
-            if (Math.abs(c1.right_stick_x) <= ConfigConstants.STICK_AT_ZERO_DISTANCE) {
-
-                turnPower = turnPowerWithPinpoint(robot);
-
-            }
-        }*/
 
         if (robot.getRobotState() == Robot.RobotState.PARK && robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
 

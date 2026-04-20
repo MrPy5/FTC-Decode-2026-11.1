@@ -191,4 +191,7 @@ public class Turret {
     public void setSOTM(boolean set) {
         sotm = set;
     }
+    public boolean getSOTM() {
+        return sotm;
+    }
 }
