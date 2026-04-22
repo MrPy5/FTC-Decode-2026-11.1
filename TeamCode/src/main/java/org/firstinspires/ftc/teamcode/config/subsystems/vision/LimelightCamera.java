@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
+import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -34,6 +35,7 @@ public class LimelightCamera {
 
     Limelight3A limelight;
     HardwareMap hardwareMap;
+    public boolean scan = false;
 
     TagMode currentMode = TagMode.MOTIF;
 
@@ -99,6 +101,29 @@ public class LimelightCamera {
         else {
             return (int) motifList.mode();
         }
+    }
+
+    public void update() {
+        if (scan) {
+            List<LLResultTypes.FiducialResult> detections = getDetections();
+            if (detections != null) {
+                motifList.add(detections.get(0).getFiducialId(), 0);
+            }
+        }
+    }
+
+    public Motif getMotif() {
+        double mode = motifList.mode();
+        if (mode != 0) {
+            return ConfigConstants.MOTIF_TAG_MAP.get(mode);
+        }
+        else {
+            return Motif.GPP;
+        }
+    }
+
+    public void setScan(boolean scan) {
+        this.scan = scan;
     }
 
 }

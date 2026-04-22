@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Config
 public class Shooter {
 
     public enum ShooterState {
@@ -44,6 +45,9 @@ public class Shooter {
     public double adder = 0;
     public CyclingList shooterRPM = new CyclingList(5);
 
+    public static double kF = 0;
+    public static double kP = 0;
+
 
 
     ShooterState shooterState = ShooterState.NOTREADY;
@@ -56,11 +60,14 @@ public class Shooter {
         shooterMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
         shooterMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
+      //  shooterMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         shooterMotorRight = new CachedMotor(hardwareMap.get(DcMotorEx.class, ConfigConstants.SHOOTER_RIGHT), ConfigConstants.SHOOTER_CPR);
         shooterMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConfigConstants.SHOOTER_PID);
+    //    shooterMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         blocker = hardwareMap.get(Servo.class, ConfigConstants.SHOOTER_BLOCKER);
 
@@ -80,6 +87,11 @@ public class Shooter {
         else {
             droppedActivateBangBang = false;
         }
+
+        /*
+        double currentRPM = robot.shooter.shooterMotorRight.getRPM();
+        double error = currentRPM - targetShooterRPM;
+        shooterMotorLeft.setPower(kF * targetShooterRPM + kP * error);*/
 
 
     }
@@ -109,14 +121,14 @@ public class Shooter {
             adder = 0;
         }
         else {
-            adder = 600;
+            adder = 0;
         }
         if (motifMode) {
             adder = -100;
         }
         shooterMotorLeft.setRPM(targetShooterRPM + adder);
         shooterMotorRight.setRPM(targetShooterRPM + adder);
-
+        //TODO Comment out
 
     }
 
@@ -158,7 +170,7 @@ public class Shooter {
 
 
     public void spinAtCalculatedSpeed(double range) {
-        setRPM(calculateRPM(range) - (robot.chassis.getVoltageScalar() * 125));
+        setRPM(calculateRPM(range)/* - (robot.chassis.getVoltageScalar() * 125)*/);
     }
     public double calculateRPM(double range) {
         if (range > ConfigConstants.NEAR_VS_FAR) {

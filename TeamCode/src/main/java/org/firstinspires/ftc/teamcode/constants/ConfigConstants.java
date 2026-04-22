@@ -155,19 +155,19 @@ public class ConfigConstants {
     public static final double SHOOTER_UNBLOCK = 0.475;
 
         //Ascent
-    public static final double ASCEND_RIGHT = 0.53; // 53
-    public static final double ASCEND_LEFT = 0.54; // 54
+    public static final double ASCEND_RIGHT = 0.5; // 53
+    public static final double ASCEND_LEFT = 0.565; // 54
     public static final double DESCEND_RIGHT = 0.83;
     public static final double DESCEND_LEFT = 0.25;
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
-        put(0.0, 2600.0);
-        put(50.0, 2650.0);
-        put(70.0, 2700.0);
-        put(85.0, 2750.0);
-        put(95.0, 2800.0);
-        put(140.0, 3200.0);
-        put(170.0, 3400.0);
+        put(0.0, 2300.0);
+        put(50.0, 2350.0);
+        put(70.0, 2400.0);
+        put(85.0, 2450.0);
+        put(95.0, 2500.0);
+        put(140.0, 2900.0);
+        put(170.0, 3100.0);
     }};
 
     //Vision

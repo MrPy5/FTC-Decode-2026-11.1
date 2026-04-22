@@ -324,13 +324,7 @@ public class Robot {
         packet.put("max", 3200);
         packet.put("min", 2600);
        // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
-
-        packet.put("left", shooter.getShooterMotorLeft().getRPM());
-        packet.put("right", shooter.getShooterMotorRight().getRPM());
-
-        packet.put("voltL", shooter.getShooterMotorLeft().getCurrent());
-        packet.put("voltR", shooter.getShooterMotorRight().getCurrent());
-
+        packet.put("volt", chassis.getVoltage());
 
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());

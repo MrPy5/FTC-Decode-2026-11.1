@@ -54,8 +54,6 @@ public class GameTeleop extends LinearOpMode {
 
             boolean motifMode = false;
             boolean startedShooting = false;
-            boolean prevHasBall = false;
-
 
             //reset follower back to full speed
             robot.initTeleop();
@@ -85,6 +83,7 @@ public class GameTeleop extends LinearOpMode {
 
                 //Switching modes between intake and shoot
                     //Shoot
+
 
                 if (robot.intake.getArtifactSensor().hasBall()) {
                     robot.intake.lift();
@@ -245,6 +244,7 @@ public class GameTeleop extends LinearOpMode {
 
                 if (robot.getRobotState() != RobotState.PARK) {
                     robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
@@ -279,8 +279,6 @@ public class GameTeleop extends LinearOpMode {
                         drivePowers[2],
                         true
                 );
-
-
 
 
                 //Motif mode (# of balls on ramp)
@@ -343,8 +341,12 @@ public class GameTeleop extends LinearOpMode {
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
-                //loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
-                //telemetry.addData("loop", loopTimes.average());
+                loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
+                /*telemetry.addData("loop", loopTimes.average());
+                telemetry.addLine();*/
+                telemetry.addData("encoder angle", robot.turret.getEncoderAngle());
+                telemetry.addData("target angle", robot.turret.getAngle());
+                telemetry.addLine();
                 telemetry.addData("distance", robot.chassis.predictedInchesAway());
                 telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
                 telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
