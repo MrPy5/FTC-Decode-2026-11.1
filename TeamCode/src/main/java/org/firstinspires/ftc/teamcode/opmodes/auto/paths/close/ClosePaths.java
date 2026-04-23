@@ -7,6 +7,7 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
+import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.constants.Poses;
 
 public class ClosePaths {
@@ -30,7 +31,6 @@ public class ClosePaths {
     static Pose gatePush1Pose = Poses.gatePush1Blue;
     static Pose gateTurn2Pose = Poses.gateTurn2Blue;
     static Pose gatePush2Pose = Poses.gatePush2Blue;
-    static Pose endShootPose = Poses.endShootPoseBlue;
     static Pose gatePushAngle = Poses.gatePushAngleBlue;
     static Pose gatePushAngleBezier = Poses.gatePushAngleBezierBlue;
     static Pose gateBackupAngle = Poses.gateBackupAngleBlue;
@@ -55,7 +55,6 @@ public class ClosePaths {
         gatePush1Pose = Poses.gatePush1Blue;
         gateTurn2Pose = Poses.gateTurn2Blue;
         gatePush2Pose = Poses.gatePush2Blue;
-        endShootPose = Poses.endShootPoseBlue;
 
         gatePushAngle = Poses.gatePushAngleBlue;
         gatePushAngleBezier = Poses.gatePushAngleBezierBlue;
@@ -82,7 +81,6 @@ public class ClosePaths {
         gatePush1Pose = Poses.gatePush1Red;
         gateTurn2Pose = Poses.gateTurn2Red;
         gatePush2Pose = Poses.gatePush2Red;
-        endShootPose = Poses.endShootPoseRed;
 
         gatePushAngle = Poses.gatePushAngleRed;
         gatePushAngleBezier = Poses.gatePushAngleBezierRed;
@@ -99,15 +97,12 @@ public class ClosePaths {
 
         driveToSpike2Bezier = robot.follower.pathBuilder()
                 .addPath(new BezierCurve(shootPose, spike2BezierPose, spike2EndPoseFast))
-                .setHeadingInterpolation(HeadingInterpolator.piecewise(
-                        new HeadingInterpolator.PiecewiseNode(0, 0.5, HeadingInterpolator.constant(Math.toRadians(90))),
-                        new HeadingInterpolator.PiecewiseNode(0.5, 1, HeadingInterpolator.constant(Math.toRadians(90)))
-                ))
+                .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.BLUE ? Math.toRadians(90) : Math.toRadians(-90))
                 .build();
 
         shootPreload = robot.follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
-                .setConstantHeadingInterpolation(Math.toRadians(45))
+                .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.BLUE ? Math.toRadians(45) : Math.toRadians(-45))
                 .build();
         driveToSpike1 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, spike1Pose))
@@ -264,7 +259,7 @@ public class ClosePaths {
                 .build();
         spike1ToPark = robot.follower.pathBuilder()
                 .addPath(new BezierLine(spike1EndPose, parkPose))
-                .setConstantHeadingInterpolation(Math.toRadians(100))
+                .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.BLUE ? Math.toRadians(100) : Math.toRadians(-100))
                 .build();
     }
 

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.constants.Poses;
 
 public class FarPaths {
 
-    public static PathChain shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, driveToGateOverflow, gateOverFlow, gateOverFlowToShoot, spike3, spike3ToShoot, parkPath, driveToHP, backupHP, returnHP, hpToShoot;
+    public static PathChain hpToGateOverFlow, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, driveToGateOverflow, gateOverFlow, gateOverFlowToShoot, spike3, spike3ToShoot, parkPath, driveToHP, backupHP, returnHP, hpToShoot;
 
     public static Pose startPose = Poses.startPoseBlueFar;
     static Pose shootPose = Poses.shootPoseBlueFar;
@@ -118,6 +118,11 @@ public class FarPaths {
         gateOverFlowToShoot = robot.follower.pathBuilder()
                 .addPath(new BezierLine(gateOverFlowEndPose, shootPose))
                 .setConstantHeadingInterpolation(shootPose.getHeading())
+                .build();
+
+        hpToGateOverFlow = robot.follower.pathBuilder()
+                .addPath(new BezierLine(hpPose, gateOverFlowEndPose))
+                .setConstantHeadingInterpolation(gateOverFlowEndPose.getHeading())
                 .build();
 
     }

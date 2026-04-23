@@ -19,7 +19,7 @@ public class WaitShooterNotReady extends Command {
 
     @Override
     public void update(double time) {
-        if (timer.milliseconds() >= 500 || shooter.getShooterState() == Shooter.ShooterState.NOTREADY) finished = true;
+        if (timer.milliseconds() >= 1000 || shooter.getShooterState() == Shooter.ShooterState.NOTREADY) finished = true;
     }
 
     @Override

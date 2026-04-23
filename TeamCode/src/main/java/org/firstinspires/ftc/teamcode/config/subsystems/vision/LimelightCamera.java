@@ -113,9 +113,16 @@ public class LimelightCamera {
     }
 
     public Motif getMotif() {
-        double mode = motifList.mode();
-        if (mode != 0) {
-            return ConfigConstants.MOTIF_TAG_MAP.get(mode);
+        if (motifList.getSize() != 0) {
+            double mode = motifList.mode();
+            Motif motif = ConfigConstants.MOTIF_TAG_MAP.get((int) mode);
+            if (motif != null) {
+                return motif;
+            }
+            else {
+                return null;
+            }
+
         }
         else {
             return Motif.GPP;
@@ -125,5 +132,6 @@ public class LimelightCamera {
     public void setScan(boolean scan) {
         this.scan = scan;
     }
+
 
 }

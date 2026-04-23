@@ -162,10 +162,11 @@ public class ConfigConstants {
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
-        put(50.0, 2350.0);
-        put(70.0, 2400.0);
-        put(85.0, 2450.0);
-        put(95.0, 2500.0);
+        put(50.0, 2300.0);
+        put(70.0, 2350.0);
+        put(85.0, 2400.0);
+        put(95.0, 2450.0);
+        put(113.0, 2500.0);
         put(140.0, 2900.0);
         put(170.0, 3100.0);
     }};
@@ -184,8 +185,8 @@ public class ConfigConstants {
     public static final Pose targetPointFarBlue = new Pose(136,136);
     public static final Pose targetPointCloseBlue = new Pose(133,133);
 
-    public static final Pose targetPointFarRed = new Pose(136,10);
-    public static final Pose targetPointCloseRed = new Pose(133,7);
+    public static final Pose targetPointFarRed = new Pose(136,7);
+    public static final Pose targetPointCloseRed = new Pose(136,7);
 
 
 }

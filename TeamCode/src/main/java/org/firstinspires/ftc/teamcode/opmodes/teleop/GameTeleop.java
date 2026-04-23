@@ -4,7 +4,9 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import android.view.WindowId;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -70,6 +72,7 @@ public class GameTeleop extends LinearOpMode {
             //Start gametimer, hardware reset before start (kicker down, others), other...
             robot.startTeleop();
             robot.transfer.intakeTransfer();
+            robot.limelightCamera.setScan(true);
            // robot.tagCamera.getVisionPortal().stopStreaming();
             while (opModeIsActive()) {
                 loopTimer.reset();
@@ -141,6 +144,10 @@ public class GameTeleop extends LinearOpMode {
                         robot.transfer.stop();
                         robot.turret.setState(Turret.TurretState.HOLD);
                         robot.turret.setAngle(90);
+                        robot.follower.followPath(robot.follower.pathBuilder()
+                                .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
+                                .setConstantHeadingInterpolation(3.13)
+                                .build());
                     }
                     else {
                         robot.scheduler.clear();
@@ -273,12 +280,14 @@ public class GameTeleop extends LinearOpMode {
                 //Driving code
 
                 double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING);
-                robot.follower.setTeleOpDrive(
-                        drivePowers[0],
-                        drivePowers[1],
-                        drivePowers[2],
-                        true
-                );
+                if (robot.getRobotState() != RobotState.PARK) {
+                    robot.follower.setTeleOpDrive(
+                            drivePowers[0],
+                            drivePowers[1],
+                            drivePowers[2],
+                            true
+                    );
+                }
 
 
                 //Motif mode (# of balls on ramp)
@@ -344,6 +353,8 @@ public class GameTeleop extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 /*telemetry.addData("loop", loopTimes.average());
                 telemetry.addLine();*/
+                telemetry.addData("x", robot.follower.getPose().getX());
+                telemetry.addData("y", robot.follower.getPose().getY());
                 telemetry.addData("encoder angle", robot.turret.getEncoderAngle());
                 telemetry.addData("target angle", robot.turret.getAngle());
                 telemetry.addLine();

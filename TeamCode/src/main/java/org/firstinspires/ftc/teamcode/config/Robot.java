@@ -233,6 +233,7 @@ public class Robot {
         ascent.descend();
         lindexer.leftCenter();
         turret.setAngle(0);
+        turret.setState(Turret.TurretState.TRACK);
     }
 
     public void startTeleop() {
@@ -263,6 +264,7 @@ public class Robot {
         transfer.update();
         turret.update();
         indicator.update();
+        limelightCamera.update();
 
         scheduler.update(getMilliseconds());
     }

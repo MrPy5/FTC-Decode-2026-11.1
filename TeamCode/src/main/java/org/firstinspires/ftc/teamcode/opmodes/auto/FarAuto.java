@@ -58,6 +58,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitShooter(robot.shooter),
                 new InstantCommand(() ->robot.transfer.intakeTransfer()),
                 new Wait(300),
@@ -80,6 +81,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.spike3ToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
                 new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
@@ -103,6 +105,30 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlowToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new WaitParametric(robot.follower),
+                new Wait(200),
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
+                new Wait(300),
+                new InstantCommand(() -> robot.transfer.stop())
+        );
+        SequentialCommand humanPlayerToGate = new SequentialCommand(
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
+
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.getCurrentTValue() > 0.95;
+                    }
+                }),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
+                new WaitParametric(robot.follower),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlowToShoot)),
+                new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
                 new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
@@ -123,6 +149,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
+                new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
                 new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
@@ -140,7 +167,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 humanPlayer2,
                 spike3,
                 getGateBall,
-                getGateBall,
+                humanPlayerToGate,
                 getGateBall,
                 getGateBall,
                 park

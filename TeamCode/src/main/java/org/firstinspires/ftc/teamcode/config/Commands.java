@@ -23,8 +23,7 @@ public class Commands {
 
 
         stopIntaking = new SequentialCommand(
-                new InstantCommand(() -> robot.transfer.stop()),
-                new InstantCommand(() -> robot.shooter.unblock()));
+                new InstantCommand(() -> robot.transfer.stop()));
 
         startIntaking = new SequentialCommand(
                 new InstantCommand(() -> robot.intake.intake()),
@@ -77,7 +76,7 @@ public class Commands {
         );
         acceptCenterBall = new SequentialCommand(
                 new InstantCommand(() -> robot.lindexer.clear()),
-                new WaitTillLindexerReady(robot.lindexer),
+                new Wait(500),
                 new InstantCommand(() -> robot.transfer.unblock()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop()),
@@ -87,13 +86,14 @@ public class Commands {
         );
         acceptLeftBall = new SequentialCommand(
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
-                new WaitTillLindexerReady(robot.lindexer),
+                new Wait(500),
                 new InstantCommand(() -> robot.transfer.unblock()),
                 new Wait(500),
                 new InstantCommand(() -> robot.lindexer.clear()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop()),
-                new InstantCommand(() -> robot.shooter.unblock())
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new InstantCommand(() -> robot.lindexer.leftBallToCenter(robot.lindexer.getLeftBall()))
         );
         acceptRightBall = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.unblock()),
@@ -101,7 +101,8 @@ public class Commands {
                 new InstantCommand(() -> robot.lindexer.clear()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.stop()),
-                new InstantCommand(() -> robot.shooter.unblock())
+                new InstantCommand(() -> robot.shooter.unblock()),
+                new InstantCommand(() -> robot.lindexer.rightBallToCenter(robot.lindexer.getRightBall()))
         );
 
 
