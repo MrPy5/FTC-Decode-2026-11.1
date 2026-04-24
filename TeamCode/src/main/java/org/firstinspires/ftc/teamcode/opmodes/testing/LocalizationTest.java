@@ -31,7 +31,7 @@ public class LocalizationTest extends LinearOpMode {
 
         @Override
         public void runOpMode () {
-            LimelightCamera ll = new LimelightCamera(hardwareMap);
+            LimelightCamera ll = new LimelightCamera(hardwareMap, null);
 
 
             waitForStart();

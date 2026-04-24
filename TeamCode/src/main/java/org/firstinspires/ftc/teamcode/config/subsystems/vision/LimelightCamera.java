@@ -34,6 +34,7 @@ public class LimelightCamera {
     }
 
     Limelight3A limelight;
+    Robot robot;
     HardwareMap hardwareMap;
     public boolean scan = false;
 
@@ -41,8 +42,9 @@ public class LimelightCamera {
 
     CyclingList motifList = new CyclingList(15);
 
-    public LimelightCamera(HardwareMap hardwareMap) {
+    public LimelightCamera(HardwareMap hardwareMap, Robot robot) {
         this.hardwareMap = hardwareMap;
+        this.robot = robot;
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -86,12 +88,14 @@ public class LimelightCamera {
     public Pose3D getBotPose() {
 
         LLResult result = getResult();
-        return result.getBotpose();
+
+
+        return result.getBotpose_MT2();
     }
 
     public Pose getPedroPose() {
-        LLResult result = getResult();
-        return new Pose(getBotPose().getPosition().x * 39.701 - 72,getBotPose().getPosition().y * -39.701 + 72,getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
+
+        return new Pose(getBotPose().getPosition().x * 39.701,getBotPose().getPosition().y * -39.701 + 60,getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
 
     }
     public int getMostPopularMotifTag() {
@@ -110,6 +114,7 @@ public class LimelightCamera {
                 motifList.add(detections.get(0).getFiducialId(), 0);
             }
         }
+        limelight.updateRobotOrientation(Math.toDegrees(robot.follower.getHeading()) + 90);
     }
 
     public Motif getMotif() {

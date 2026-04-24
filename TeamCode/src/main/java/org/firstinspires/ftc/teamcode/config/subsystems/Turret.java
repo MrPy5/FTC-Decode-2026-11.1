@@ -51,6 +51,9 @@ public class Turret {
     public void update() {
         if (turretState == TurretState.TRACK) {
             // Current position
+           /* double x = robot.chassis.turretPose().getX();
+            double y = robot.chassis.turretPose().getY();*/
+
             double x = robot.chassis.turretPose().getX();
             double y = robot.chassis.turretPose().getY();
 

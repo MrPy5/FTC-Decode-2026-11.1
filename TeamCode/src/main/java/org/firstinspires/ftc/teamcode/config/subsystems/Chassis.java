@@ -38,7 +38,7 @@ public class Chassis {
     public boolean noSticks = false;
     public boolean turnCompleted = true;
     public double targetHeading = 0;
-    public double degreeOffset = 0;
+    public double degreeOffset = 2;
     public double parkHeading = 180;
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
@@ -108,7 +108,9 @@ public class Chassis {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan2(ConfigConstants.targetPointCloseBlue.getY() - y, ConfigConstants.targetPointCloseBlue.getX() - x));
             } else {
-                return Math.toDegrees(Math.atan2(ConfigConstants.targetPointCloseRed.getY() - y, ConfigConstants.targetPointCloseRed.getX() - x));
+                double dx = ConfigConstants.targetPointCloseRed.getX() - x; //62
+                double dy = ConfigConstants.targetPointCloseRed.getY() - y; //-65
+                return Math.toDegrees(Math.atan2(dy, dx));
 
             }
         }

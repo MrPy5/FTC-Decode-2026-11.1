@@ -345,15 +345,15 @@ public class GameTeleop extends LinearOpMode {
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
 
-             /*   if (c1.touchpad) {
+               if (true) {
                     Pose botPose = robot.limelightCamera.getPedroPose();
-                    xPos.add(botPose.getX() - (10 * Math.cos(botPose.getHeading())), 0);
-                    yPos.add(botPose.getY() - (10 * Math.sin(botPose.getHeading())), 0);
+                    xPos.add(botPose.getX(), 0);
+                    yPos.add(botPose.getY(), 0);
                     headingPos.add(botPose.getHeading(), 0);
                 }
                 if (c2.touchpadWasPressed()) {
                     robot.follower.setPose(new Pose(robot.follower.getPose().getX(), robot.follower.getPose().getY(), headingPos.average()));
-                }*/
+                }
 
                 //update everything
                 robot.updateHardware();
@@ -361,8 +361,13 @@ public class GameTeleop extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 /*telemetry.addData("loop", loopTimes.average());
                 telemetry.addLine();*/
-                telemetry.addData("x", robot.follower.getPose().getX());
-                telemetry.addData("y", robot.follower.getPose().getY());
+                telemetry.addData("x", robot.chassis.turretPose().getX());
+                telemetry.addData("y", robot.chassis.turretPose().getY());
+                telemetry.addData("heading", Math.toDegrees(robot.follower.getHeading()));
+                telemetry.addData("x", xPos.average());
+                telemetry.addData("y", yPos.average());
+                telemetry.addLine();
+                telemetry.addData("angle", robot.chassis.degreesAwayTurret(robot.chassis.turretPose()));
                 telemetry.addData("encoder angle", robot.turret.getEncoderAngle());
                 telemetry.addData("target angle", robot.turret.getAngle());
                 telemetry.addLine();

@@ -125,7 +125,7 @@ public class Robot {
         chassis = new Chassis(hardwareMap, this);
         ascent = new Ascent(hardwareMap);
         turret = new Turret(hardwareMap, this);
-        limelightCamera = new LimelightCamera(hardwareMap);
+        limelightCamera = new LimelightCamera(hardwareMap, this);
         indicator = new Indicator(hardwareMap, this);
 
 
