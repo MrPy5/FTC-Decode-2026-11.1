@@ -180,6 +180,8 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.updateHardware();
 
         telemetry.addData("motif", robot.getMotif());
+        telemetry.addData("mode", robot.limelightCamera.getMode());
+        telemetry.addData("size", robot.limelightCamera.getSize());
         telemetry.update();
 
     }

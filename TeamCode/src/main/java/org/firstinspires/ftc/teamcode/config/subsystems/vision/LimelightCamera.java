@@ -133,5 +133,12 @@ public class LimelightCamera {
         this.scan = scan;
     }
 
+    public double getSize() {
+        return motifList.getSize();
+    }
+    public double getMode() {
+        return motifList.mode();
+    }
+
 
 }

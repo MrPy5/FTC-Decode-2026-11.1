@@ -32,9 +32,9 @@ public class Indicator {
     }
 
     public void update() {
-        boolean ball = robot.intake.artifactSensor.hasBall();
+        boolean ball = robot.intake.artifactSensor.getState();
         if (ball) {
-            if (!robot.turret.passedBounds()) {
+            if (!robot.turret.passedBounds() && robot.chassis.inchesAwayPinpoint(robot.follower.getPose()) > 57) {
                 green();
             }
             else {

@@ -14,7 +14,7 @@ public class ClosePaths {
 
 
 
-    public static PathChain spike1ToPark, spike1FastDrive, driveToSpike2Bezier, spike2Fast, spike2Reverse, gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot, driveToGateFromSpike2, spike2GateToShoot;
+    public static PathChain driveToSpike1Bezier, spike1ToPark, spike1FastDrive, driveToSpike2Bezier, spike2Fast, spike2Reverse, gateTurnToGatePush2, gateTurnToGatePush1, gatePushToShoot1, gatePushToShoot2, tunnelToShoot, shootToTunnel, spike2ToGateTurn, shootToGate,scanMotif, straightShootPreload, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, spike3, spike3ToShoot, parkPath, spike1ToGateTurn, gateTurnToGatePush, gatePushToShoot, driveToGate, backupFronGate, gateAngleToShoot, driveToGateFromSpike2, spike2GateToShoot;
 
     public static Pose startPose = Poses.startPoseBlueClose;
     static Pose shootPose = Poses.shootPoseBlueClose;
@@ -95,6 +95,10 @@ public class ClosePaths {
     public static void buildPaths(Robot robot) {
         pathsBuilt = true;
 
+        driveToSpike1Bezier = robot.follower.pathBuilder()
+                .addPath(new BezierCurve(shootPose, robot.getAlliance() == Alliance.BLUE ? new Pose(81, 110) : new Pose(81, 40), spike1EndPose))
+                .setConstantHeadingInterpolation(spike1EndPose.getHeading())
+                .build();
         driveToSpike2Bezier = robot.follower.pathBuilder()
                 .addPath(new BezierCurve(shootPose, spike2BezierPose, spike2EndPoseFast))
                 .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.BLUE ? Math.toRadians(90) : Math.toRadians(-90))

@@ -71,7 +71,7 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.turret.setState(Turret.TurretState.TRACK)),
                 new InstantCommand(() -> robot.turret.setSOTM(true)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1FastDrive)),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike1Bezier)),
                 new WaitUntil(new BooleanSupplier() {
                     @Override
                     public boolean getAsBoolean() {
@@ -141,20 +141,10 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToGate)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2);
-                    }
-                }),
-                new Wait(700),
+                new WaitParametric(robot.follower),
+                new Wait(500),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.backupFronGate)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2);
-                    }
-                }),
+                new WaitParametric(robot.follower),
                 new Wait(800),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateAngleToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),

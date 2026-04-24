@@ -144,10 +144,18 @@ public class GameTeleop extends LinearOpMode {
                         robot.transfer.stop();
                         robot.turret.setState(Turret.TurretState.HOLD);
                         robot.turret.setAngle(90);
-                        robot.follower.followPath(robot.follower.pathBuilder()
-                                .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
-                                .setConstantHeadingInterpolation(3.13)
-                                .build());
+                        if (robot.getAlliance() == Alliance.BLUE) {
+                            robot.follower.followPath(robot.follower.pathBuilder()
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
+                                    .setConstantHeadingInterpolation(3.13)
+                                    .build());
+                        }
+                        else {
+                            robot.follower.followPath(robot.follower.pathBuilder()
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 109, 3.13)))
+                                    .setConstantHeadingInterpolation(3.13)
+                                    .build());
+                        }
                     }
                     else {
                         robot.scheduler.clear();
