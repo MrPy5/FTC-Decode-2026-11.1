@@ -195,7 +195,14 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                         return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
                     }
                 }),
-                new Wait(500),
+                new Wait(200),
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                    }
+                }),
                 new InstantCommand(() -> robot.follower.followPath(robot.follower.pathBuilder().addPath(new BezierLine(robot.follower.getPose(), FarPaths.shootPose))
                         .setLinearHeadingInterpolation(FarPaths.shootPose.getHeading(), FarPaths.shootPose.getHeading())
                         .build())),
@@ -222,7 +229,6 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 visionBall,
                 visionBall,
                 visionBall,
-                visionBall,
                 park
         );
         pathSchedule.start();
@@ -233,7 +239,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         pathSchedule.update(robot.getMilliseconds());
         robot.update();
         robot.updateHardware();
-        telemetry.addData("python", robot.limelightCamera.getPython()[0]);
+        telemetry.addData("python", robot.limelightCamera.ballPose.getX());
         telemetry.update();
     }
     @Override

@@ -32,7 +32,7 @@ public class LimelightCamera {
     Limelight3A limelight;
     Robot robot;
     HardwareMap hardwareMap;
-    Pose ballPose = new Pose(0,0);
+    public Pose ballPose = new Pose(0,0);
 
     public CyclingList xPos = new CyclingList(20);
     public CyclingList yPos = new CyclingList(20);
@@ -196,7 +196,7 @@ public class LimelightCamera {
             return pathChain;
         }
         else {
-            return FarPaths.gateOverFlow;
+            return FarPaths.driveToHP;
         }
 
     }

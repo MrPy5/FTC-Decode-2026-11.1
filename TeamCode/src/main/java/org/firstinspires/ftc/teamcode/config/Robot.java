@@ -148,6 +148,7 @@ public class Robot {
 
         shooter.unblock();
         turret.setAngle(0);
+        lindexer.leftCenter();
     }
     public void initLoopAuto(Runnable useBluePaths, Runnable useRedPaths, boolean scanMotif) {
         updateGamepads();

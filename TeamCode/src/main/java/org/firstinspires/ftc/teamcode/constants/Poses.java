@@ -47,7 +47,7 @@ public class Poses {
     public static final Pose backupHPPoseBlue = new Pose(8.85, 126, Math.toRadians(90));
 
     public static final Pose gateOverFlowPoseBlueFar = new Pose(17, 128, Math.toRadians(35));
-    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(50, 128, Math.toRadians(35));
+    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(30, 128, Math.toRadians(35));
 
     //RED
     public static final Pose startPoseRedFar = new Pose(8.5, 54, -1.56);
@@ -92,7 +92,7 @@ public class Poses {
     public static final Pose backupHPPoseRed = new Pose(8.85, 14, Math.toRadians(-90));
 
     public static final Pose gateOverFlowPoseRedFar = new Pose(17, 14, Math.toRadians(-35));
-    public static final Pose gateOverFlowEndPoseRedFar = new Pose(50, 14, Math.toRadians(-35));
+    public static final Pose gateOverFlowEndPoseRedFar = new Pose(30, 14, Math.toRadians(-35));
 
 
 }
