@@ -14,7 +14,7 @@ public class FarPaths {
     public static PathChain hpToGateOverFlow, shootPreload, driveToSpike1, spike1, spike1ToShoot, driveToSpike2, spike2, spike2ToShoot, driveToSpike3, driveToGateOverflow, gateOverFlow, gateOverFlowToShoot, spike3, spike3ToShoot, parkPath, driveToHP, backupHP, returnHP, hpToShoot;
 
     public static Pose startPose = Poses.startPoseBlueFar;
-    static Pose shootPose = Poses.shootPoseBlueFar;
+    public static Pose shootPose = Poses.shootPoseBlueFar;
     static Pose spike3Pose = Poses.spike3PoseBlueFar;
     static Pose spike3EndPose = Poses.spike3EndPoseBlueFar;
     static Pose gateOverFlowPose = Poses.gateOverFlowPoseBlueFar;

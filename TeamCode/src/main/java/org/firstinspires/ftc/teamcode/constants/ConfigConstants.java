@@ -92,7 +92,7 @@ public class ConfigConstants {
         //Intake
     public static final double INTAKE_POWER = 1;
     public static final double OUTTAKE_POWER = -1;
-    public static final double INTAKE_LIFT = 0.15;
+    public static final double INTAKE_LIFT = 0.2;
     public static final double INTAKE_DROP = 0.38;
 
 
@@ -185,7 +185,7 @@ public class ConfigConstants {
     public static final Pose targetPointFarBlue = new Pose(133,133);
     public static final Pose targetPointCloseBlue = new Pose(133,133);
 
-    public static final Pose targetPointFarRed = new Pose(133,11);
+    public static final Pose targetPointFarRed = new Pose(133,13);
     public static final Pose targetPointCloseRed = new Pose(133,9);
 
 

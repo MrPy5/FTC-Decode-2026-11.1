@@ -19,6 +19,7 @@ public class Indicator {
     Robot robot;
     Servo indicator;
 
+    public boolean alert = false;
 
 
     public Indicator(HardwareMap hardwareMap, Robot robot) {
@@ -32,17 +33,20 @@ public class Indicator {
     }
 
     public void update() {
-        boolean ball = robot.intake.artifactSensor.getState();
-        if (ball) {
-            if (!robot.turret.passedBounds() && robot.chassis.inchesAwayPinpoint(robot.follower.getPose()) > 57) {
-                green();
-            }
-            else {
-                red();
+        if (!alert) {
+            boolean ball = robot.intake.artifactSensor.getState();
+            if (ball) {
+                if (!robot.turret.passedBounds() && robot.chassis.inchesAwayPinpoint(robot.follower.getPose()) > 57) {
+                    green();
+                } else {
+                    red();
+                }
+            } else {
+                off();
             }
         }
         else {
-            off();
+            alert();
         }
     }
     public void red() {
@@ -53,6 +57,9 @@ public class Indicator {
     }
     public void green() {
         indicator.setPosition(0.5);
+    }
+    public void alert() {
+        indicator.setPosition(0.7);
     }
 
 }

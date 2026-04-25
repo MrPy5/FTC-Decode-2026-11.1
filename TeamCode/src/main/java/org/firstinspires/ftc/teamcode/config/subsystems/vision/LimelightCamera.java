@@ -1,42 +1,43 @@
 package org.firstinspires.ftc.teamcode.config.subsystems.vision;
 
-import android.util.Size;
-
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.config.Robot;
-import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.teamcode.opmodes.auto.paths.far.FarPaths;
+import org.firstinspires.ftc.teamcode.opmodes.testing.BallTest;
 
 import java.util.List;
 
 public class LimelightCamera {
     public enum TagMode {
         MOTIF,
-        GOAL
+        BALL,
+        OFF
     }
 
     Limelight3A limelight;
     Robot robot;
     HardwareMap hardwareMap;
-    public boolean scan = false;
+    Pose ballPose = new Pose(0,0);
+
+    public CyclingList xPos = new CyclingList(20);
+    public CyclingList yPos = new CyclingList(20);
+    public CyclingList headingPos = new CyclingList(20);
+
 
     TagMode currentMode = TagMode.MOTIF;
 
@@ -72,9 +73,16 @@ public class LimelightCamera {
         return limelight.getLatestResult();
     }
 
+    public double[] getPython() {
+        return limelight.getLatestResult().getPythonOutput();
+    }
+
+
+
     public List<LLResultTypes.FiducialResult> getDetections() {
 
         LLResult result = getResult();
+
         if (result.isValid()) {
             // Access fiducial results
             return result.getFiducialResults();
@@ -90,12 +98,21 @@ public class LimelightCamera {
         LLResult result = getResult();
 
 
-        return result.getBotpose_MT2();
+        return result.getBotpose();
     }
 
     public Pose getPedroPose() {
+        double rawX = getBotPose().getPosition().x;
+        double rawY =  getBotPose().getPosition().y;
 
-        return new Pose(getBotPose().getPosition().x * 39.701,getBotPose().getPosition().y * -39.701 + 60,getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
+        double pedroX = (rawY / DistanceUnit.mPerInch);
+        double pedroY = (rawX / DistanceUnit.mPerInch);
+
+
+        Pose asPedro = FTCCoordinates.INSTANCE.convertToPedro(
+                new Pose(pedroX, pedroY, getBotPose().getOrientation().getYaw(AngleUnit.RADIANS), PedroCoordinates.INSTANCE));
+        asPedro = new Pose(142 - asPedro.getX(), asPedro.getY());
+        return new Pose(asPedro.getX(),asPedro.getY(), getBotPose().getOrientation().getYaw(AngleUnit.RADIANS));
 
     }
     public int getMostPopularMotifTag() {
@@ -108,13 +125,19 @@ public class LimelightCamera {
     }
 
     public void update() {
-        if (scan) {
+        if (currentMode == TagMode.MOTIF) {
             List<LLResultTypes.FiducialResult> detections = getDetections();
             if (detections != null) {
                 motifList.add(detections.get(0).getFiducialId(), 0);
             }
         }
-        limelight.updateRobotOrientation(Math.toDegrees(robot.follower.getHeading()) + 90);
+        else if (currentMode == TagMode.BALL) {
+            double[] llpython = robot.limelightCamera.getPython();
+            double x = robot.follower.getPose().getX() - (Math.sin(Math.toRadians(llpython[2])) * 45);
+            x = Math.max(x, 8.85);
+            ballPose = new Pose(x, 11);
+        }
+        //limelight.updateRobotOrientation(180/* - Math.toDegrees(robot.follower.getHeading())*/);
     }
 
     public Motif getMotif() {
@@ -134,10 +157,6 @@ public class LimelightCamera {
         }
     }
 
-    public void setScan(boolean scan) {
-        this.scan = scan;
-    }
-
     public double getSize() {
         return motifList.getSize();
     }
@@ -145,5 +164,40 @@ public class LimelightCamera {
         return motifList.mode();
     }
 
+    public Limelight3A getLimelight() {
+        return limelight;
+    }
 
+    public void recordPosition() {
+        Pose botPose = getPedroPose();
+
+        xPos.add(botPose.getX(), 0);
+        yPos.add(botPose.getY(), 0);
+        headingPos.add(botPose.getHeading(), 0);
+    }
+
+    public Pose avgPose() {
+        return new Pose(xPos.average(), yPos.average(), robot.follower.getHeading());
+    }
+    public double length() {
+        return xPos.getSize();
+    }
+
+    public void switchToBallDetection() {
+        limelight.pipelineSwitch(1);
+    }
+
+    public PathChain getBallPath() {
+        if (getPython()[0] == 1) {
+            PathChain pathChain = robot.follower.pathBuilder()
+                    .addPath(new BezierLine(robot.follower.getPose(), ballPose))
+                    .setConstantHeadingInterpolation(-1.56)
+                    .build();
+            return pathChain;
+        }
+        else {
+            return FarPaths.gateOverFlow;
+        }
+
+    }
 }

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.Storage;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
@@ -51,6 +52,8 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
     public void start() {
         robot.startAuto(ClosePaths::buildPaths, ClosePaths.startPose);
         robot.turret.setState(Turret.TurretState.TRACK);
+        robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.MOTIF);
+
         SequentialCommand shoot = new SequentialCommand(
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
                // new WaitShooterNotReady(robot.shooter),
@@ -76,11 +79,9 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop()),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.scanMotif)),
-                new InstantCommand(() -> robot.limelightCamera.setScan(true)),
                 new WaitParametric(robot.follower),
                 new Wait(500),
                 new InstantCommand(() -> robot.setMotif(robot.limelightCamera.getMotif())),
-                new InstantCommand(() -> robot.limelightCamera.setScan(false)),
                 new InstantCommand(() -> robot.lindexer.setIndex(true))
         );
         SequentialCommand spike1 = new SequentialCommand(

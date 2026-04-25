@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.Lindexer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.TagCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Color;
@@ -45,10 +47,6 @@ public class GameTeleop extends LinearOpMode {
             CyclingList loopTimes = new CyclingList(5);
             ElapsedTime loopTimer = new ElapsedTime();
 
-            CyclingList xPos = new CyclingList(10);
-            CyclingList yPos = new CyclingList(10);
-            CyclingList headingPos = new CyclingList(10);
-
             //Create new robot instance
             Robot robot = new Robot(hardwareMap, OpMode.TELEOP, Storage.getStoredAlliance(), Storage.getStoredMotif(), Storage.getStoredFollower(), gamepad1, gamepad2, telemetry, dashboard);
 
@@ -56,6 +54,7 @@ public class GameTeleop extends LinearOpMode {
 
             boolean motifMode = false;
             boolean startedShooting = false;
+            boolean parkStarted = false;
 
             //reset follower back to full speed
             robot.initTeleop();
@@ -72,7 +71,8 @@ public class GameTeleop extends LinearOpMode {
             //Start gametimer, hardware reset before start (kicker down, others), other...
             robot.startTeleop();
             robot.transfer.intakeTransfer();
-            robot.limelightCamera.setScan(true);
+            robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.BALL);
+           // robot.limelightCamera.switchToBallDetection();
            // robot.tagCamera.getVisionPortal().stopStreaming();
             while (opModeIsActive()) {
                 loopTimer.reset();
@@ -144,17 +144,21 @@ public class GameTeleop extends LinearOpMode {
                         robot.transfer.stop();
                         robot.turret.setState(Turret.TurretState.HOLD);
                         robot.turret.setAngle(90);
+                        //gamepad1.resetEdgeDetection();
+                        boolean test = c1.touchpadWasPressed();
                         if (robot.getAlliance() == Alliance.BLUE) {
                             robot.follower.followPath(robot.follower.pathBuilder()
                                     .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
                                     .setConstantHeadingInterpolation(3.13)
                                     .build());
+                            parkStarted = true;
                         }
                         else {
                             robot.follower.followPath(robot.follower.pathBuilder()
                                     .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 109, 3.13)))
                                     .setConstantHeadingInterpolation(3.13)
                                     .build());
+                            parkStarted = true;
                         }
                     }
                     else {
@@ -181,7 +185,6 @@ public class GameTeleop extends LinearOpMode {
                             robot.ascent.descend();
                         }
                     }
-
                 }
 
                 //Motif mode activation
@@ -259,12 +262,11 @@ public class GameTeleop extends LinearOpMode {
 
                 if (robot.getRobotState() != RobotState.PARK) {
                     robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
-
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY && (robot.turret.atAngle() || robot.turret.getSOTM())) || startedShooting)) {
+                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY /*&& robot.turret.atAngle() || robot.turret.getSOTM())*/|| startedShooting))) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -288,14 +290,21 @@ public class GameTeleop extends LinearOpMode {
                 //Driving code
 
                 double[] drivePowers = robot.chassis.calculateDrivePowers(c1, ConfigConstants.DRIVE_DAMPENING, ConfigConstants.STRAFE_DAMPENING, ConfigConstants.TURN_DAMPENING);
-                if (robot.getRobotState() != RobotState.PARK) {
-                    robot.follower.setTeleOpDrive(
-                            drivePowers[0],
-                            drivePowers[1],
-                            drivePowers[2],
-                            true
-                    );
+
+                robot.follower.setTeleOpDrive(
+                        drivePowers[0],
+                        drivePowers[1],
+                        drivePowers[2],
+                        true
+                );
+
+                if (parkStarted && ((c1.left_stick_x != 0 || c1.left_stick_y != 0))) {
+                    robot.follower.breakFollowing();
+                    robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
+
+                    parkStarted = false;
                 }
+
 
 
                 //Motif mode (# of balls on ramp)
@@ -344,16 +353,27 @@ public class GameTeleop extends LinearOpMode {
                     robot.setRobotState(RobotState.INTAKE);
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
+                if (c2.touchpad) {
+                    robot.limelightCamera.recordPosition();
+                    robot.indicator.alert = true;
+                }
+                if (c2.touchpadWasReleased()) {
+                    robot.indicator.alert = false;
+                    robot.follower.setPose(robot.limelightCamera.avgPose());
+                }
 
-               if (true) {
-                    Pose botPose = robot.limelightCamera.getPedroPose();
-                    xPos.add(botPose.getX(), 0);
-                    yPos.add(botPose.getY(), 0);
-                    headingPos.add(botPose.getHeading(), 0);
-                }
-                if (c2.touchpadWasPressed()) {
-                    robot.follower.setPose(new Pose(robot.follower.getPose().getX(), robot.follower.getPose().getY(), headingPos.average()));
-                }
+               /* if (c1.triangleWasPressed()) {
+                    double[] llpython = robot.limelightCamera.getPython();
+                    double x = robot.follower.getPose().getX() - (Math.sin(Math.toRadians(llpython[2])) * 45);
+                    x = Math.max(x, 8.85);
+                    Pose targetPose = new Pose(x, 11);
+                    PathChain pathChain = robot.follower.pathBuilder()
+                            .addPath(new BezierLine(robot.follower.getPose(), targetPose))
+                            .setConstantHeadingInterpolation(-1.56)
+                            .build();
+                    robot.follower.followPath(pathChain);
+                    parkStarted = true;
+                }*/
 
                 //update everything
                 robot.updateHardware();
@@ -363,9 +383,6 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addLine();*/
                 telemetry.addData("x", robot.chassis.turretPose().getX());
                 telemetry.addData("y", robot.chassis.turretPose().getY());
-                telemetry.addData("heading", Math.toDegrees(robot.follower.getHeading()));
-                telemetry.addData("x", xPos.average());
-                telemetry.addData("y", yPos.average());
                 telemetry.addLine();
                 telemetry.addData("angle", robot.chassis.degreesAwayTurret(robot.chassis.turretPose()));
                 telemetry.addData("encoder angle", robot.turret.getEncoderAngle());

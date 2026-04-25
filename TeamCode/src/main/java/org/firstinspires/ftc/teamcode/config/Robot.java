@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.field.Classifier;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 import org.firstinspires.ftc.teamcode.config.util.Alliance;
+import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.CommandScheduler;
@@ -69,7 +70,6 @@ public class Robot {
 
 
     public LimelightCamera limelightCamera;
-
 
     private Alliance alliance;
     private OpMode opMode;
@@ -327,7 +327,11 @@ public class Robot {
         packet.put("min", 2600);
        // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
         packet.put("volt", chassis.getVoltage());
-
+        /*packet.put("distance", Math.hypot(limelightCamera.getPedroPose().getX() - follower.getPose().getX(), limelightCamera.getPedroPose().getY() - follower.getPose().getY()));
+        packet.put("realx", follower.getPose().getX());
+        packet.put("realy", follower.getPose().getY());
+        packet.put("x", limelightCamera.xPos.getKalmanEstimate());
+        packet.put("y", limelightCamera.yPos.getKalmanEstimate());*/
       //  packet.put("hue", lindexer.getLindexerColor().getDistance());
        // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
       //  packet.put("dist", lindexer.getLindexerColor().getDistance());
