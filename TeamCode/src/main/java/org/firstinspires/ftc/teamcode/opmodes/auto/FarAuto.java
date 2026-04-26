@@ -57,7 +57,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.BALL);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(2950)),
+                new InstantCommand(() -> robot.shooter.setRPM(3000)),
 
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
@@ -65,7 +65,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitShooter(robot.shooter),
                 new InstantCommand(() ->robot.transfer.intakeTransfer()),
-                new Wait(500),
+                new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
         );
 
@@ -159,7 +159,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                         return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
                     }
                 }),
-                new Wait(300),
+                new Wait(200),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
                 new WaitUntil(new BooleanSupplier() {
                     @Override
@@ -196,6 +196,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                     }
                 }),
                 new Wait(200),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.5)),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
                 new WaitUntil(new BooleanSupplier() {
                     @Override
@@ -203,6 +204,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                         return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
                     }
                 }),
+                new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(robot.follower.pathBuilder().addPath(new BezierLine(robot.follower.getPose(), FarPaths.shootPose))
                         .setLinearHeadingInterpolation(FarPaths.shootPose.getHeading(), FarPaths.shootPose.getHeading())
                         .build())),
@@ -240,6 +242,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.update();
         robot.updateHardware();
         telemetry.addData("python", robot.limelightCamera.ballPose.getX());
+        telemetry.addData("ball", robot.limelightCamera.getPython()[0]);
         telemetry.update();
     }
     @Override

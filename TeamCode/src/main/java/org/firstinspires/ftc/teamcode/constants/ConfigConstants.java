@@ -182,7 +182,7 @@ public class ConfigConstants {
     public static final Pose GOAL_BLUE = new Pose(144,144);
     public static final Pose GOAL_RED = new Pose(144,0);
 
-    public static final Pose targetPointFarBlue = new Pose(133,133);
+    public static final Pose targetPointFarBlue = new Pose(133,129);
     public static final Pose targetPointCloseBlue = new Pose(133,133);
 
     public static final Pose targetPointFarRed = new Pose(133,13);

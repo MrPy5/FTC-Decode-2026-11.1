@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.config.Robot;
+import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.Motif;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
@@ -133,11 +134,12 @@ public class LimelightCamera {
         }
         else if (currentMode == TagMode.BALL) {
             double[] llpython = robot.limelightCamera.getPython();
-            double x = robot.follower.getPose().getX() - (Math.sin(Math.toRadians(llpython[2])) * 45);
+            double angle = robot.getAlliance() == Alliance.RED ? llpython[2] : llpython[3];
+            double x = robot.follower.getPose().getX() + (Math.sin(Math.toRadians(angle) * 45 * (robot.getAlliance() == Alliance.RED ? -1 : 1)));
             x = Math.max(x, 8.85);
-            ballPose = new Pose(x, 11);
+            ballPose = new Pose(x, robot.getAlliance() == Alliance.RED ? 11 : 132);
         }
-        //limelight.updateRobotOrientation(180/* - Math.toDegrees(robot.follower.getHeading())*/);
+
     }
 
     public Motif getMotif() {
@@ -191,7 +193,7 @@ public class LimelightCamera {
         if (getPython()[0] == 1) {
             PathChain pathChain = robot.follower.pathBuilder()
                     .addPath(new BezierLine(robot.follower.getPose(), ballPose))
-                    .setConstantHeadingInterpolation(-1.56)
+                    .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.RED ? -1.56 : 1.56)
                     .build();
             return pathChain;
         }
