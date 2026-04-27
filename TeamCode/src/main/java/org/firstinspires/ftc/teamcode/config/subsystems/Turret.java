@@ -51,8 +51,7 @@ public class Turret {
     public void update() {
         if (turretState == TurretState.TRACK) {
             // Current position
-           /* double x = robot.chassis.turretPose().getX();
-            double y = robot.chassis.turretPose().getY();*/
+
 
             double x = robot.chassis.turretPose().getX();
             double y = robot.chassis.turretPose().getY();
@@ -81,8 +80,8 @@ public class Turret {
         if (Math.abs(getEncoderVelocity()) < .05) {
             double difference = angle - getEncoderAngle();
 
-            if (Math.abs(difference) > 1) {
-                ticks = angleToTicks(wrapAngle(angle + (Math.max(1, Math.abs(difference * 1.25)) * Math.signum(difference))));
+            if (Math.abs(difference) > 100) {
+                ticks = angleToTicks(wrapAngle(angle + (Math.min(Math.max(1, Math.abs(difference * 1.25)) * Math.signum(difference), 5))));
 
             }
         }

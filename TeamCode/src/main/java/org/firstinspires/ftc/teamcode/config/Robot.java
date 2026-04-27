@@ -188,12 +188,12 @@ public class Robot {
         buildPaths.accept(this);
         intake.reset();
         gameTimer.reset();
+        lindexer.leftCenter();
     }
 
     public void initTeleop() {
         breakFollowing();
         follower.update();
-        turret.setAngle(0);
 
     }
     public void breakFollowing() {
@@ -222,6 +222,7 @@ public class Robot {
 
         if (c1.psWasPressed()) {
             follower.setPose(new Pose(77.5,71,0));
+            turret.setAngle(0);
             follower.update();
         }
     }
@@ -241,7 +242,9 @@ public class Robot {
         gameTimer.reset();
         follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
         startTeleopPositions();
-        intake.reset(); // for turret reset
+        if (follower.atPose(new Pose(77.5, 71), 0.1, 0.1)) {
+            intake.reset();
+        }
     }
 
     public void updateGamepads() {

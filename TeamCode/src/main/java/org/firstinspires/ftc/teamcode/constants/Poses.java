@@ -46,8 +46,8 @@ public class Poses {
     public static final Pose hpBezierPoseBlue = new Pose(8.8, 94.5, Math.toRadians(90));
     public static final Pose backupHPPoseBlue = new Pose(8.85, 126, Math.toRadians(90));
 
-    public static final Pose gateOverFlowPoseBlueFar = new Pose(17, 128, Math.toRadians(35));
-    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(30, 128, Math.toRadians(35));
+    public static final Pose gateOverFlowPoseBlueFar = new Pose(20, 128, Math.toRadians(35));
+    public static final Pose gateOverFlowEndPoseBlueFar = new Pose(40, 128, Math.toRadians(35));
 
     //RED
     public static final Pose startPoseRedFar = new Pose(8.5, 54, -1.56);
@@ -87,12 +87,12 @@ public class Poses {
     public static final Pose spike3PoseRedFar = new Pose(39, 54, -1.56);
     public static final Pose spike3EndPoseRedFar = new Pose(38.7, 14, -1.56);
 
-    public static final Pose hpPoseRed = new Pose(8.85, 10, Math.toRadians(-90));
+    public static final Pose hpPoseRed = new Pose(8.85, 12, Math.toRadians(-90));
     public static final Pose hpBezierPoseRed = new Pose(8.8, 47.5, Math.toRadians(-90));
     public static final Pose backupHPPoseRed = new Pose(8.85, 14, Math.toRadians(-90));
 
-    public static final Pose gateOverFlowPoseRedFar = new Pose(17, 14, Math.toRadians(-35));
-    public static final Pose gateOverFlowEndPoseRedFar = new Pose(30, 14, Math.toRadians(-35));
+    public static final Pose gateOverFlowPoseRedFar = new Pose(20, 15, Math.toRadians(-35));
+    public static final Pose gateOverFlowEndPoseRedFar = new Pose(40, 15, Math.toRadians(-35));
 
 
 }

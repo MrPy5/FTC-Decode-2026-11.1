@@ -159,6 +159,8 @@ public class ConfigConstants {
     public static final double ASCEND_LEFT = 0.565; // 54
     public static final double DESCEND_RIGHT = 0.83;
     public static final double DESCEND_LEFT = 0.25;
+    public static final double DOWN_RIGHT = 0.695;
+    public static final double DOWN_LEFT = 0.385;
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
@@ -168,7 +170,7 @@ public class ConfigConstants {
         put(95.0, 2450.0);
         put(113.0, 2500.0);
         put(140.0, 2900.0);
-        put(170.0, 3100.0);
+        put(170.0, 3150.0);
     }};
 
     //Vision
@@ -182,7 +184,7 @@ public class ConfigConstants {
     public static final Pose GOAL_BLUE = new Pose(144,144);
     public static final Pose GOAL_RED = new Pose(144,0);
 
-    public static final Pose targetPointFarBlue = new Pose(133,129);
+    public static final Pose targetPointFarBlue = new Pose(136,136);
     public static final Pose targetPointCloseBlue = new Pose(133,133);
 
     public static final Pose targetPointFarRed = new Pose(133,13);

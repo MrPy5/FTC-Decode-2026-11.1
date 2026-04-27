@@ -47,4 +47,12 @@ public class Ascent {
     public AscentState getAscentState() {
         return ascentState;
     }
+
+    public Servo getAscentLeft() {
+        return ascentLeft;
+    }
+
+    public Servo getAscentRight() {
+        return ascentRight;
+    }
 }

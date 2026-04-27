@@ -17,7 +17,7 @@ public class ServoTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        testServo = hardwareMap.get(Servo.class, "ascent right");
+        testServo = hardwareMap.get(Servo.class, "ascent left");
 
 
         double currentPosition = 0.5;

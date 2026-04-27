@@ -79,7 +79,7 @@ public class Chassis {
             double robotVx = robot.follower.getVelocity().getXComponent();
             double robotVy = robot.follower.getVelocity().getYComponent();
 
-            double airTime = inchesAwayPinpoint(new Pose(x, y)) / 130;
+            double airTime = inchesAwayPinpoint(new Pose(x, y)) / 120;
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
@@ -220,7 +220,7 @@ public class Chassis {
     }
 
     public boolean inFar() {
-        return robot.follower.getPose().getX() < 45;
+        return robot.follower.getPose().getX() < 40;
     }
 
 }

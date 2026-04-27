@@ -39,6 +39,10 @@ public class LimelightCamera {
     public CyclingList yPos = new CyclingList(20);
     public CyclingList headingPos = new CyclingList(20);
 
+    public CyclingList ball = new CyclingList(5);
+    public CyclingList left = new CyclingList(5);
+    public CyclingList right = new CyclingList(5);
+
 
     TagMode currentMode = TagMode.MOTIF;
 
@@ -134,10 +138,9 @@ public class LimelightCamera {
         }
         else if (currentMode == TagMode.BALL) {
             double[] llpython = robot.limelightCamera.getPython();
-            double angle = robot.getAlliance() == Alliance.RED ? llpython[2] : llpython[3];
-            double x = robot.follower.getPose().getX() + (Math.sin(Math.toRadians(angle) * 45 * (robot.getAlliance() == Alliance.RED ? -1 : 1)));
-            x = Math.max(x, 8.85);
-            ballPose = new Pose(x, robot.getAlliance() == Alliance.RED ? 11 : 132);
+            ball.add(llpython[0], 0);
+            left.add(llpython[3], 0);
+            right.add(llpython[2], 0);
         }
 
     }
@@ -188,9 +191,16 @@ public class LimelightCamera {
     public void switchToBallDetection() {
         limelight.pipelineSwitch(1);
     }
+    public void switchToTagDetection() {
+        limelight.pipelineSwitch(0);
+    }
 
     public PathChain getBallPath() {
-        if (getPython()[0] == 1) {
+        double angle = robot.getAlliance() == Alliance.RED ? right.average() : left.average();
+        double x = robot.follower.getPose().getX() + ((Math.sin(Math.toRadians(angle)) * 45) * (robot.getAlliance() == Alliance.RED ? -1 : 1));
+        x = Math.max(x, 8.85);
+        ballPose = new Pose(x, robot.getAlliance() == Alliance.RED ? 11 : 132);
+        if (ball.mode() == 1) {
             PathChain pathChain = robot.follower.pathBuilder()
                     .addPath(new BezierLine(robot.follower.getPose(), ballPose))
                     .setConstantHeadingInterpolation(robot.getAlliance() == Alliance.RED ? -1.56 : 1.56)
@@ -198,7 +208,7 @@ public class LimelightCamera {
             return pathChain;
         }
         else {
-            return FarPaths.driveToHP;
+            return FarPaths.driveToGateOverflow;
         }
 
     }

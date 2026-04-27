@@ -36,6 +36,8 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 //take out reset pose button in robot
 
 @TeleOp(name="Game Teleop")
+
+//TODO mat position tilt
 public class GameTeleop extends LinearOpMode {
 
         @Override
@@ -71,9 +73,9 @@ public class GameTeleop extends LinearOpMode {
             //Start gametimer, hardware reset before start (kicker down, others), other...
             robot.startTeleop();
             robot.transfer.intakeTransfer();
-            robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.BALL);
-           // robot.limelightCamera.switchToBallDetection();
-           // robot.tagCamera.getVisionPortal().stopStreaming();
+            robot.limelightCamera.switchToTagDetection();
+            robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.OFF);
+
             while (opModeIsActive()) {
                 loopTimer.reset();
                 //Pull new gamepad values and freeze state
@@ -95,12 +97,12 @@ public class GameTeleop extends LinearOpMode {
                     robot.intake.drop();
                 }
 
-                if (c2.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                if (c1.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
                     robot.turret.setSOTM(true);
                 }
-                else {
+               /* else {
                     robot.turret.setSOTM(false);
-                }
+                }*/
 
                 if (((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) || robot.transfer.motorStopped) {
                     robot.scheduler.clear();
@@ -119,7 +121,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                     //Intake
-                else if ((c1.rightTriggerWasReleased() || c2.rightTriggerWasReleased()) && robot.getRobotState() != RobotState.INTAKE) {
+                else if ((c1.rightTriggerWasReleased()) && robot.getRobotState() != RobotState.INTAKE) {
                     robot.scheduler.clear();
                     robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                     robot.setRobotState(RobotState.INTAKE);
@@ -144,6 +146,8 @@ public class GameTeleop extends LinearOpMode {
                         robot.transfer.stop();
                         robot.turret.setState(Turret.TurretState.HOLD);
                         robot.turret.setAngle(90);
+                        robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
+                        robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
                         //gamepad1.resetEdgeDetection();
                         boolean test = c1.touchpadWasPressed();
                         if (robot.getAlliance() == Alliance.BLUE) {
@@ -163,6 +167,8 @@ public class GameTeleop extends LinearOpMode {
                     }
                     else {
                         robot.scheduler.clear();
+                        robot.ascent.getAscentLeft().setPosition(ConfigConstants.DESCEND_LEFT);
+                        robot.ascent.getAscentRight().setPosition(ConfigConstants.DESCEND_RIGHT);
                         robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                         robot.setRobotState(RobotState.INTAKE);
                         robot.turret.setState(Turret.TurretState.TRACK);
@@ -261,12 +267,17 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+                    if (!robot.chassis.inFar() && robot.turret.getSOTM()) {
+                        robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+                    }
+                    else {
+                        robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+                    }
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
 
-                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY || c2.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY /*&& robot.turret.atAngle() || robot.turret.getSOTM())*/|| startedShooting))) {
+                    if ((c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY ) && ((robot.shooter.getShooterState() == Shooter.ShooterState.READY /*&& robot.turret.atAngle() || robot.turret.getSOTM())*/|| startedShooting))) {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
@@ -361,19 +372,6 @@ public class GameTeleop extends LinearOpMode {
                     robot.indicator.alert = false;
                     robot.follower.setPose(robot.limelightCamera.avgPose());
                 }
-
-               /* if (c1.triangleWasPressed()) {
-                    double[] llpython = robot.limelightCamera.getPython();
-                    double x = robot.follower.getPose().getX() - (Math.sin(Math.toRadians(llpython[2])) * 45);
-                    x = Math.max(x, 8.85);
-                    Pose targetPose = new Pose(x, 11);
-                    PathChain pathChain = robot.follower.pathBuilder()
-                            .addPath(new BezierLine(robot.follower.getPose(), targetPose))
-                            .setConstantHeadingInterpolation(-1.56)
-                            .build();
-                    robot.follower.followPath(pathChain);
-                    parkStarted = true;
-                }*/
 
                 //update everything
                 robot.updateHardware();
