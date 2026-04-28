@@ -38,6 +38,26 @@ import java.util.function.Consumer;
 //http://192.168.43.1:8001/ -- panels
 
 
+//TODO
+//Alignment on field
+//Write vision test
+//Fixed angle driving
+//Shooter edge case (shooter blocker)
+//1 inch back button
+//Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
+//Only drive when we have the motif
+//Check transition auto -> teleop
+//Check init rules
+//Reset button for everything
+//Limelight ball detection max & min
+//✅ If statement for command scheduler
+//Limelight relocalization
+//PREMATCH update hardware & software devices
+//Remove telemetry, logging, dashboard
+//Drive into balls slowly (auto)
+
+
+
 public class Robot {
 
     public enum RobotState {
@@ -236,6 +256,7 @@ public class Robot {
         lindexer.leftCenter();
         turret.setAngle(0);
         turret.setState(Turret.TurretState.TRACK);
+        intake.intake();
     }
 
     public void startTeleop() {
@@ -330,7 +351,7 @@ public class Robot {
         packet.put("max", 3200);
         packet.put("min", 2600);
        // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
-        packet.put("volt", chassis.getVoltage());
+        packet.put("volt", chassis.getVoltageScalar());
         /*packet.put("distance", Math.hypot(limelightCamera.getPedroPose().getX() - follower.getPose().getX(), limelightCamera.getPedroPose().getY() - follower.getPose().getY()));
         packet.put("realx", follower.getPose().getX());
         packet.put("realy", follower.getPose().getY());

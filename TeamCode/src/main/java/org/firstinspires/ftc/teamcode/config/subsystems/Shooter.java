@@ -121,14 +121,14 @@ public class Shooter {
             adder = 0;
         }
         else {
-            adder = 0;
+            adder = 600;
         }
         if (motifMode) {
             adder = -100;
         }
         shooterMotorLeft.setRPM(targetShooterRPM + adder);
         shooterMotorRight.setRPM(targetShooterRPM + adder);
-        //TODO Comment out
+
 
     }
 
@@ -170,7 +170,7 @@ public class Shooter {
 
 
     public void spinAtCalculatedSpeed(double range) {
-        setRPM(calculateRPM(range)/* - (robot.chassis.getVoltageScalar() * 125)*/);
+        setRPM(calculateRPM(range) /*- (robot.chassis.getVoltageScalar() * 125)*/);
     }
     public double calculateRPM(double range) {
         if (range > ConfigConstants.NEAR_VS_FAR) {

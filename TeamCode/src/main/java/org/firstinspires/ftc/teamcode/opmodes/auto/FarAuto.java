@@ -8,7 +8,9 @@ import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.ConditionalCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.SelectCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.SequentialCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.Wait;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitFollower;
@@ -87,7 +89,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                new Wait(200),
+               // new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -111,7 +113,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                new Wait(200),
+                //new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -134,7 +136,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                new Wait(200),
+                //new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -169,7 +171,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                new Wait(200),
+               // new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -178,22 +180,36 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
 
-                new InstantCommand(() -> robot.follower.followPath(robot.limelightCamera.getBallPath())),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                    }
-                }),
-                new Wait(0),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                    }
-                }),
+                new ConditionalCommand(
+                        () -> robot.limelightCamera.ball.mode() == 1,
+                        new SequentialCommand(
+                                new InstantCommand(() -> robot.follower.followPath(robot.limelightCamera.getBallPath())),
+                                new WaitUntil(new BooleanSupplier() {
+                                    @Override
+                                    public boolean getAsBoolean() {
+                                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                                    }
+                                }),
+                                new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
+                                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
+                                new WaitUntil(new BooleanSupplier() {
+                                    @Override
+                                    public boolean getAsBoolean() {
+                                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                                    }
+                                })
+                        ),
+                        new SequentialCommand(
+                                new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
+                                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
+                                new WaitUntil(new BooleanSupplier() {
+                                    @Override
+                                    public boolean getAsBoolean() {
+                                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                                    }
+                                })
+                        )
+                ),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new InstantCommand(() -> robot.follower.followPath(robot.follower.pathBuilder().addPath(new BezierLine(robot.follower.getPose(), FarPaths.shootPose))
                         .setLinearHeadingInterpolation(FarPaths.shootPose.getHeading(), FarPaths.shootPose.getHeading())
@@ -202,7 +218,6 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())

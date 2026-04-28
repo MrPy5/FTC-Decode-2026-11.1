@@ -51,15 +51,12 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
         robot.turret.setState(Turret.TurretState.TRACK);
 
         SequentialCommand shootPreload = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(2300)),
+                new InstantCommand(() -> robot.shooter.setRPM(2350)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.shootPreload)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
-                new InstantCommand(() -> robot.intake.lift()),
-                new Wait(100),
-                new InstantCommand(() -> robot.turret.setAngle(3)),
                 new WaitShooter(robot.shooter),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
@@ -100,6 +97,8 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike2Bezier)),
+                new InstantCommand(() -> robot.turret.setSOTM(true)),
+                new InstantCommand(() -> robot.turret.setSotmMultiplier(0.5)),
                 new WaitUntil(new BooleanSupplier() {
                     @Override
                     public boolean getAsBoolean() {
@@ -114,10 +113,16 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new InstantCommand(() -> robot.intake.lift()),
-                new WaitParametric(robot.follower),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 5) || robot.follower.getCurrentTValue() > 0.85;
+                    }
+                }),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
-                new InstantCommand(() -> robot.transfer.stop())
+                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.turret.setSotmMultiplier(1))
         );
 
         SequentialCommand spike3 = new SequentialCommand(
@@ -140,23 +145,41 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToGate)),
-                new WaitParametric(robot.follower),
-                new Wait(400),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.backupFronGate)),
+                new InstantCommand(() -> robot.turret.setSOTM(true)),
+                new InstantCommand(() -> robot.turret.setSotmMultiplier(0.5)),
                 new WaitParametric(robot.follower),
                 new Wait(0),
+                new InstantCommand(() -> robot.follower.followPath(ClosePaths.backupFronGate)),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                    }
+                }),
+                new Wait(0),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.returnToGate)),
-                new WaitParametric(robot.follower),
-                new Wait(200),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                    }
+                }),
+                new Wait(0),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateAngleToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new InstantCommand(() -> robot.intake.lift()),
-                new WaitParametric(robot.follower),
+                new WaitUntil(new BooleanSupplier() {
+                    @Override
+                    public boolean getAsBoolean() {
+                        return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 5) || robot.follower.getCurrentTValue() > 0.85;
+                    }
+                }),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
-                new InstantCommand(() -> robot.transfer.stop())
+                new InstantCommand(() -> robot.transfer.stop()),
+                new InstantCommand(() -> robot.turret.setSotmMultiplier(1))
         );
 
         SequentialCommand park = new SequentialCommand(
@@ -167,6 +190,7 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
         pathSchedule = new SequentialCommand(
                 shootPreload,
                 spike2,
+                gateBall,
                 gateBall,
                 gateBall,
                 gateBall,

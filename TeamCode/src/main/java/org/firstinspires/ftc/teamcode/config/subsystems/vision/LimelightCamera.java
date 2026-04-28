@@ -35,9 +35,9 @@ public class LimelightCamera {
     HardwareMap hardwareMap;
     public Pose ballPose = new Pose(0,0);
 
-    public CyclingList xPos = new CyclingList(20);
-    public CyclingList yPos = new CyclingList(20);
-    public CyclingList headingPos = new CyclingList(20);
+    public CyclingList xPos = new CyclingList(40);
+    public CyclingList yPos = new CyclingList(40);
+    public CyclingList headingPos = new CyclingList(40);
 
     public CyclingList ball = new CyclingList(5);
     public CyclingList left = new CyclingList(5);
@@ -104,6 +104,11 @@ public class LimelightCamera {
 
 
         return result.getBotpose();
+    }
+    public int getTagCount() {
+        LLResult result = getResult();
+
+        return result.getBotposeTagCount();
     }
 
     public Pose getPedroPose() {
@@ -189,6 +194,7 @@ public class LimelightCamera {
     }
 
     public void switchToBallDetection() {
+
         limelight.pipelineSwitch(1);
     }
     public void switchToTagDetection() {

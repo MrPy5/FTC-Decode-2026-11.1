@@ -38,7 +38,7 @@ public class Chassis {
     public boolean noSticks = false;
     public boolean turnCompleted = true;
     public double targetHeading = 0;
-    public double degreeOffset = 2;
+    public double degreeOffset = 0;
     public double parkHeading = 180;
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
@@ -130,8 +130,8 @@ public class Chassis {
             double powerError = (error * kp) - (robot.follower.getAngularVelocity() * kd);
             double degreeError = Math.toDegrees(error);
             double clampedPowerError = clamp(powerError, -1, 1);
-            if (Math.abs(clampedPowerError) < 0.06) {
-                clampedPowerError = 0.06 * sign;
+            if (Math.abs(clampedPowerError) < 0.05) {
+                clampedPowerError = 0.05 * sign;
             }
 
             if (Math.abs(degreeError) < 0.5) {

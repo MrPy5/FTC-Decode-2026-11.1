@@ -28,6 +28,7 @@ public class Turret {
     Servo turretLeft;
     Servo turretRight;
     boolean sotm = false;
+    public double sotmMultiplier = 1;
 
     TurretState turretState = TurretState.TRACK;
 
@@ -62,6 +63,8 @@ public class Turret {
             if (!robot.chassis.inFar() && sotm) {
                  airTime = robot.chassis.inchesAwayPinpoint(new Pose(x, y)) / 135;
             }
+
+            airTime *= sotmMultiplier;
 
             double predictedX = x + (robotVx * airTime);
             double predictedY = y + (robotVy * airTime);
@@ -195,5 +198,9 @@ public class Turret {
     }
     public boolean getSOTM() {
         return sotm;
+    }
+
+    public void setSotmMultiplier(double sotmMultiplier) {
+        this.sotmMultiplier = sotmMultiplier;
     }
 }

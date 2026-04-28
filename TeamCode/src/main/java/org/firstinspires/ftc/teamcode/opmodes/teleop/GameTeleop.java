@@ -37,7 +37,6 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
 @TeleOp(name="Game Teleop")
 
-//TODO mat position tilt
 public class GameTeleop extends LinearOpMode {
 
         @Override
@@ -72,7 +71,7 @@ public class GameTeleop extends LinearOpMode {
 
             //Start gametimer, hardware reset before start (kicker down, others), other...
             robot.startTeleop();
-            robot.transfer.intakeTransfer();
+
             robot.limelightCamera.switchToTagDetection();
             robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.OFF);
 
@@ -100,9 +99,9 @@ public class GameTeleop extends LinearOpMode {
                 if (c1.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
                     robot.turret.setSOTM(true);
                 }
-               /* else {
+                else {
                     robot.turret.setSOTM(false);
-                }*/
+                }
 
                 if (((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) || robot.transfer.motorStopped) {
                     robot.scheduler.clear();
@@ -148,19 +147,19 @@ public class GameTeleop extends LinearOpMode {
                         robot.turret.setAngle(90);
                         robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
                         robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
-                        //gamepad1.resetEdgeDetection();
-                        boolean test = c1.touchpadWasPressed();
+                        c1.touchpadWasPressed();
+
                         if (robot.getAlliance() == Alliance.BLUE) {
                             robot.follower.followPath(robot.follower.pathBuilder()
                                     .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
-                                    .setConstantHeadingInterpolation(3.13)
+                                    .setConstantHeadingInterpolation(3.14)
                                     .build());
                             parkStarted = true;
                         }
                         else {
                             robot.follower.followPath(robot.follower.pathBuilder()
                                     .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 109, 3.13)))
-                                    .setConstantHeadingInterpolation(3.13)
+                                    .setConstantHeadingInterpolation(3.14)
                                     .build());
                             parkStarted = true;
                         }
@@ -267,12 +266,9 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() != RobotState.PARK) {
-                    if (!robot.chassis.inFar() && robot.turret.getSOTM()) {
-                        robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
-                    }
-                    else {
-                        robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
-                    }
+
+                    robot.shooter.spinAtCalculatedSpeed(robot.chassis.predictedInchesAway());
+
                 }
                 //RPM and shooting
                 if (robot.getRobotState() == RobotState.SHOOT) {
@@ -330,22 +326,22 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() == RobotState.PARK) {
-                    if (c2.circleWasPressed()) {
+                    if (c2.dpadRightWasPressed()) {
                         robot.chassis.parkHeadingOffset += 3;
                         gamepad2.rumble(0, 1, 200);
                     }
-                    if (c2.squareWasPressed()) {
+                    if (c2.dpadLeftWasPressed()) {
                         robot.chassis.parkHeadingOffset -= 3;
                         gamepad2.rumble(1, 0, 200);
                     }
                 }
                 else {
                     if (c2.dpadLeftWasPressed()) {
-                        robot.chassis.degreeOffset += 0.5;
+                        robot.chassis.degreeOffset += 1;
                         gamepad2.rumble(0, 1, 200);
                     }
                     if (c2.dpadRightWasPressed()) {
-                        robot.chassis.degreeOffset -= 0.5;
+                        robot.chassis.degreeOffset -= 1;
                         gamepad2.rumble(1, 0, 200);
                     }
                 }
@@ -365,12 +361,16 @@ public class GameTeleop extends LinearOpMode {
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
                 if (c2.touchpad) {
-                    robot.limelightCamera.recordPosition();
-                    robot.indicator.alert = true;
+                    if (robot.limelightCamera.getTagCount() != 0) {
+                        robot.limelightCamera.recordPosition();
+                        robot.indicator.alert = true;
+                    }
+
                 }
                 if (c2.touchpadWasReleased()) {
                     robot.indicator.alert = false;
                     robot.follower.setPose(robot.limelightCamera.avgPose());
+                    robot.chassis.degreeOffset = 0;
                 }
 
                 //update everything
@@ -379,10 +379,11 @@ public class GameTeleop extends LinearOpMode {
                 loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
                 /*telemetry.addData("loop", loopTimes.average());
                 telemetry.addLine();*/
-                telemetry.addData("x", robot.chassis.turretPose().getX());
-                telemetry.addData("y", robot.chassis.turretPose().getY());
+                telemetry.addData("x", robot.follower.getPose().getX());
+                telemetry.addData("y", robot.follower.getPose().getY());
                 telemetry.addLine();
-                telemetry.addData("angle", robot.chassis.degreesAwayTurret(robot.chassis.turretPose()));
+                telemetry.addData("heading", Math.toDegrees(robot.follower.getHeading()));
+                telemetry.addData("math angle", robot.chassis.degreesAwayTurret(robot.chassis.turretPose()));
                 telemetry.addData("encoder angle", robot.turret.getEncoderAngle());
                 telemetry.addData("target angle", robot.turret.getAngle());
                 telemetry.addLine();

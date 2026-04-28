@@ -35,7 +35,7 @@ public class Poses {
 
     public static final Pose gatePushAngleBlue = new Pose(59, 127, 1.1);
     public static final Pose gatePushAngleBezierBlue = new Pose(62, 80, Math.toRadians(62));
-    public static final Pose gateBackupAngleBlue = new Pose(47, 130, 0.6);
+    public static final Pose gateBackupAngleBlue = new Pose(48, 130, 0.6);
     //Not updated
     public static final Pose gatePoseSpikeBlue = new Pose(-17, 61.0, Math.toRadians(58));
     //Not updated
@@ -81,7 +81,7 @@ public class Poses {
 
     public static final Pose gatePushAngleRed = new Pose(59, 14, -1.1);
     public static final Pose gatePushAngleBezierRed = new Pose(62, 62, Math.toRadians(-62));
-    public static final Pose gateBackupAngleRed = new Pose(47, 12, -0.6);
+    public static final Pose gateBackupAngleRed = new Pose(48, 12, -0.6);
     public static final Pose gatePoseSpikeRed = new Pose(-17, 81.0, Math.toRadians(-58));
 
     public static final Pose spike3PoseRedFar = new Pose(39, 54, -1.56);

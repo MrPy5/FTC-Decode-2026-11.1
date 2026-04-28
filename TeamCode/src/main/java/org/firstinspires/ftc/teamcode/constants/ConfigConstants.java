@@ -132,7 +132,7 @@ public class ConfigConstants {
         put(12.0, 0.0045);
         put(20.0, 0.0043);
         put(43.0, 0.004);
-        put(67.5, 0.0036);
+        put(67.5, 0.0038);
         put(90.0, 0.0037);
     }};
 
@@ -168,9 +168,9 @@ public class ConfigConstants {
         put(70.0, 2350.0);
         put(85.0, 2400.0);
         put(95.0, 2450.0);
-        put(113.0, 2500.0);
+        put(113.0, 2600.0);
         put(140.0, 2900.0);
-        put(170.0, 3150.0);
+        put(170.0, 3200.0);
     }};
 
     //Vision
@@ -184,10 +184,10 @@ public class ConfigConstants {
     public static final Pose GOAL_BLUE = new Pose(144,144);
     public static final Pose GOAL_RED = new Pose(144,0);
 
-    public static final Pose targetPointFarBlue = new Pose(136,136);
+    public static final Pose targetPointFarBlue = new Pose(136,134);
     public static final Pose targetPointCloseBlue = new Pose(133,133);
 
-    public static final Pose targetPointFarRed = new Pose(133,13);
+    public static final Pose targetPointFarRed = new Pose(136,8);
     public static final Pose targetPointCloseRed = new Pose(133,9);
 
 
