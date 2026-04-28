@@ -40,21 +40,22 @@ import java.util.function.Consumer;
 
 //TODO
 //Alignment on field
-//Write vision test
+//⌛ Write vision test
 //Fixed angle driving
 //Shooter edge case (shooter blocker)
 //1 inch back button
 //Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
 //Only drive when we have the motif
 //Check transition auto -> teleop
-//Check init rules
-//Reset button for everything
+//⌛ Check init rules
+//⌛ Reset button for everything
 //Limelight ball detection max & min
 //✅ If statement for command scheduler
 //Limelight relocalization
-//PREMATCH update hardware & software devices
+//⌛ PREMATCH update hardware & software devices
 //Remove telemetry, logging, dashboard
 //Drive into balls slowly (auto)
+//Better drive to balls
 
 
 
@@ -346,36 +347,13 @@ public class Robot {
     }
 
     public void doDashboard(TelemetryPacket packet) {
-        packet.put("currentRPM", shooter.getShooterMotor().getRPM());
+      /*  packet.put("currentRPM", shooter.getShooterMotor().getRPM());
         packet.put("targetRPM", shooter.getTargetShooterRPM() + shooter.adder);
         packet.put("max", 3200);
         packet.put("min", 2600);
-       // packet.put("bang", shooter.droppedActivateBangBang ? 3000 : 200);
-        packet.put("volt", chassis.getVoltageScalar());
-        /*packet.put("distance", Math.hypot(limelightCamera.getPedroPose().getX() - follower.getPose().getX(), limelightCamera.getPedroPose().getY() - follower.getPose().getY()));
-        packet.put("realx", follower.getPose().getX());
-        packet.put("realy", follower.getPose().getY());
-        packet.put("x", limelightCamera.xPos.getKalmanEstimate());
-        packet.put("y", limelightCamera.yPos.getKalmanEstimate());*/
-      //  packet.put("hue", lindexer.getLindexerColor().getDistance());
-       // packet.put("ball", intake.getArtifactSensor().getDistanceList().mode());
-      //  packet.put("dist", lindexer.getLindexerColor().getDistance());
-        //packet.put("hue", lindexer.getLindexerColor().getHue());
-       // packet.put("hue", lindexer.getLindexerColor().getHue() > 240 ? 1 : 0);
-        //packet.put("dist", lindexer.getLindexerColor().getDistance() < 5 ? 1 : 0);
-        /*if (lindexer.getLindexerColor().distance < 3.4) {
-            packet.put("dist", 1);
-        }
-        else {
-           packet.put("dist", 0);
-        }
-        if (lindexer.getLindexerColor().hue > 180) {
-            packet.put("hue", 1);
-        }
-        else {
-            packet.put("hue", 0);
-        }*/
-       // packet.put("volt", transfer.getTransferMotor().getCurrent());
+
+        packet.put("volt", chassis.getVoltageScalar());*/
+
 
     }
     public void log(String tag, String message) {

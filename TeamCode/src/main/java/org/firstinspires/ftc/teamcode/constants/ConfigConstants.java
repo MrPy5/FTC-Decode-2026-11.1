@@ -35,6 +35,7 @@ public class ConfigConstants {
     public static final String INTAKE_LIFTER = "intake lifter";
     public static final String GREEN_WHEEL = "transfer motor";
     public static final String ARDUCAM = "ardu cam";
+    public static final String LIMELIGHT = "limelight";
     public static final String TRANSFER_BLOCKER = "transfer blocker";
     public static final String ASCENT_LEFT = "ascent left";
     public static final String ASCENT_RIGHT = "ascent right";

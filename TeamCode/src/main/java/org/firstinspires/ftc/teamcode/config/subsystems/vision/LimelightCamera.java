@@ -52,7 +52,7 @@ public class LimelightCamera {
         this.hardwareMap = hardwareMap;
         this.robot = robot;
 
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = hardwareMap.get(Limelight3A.class, ConfigConstants.LIMELIGHT);
 
 
         limelight.pipelineSwitch(0);

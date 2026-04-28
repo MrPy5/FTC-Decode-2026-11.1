@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -66,8 +67,17 @@ public class PreMatch extends LinearOpMode {
     Servo leftAscent;
     Servo rightAscent;
 
-    RevColorSensorV3 colorSensorV3;
+    Servo sl;
+    Servo sr;
+
+    Servo rgb;
+
+    RevColorSensorV3 colorSensorV3Left;
+    RevColorSensorV3 colorSensorV3Right;
+    RevColorSensorV3 colorSensorV3Center;
     DigitalChannel distance;
+
+    Limelight3A limelight3A;
 
     @Override
     public void runOpMode() {
@@ -92,8 +102,17 @@ public class PreMatch extends LinearOpMode {
         leftAscent = hardwareMap.get(Servo.class, ConfigConstants.ASCENT_LEFT);
         rightAscent = hardwareMap.get(Servo.class, ConfigConstants.ASCENT_RIGHT);
 
-        colorSensorV3 = hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT);
+        colorSensorV3Left = hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_LEFT);
+        colorSensorV3Right = hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_RIGHT);
+        colorSensorV3Center = hardwareMap.get(RevColorSensorV3.class, ConfigConstants.LINDEX_COLOR_CENTER);
         distance = hardwareMap.get(DigitalChannel.class, ConfigConstants.DIGITAL_DISTANCE);
+
+        sl = hardwareMap.get(Servo.class, ConfigConstants.TURRET_LEFT);
+        sr = hardwareMap.get(Servo.class, ConfigConstants.TURRET_RIGHT);
+
+        rgb = hardwareMap.get(Servo.class, ConfigConstants.RGB_INDICATOR);
+
+        limelight3A = hardwareMap.get(Limelight3A.class, ConfigConstants.LIMELIGHT);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -125,12 +144,29 @@ public class PreMatch extends LinearOpMode {
 
         while (!gamepad1.ps);
 
-        sml.setPower(0.5);
+        sr.setPosition(0.8);
         sleep(1000);
+        sr.setPosition(0.5);
+        sleep(1000);
+        sl.setPosition(0.3);
+        sleep(1000);
+        sl.setPosition(0.5);
+
+        while (!gamepad1.ps);
+
+        sml.setPower(0.5);
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        while (timer.milliseconds() < 1000) {
+            telemetry.addData("rpm", sml.getCurrentPosition());
+        }
         sml.setPower(0);
         sleep(2000);
         smr.setPower(0.5);
-        sleep(1000);
+        timer.reset();
+        while (timer.milliseconds() < 1000) {
+            telemetry.addData("rpm", smr.getCurrentPosition());
+        }
         smr.setPower(0);
 
         while (!gamepad1.ps);
@@ -172,13 +208,31 @@ public class PreMatch extends LinearOpMode {
         sleep(1000);
 
         while(!gamepad1.ps) {
-            telemetry.addData("distance", colorSensorV3.getDistance(DistanceUnit.CM));
+            telemetry.addData("left", colorSensorV3Left.getDistance(DistanceUnit.CM));
+            telemetry.addData("right", colorSensorV3Right.getDistance(DistanceUnit.CM));
+            telemetry.addData("center", colorSensorV3Center.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
+
         sleep(1000);
 
         while(!gamepad1.ps) {
             telemetry.addData("ball in?", distance.getState());
+            telemetry.update();
+        }
+
+        sleep(1000);
+
+        double position = 0;
+        while(!gamepad1.ps) {
+            position += 0.01;
+            rgb.setPosition(position);
+        }
+
+        sleep(1000);
+
+        while(!gamepad1.ps) {
+            telemetry.addData("limelight", limelight3A.getStatus().getFps());
             telemetry.update();
         }
 

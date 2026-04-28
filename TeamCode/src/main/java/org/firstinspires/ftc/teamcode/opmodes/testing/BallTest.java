@@ -5,6 +5,7 @@ import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
 //take out reset pose button in robot
 
 @TeleOp(name="Ball Test")
-
+@Disabled
 public class BallTest extends LinearOpMode {
 
         @Override

@@ -136,7 +136,6 @@ public class Lindexer {
     public void moveToNextBall(Color desiredColor) {
         if (matchesColor(centerBall, desiredColor)){
             centerBall = Color.EMPTY;
-            robot.log("CENTER", centerBall.toString());
 
         }
         else if (matchesColor(leftBall, desiredColor)) {
@@ -221,10 +220,6 @@ public class Lindexer {
         rightBall = lindexerColorCenter.getBall();
         centerBall = assignCenterBall(leftBall, rightBall);
 
-        robot.log("BALL_COLOR", leftBall.toString());
-        robot.log("BALL_COLOR", rightBall.toString());
-        robot.log("BALL_COLOR", centerBall.toString());
-        robot.log("BALL_COLOR", "end");
 
         Color nextBall = robot.classifier.getNextColor(robot.getMotif());
         robot.transfer.intakeTransfer();

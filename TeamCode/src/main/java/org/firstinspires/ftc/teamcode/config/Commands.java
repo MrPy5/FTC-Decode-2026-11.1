@@ -50,6 +50,13 @@ public class Commands {
         );
 
         resetEverything = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.motorStopped = false),
+                new InstantCommand(() -> robot.transfer.startChecking = false),
+                new InstantCommand(() -> robot.lindexer.setIndex(false)),
+                new InstantCommand(() -> robot.lindexer.empty()),
+                new InstantCommand(() -> robot.classifier.reset()),
+                new InstantCommand(() -> robot.shooter.setShooting(false)),
+
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new Wait(300),
                 new InstantCommand(() -> robot.ascent.descend()),
