@@ -164,8 +164,8 @@ public class ConfigConstants {
     public static final double DOWN_LEFT = 0.385;
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
-        put(0.0, 2300.0);
-        put(50.0, 2250.0);
+        put(0.0, 2200.0);
+        put(50.0, 2200.0);
         put(70.0, 2350.0);
         put(85.0, 2400.0);
         put(95.0, 2450.0);
@@ -177,8 +177,8 @@ public class ConfigConstants {
     //Vision
 
 
-    public static final Pose BLUE_FIELD_RESET = new Pose(1.5, 11.5, 0);
-    public static final Pose RED_FIELD_RESET = new Pose(1.5, 136, 0);
+    public static final Pose BLUE_FIELD_RESET = new Pose(8, 31.5, 0);
+    public static final Pose RED_FIELD_RESET = new Pose(8, 109, 0);
 
 
     //Positions

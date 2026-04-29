@@ -29,8 +29,9 @@ public class Commands {
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.intake.drop()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
-                new Wait(300),
+                new Wait(100),
                 new InstantCommand(() -> robot.shooter.block()),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(600),
                 new InstantCommand(() -> robot.transfer.startCheckingNow()));

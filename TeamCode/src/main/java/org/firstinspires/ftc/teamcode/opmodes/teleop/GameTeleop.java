@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.Color;
 import org.firstinspires.ftc.teamcode.config.util.CyclingList;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
+import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
 import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 
 //shooting
@@ -58,6 +59,9 @@ public class GameTeleop extends LinearOpMode {
             boolean parkStarted = false;
             boolean trigReleased = false;
             boolean trigPressedLast = false;
+
+            double xPark = 0;
+            double yPark = 0;
 
             //reset follower back to full speed
             robot.initTeleop();
@@ -148,18 +152,18 @@ public class GameTeleop extends LinearOpMode {
                         robot.turret.setAngle(90);
                         robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
                         robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
-                        c1.touchpadWasPressed();
+                        c2.touchpadWasPressed();
 
                         if (robot.getAlliance() == Alliance.BLUE) {
                             robot.follower.followPath(robot.follower.pathBuilder()
-                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 38, 3.13)))
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28, 38, 3.13)))
                                     .setConstantHeadingInterpolation(3.14)
                                     .build());
                             parkStarted = true;
                         }
                         else {
                             robot.follower.followPath(robot.follower.pathBuilder()
-                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(25, 109, 3.13)))
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28, 109, 3.13)))
                                     .setConstantHeadingInterpolation(3.14)
                                     .build());
                             parkStarted = true;
@@ -167,11 +171,14 @@ public class GameTeleop extends LinearOpMode {
                     }
                     else {
                         robot.scheduler.clear();
+                        robot.chassis.parkHeading = 180;
                         robot.ascent.getAscentLeft().setPosition(ConfigConstants.DESCEND_LEFT);
                         robot.ascent.getAscentRight().setPosition(ConfigConstants.DESCEND_RIGHT);
                         robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                         robot.setRobotState(RobotState.INTAKE);
                         robot.turret.setState(Turret.TurretState.TRACK);
+                        robot.transfer.motorStopped = false;
+                        robot.shooter.setShooting(false);
 
                         if (motifMode) {
                             robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
@@ -183,12 +190,17 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() == RobotState.PARK) {
-                    if (c1.touchpadWasPressed()) {
+                    if (c2.touchpadWasPressed()) {
+                        robot.follower.breakFollowing();
+                        robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         if (robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
                             robot.ascent.ascend();
+
                         }
                         else {
                             robot.ascent.descend();
+                            robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
+                            robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
                         }
                     }
                 }
@@ -217,31 +229,48 @@ public class GameTeleop extends LinearOpMode {
                 //RPM addition
                 if (robot.getRobotState() == RobotState.PARK) {
                     if (robot.getAlliance() == Alliance.BLUE) {
-                        if (c1.dpadLeftWasPressed()) {
+                        if (c2.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 180;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c1.dpadDownWasPressed()) {
+                        if (c2.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 270;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
+
                         }
-                        if (c1.dpadUpWasPressed()) {
+                        if (c2.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 90;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c1.dpadRightWasPressed()) {
+                        if (c2.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 0;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
                     }
                     else {
-                        if (c1.dpadLeftWasPressed()) {
+                        if (c2.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 0;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c1.dpadDownWasPressed()) {
+                        if (c2.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 90;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c1.dpadUpWasPressed()) {
+                        if (c2.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 270;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c1.dpadRightWasPressed()) {
+                        if (c2.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 180;
+                            robot.follower.breakFollowing();
+                            robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
                     }
                 }
@@ -313,25 +342,26 @@ public class GameTeleop extends LinearOpMode {
                     parkStarted = false;
                 }
 
-
+                boolean c2Triangle = c2.triangleWasPressed();
+                boolean c2Cross = c2.crossWasPressed();
 
                 //Motif mode (# of balls on ramp)
-                if (c2.triangleWasPressed()) {
+                if (c2Triangle && robot.getRobotState() != RobotState.PARK) {
                     robot.classifier.addBall();
                     gamepad2.rumble(250);
                 }
 
-                if (c2.crossWasPressed()) {
+                if (c2Cross && robot.getRobotState() != RobotState.PARK) {
                     robot.classifier.subtractBall();
                     gamepad2.rumble(1000);
                 }
 
                 if (robot.getRobotState() == RobotState.PARK) {
-                    if (c2.dpadRightWasPressed()) {
+                    if (c1.dpadRightWasPressed()) {
                         robot.chassis.parkHeadingOffset += 3;
                         gamepad2.rumble(0, 1, 200);
                     }
-                    if (c2.dpadLeftWasPressed()) {
+                    if (c1.dpadLeftWasPressed()) {
                         robot.chassis.parkHeadingOffset -= 3;
                         gamepad2.rumble(1, 0, 200);
                     }
@@ -347,7 +377,7 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
 
-                if (c2.psWasPressed()) {
+                if (c2.leftTriggerWasPressed()) {
                     if (robot.getAlliance() == Alliance.RED) {
                         robot.follower.setPose(ConfigConstants.RED_FIELD_RESET);
                     }
@@ -361,17 +391,69 @@ public class GameTeleop extends LinearOpMode {
                     robot.setRobotState(RobotState.INTAKE);
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
-                if (c2.touchpad) {
+                if (c2.right_trigger_pressed && robot.getRobotState() != RobotState.PARK) {
                     if (robot.limelightCamera.getTagCount() != 0) {
                         robot.limelightCamera.recordPosition();
                         robot.indicator.alert = true;
                     }
 
                 }
-                if (c2.touchpadWasReleased()) {
+                if (c2.rightTriggerWasReleased() && robot.getRobotState() != RobotState.PARK) {
                     robot.indicator.alert = false;
                     robot.follower.setPose(robot.limelightCamera.avgPose());
-                    robot.chassis.degreeOffset = 0;
+                    robot.chassis.degreeOffset = 2;
+                }
+
+                if (robot.getRobotState() == RobotState.PARK) {
+                    boolean triangle = c2Triangle;
+                    boolean cross = c2Cross;
+                    boolean square = c2.squareWasPressed();
+                    boolean circle = c2.circleWasPressed();
+                    if (robot.getAlliance() == Alliance.BLUE) {
+                        if (triangle) {
+                            yPark += 1.5;
+                        }
+                        if (cross) {
+                            yPark -= 1.5;
+                        }
+                        if (square) {
+                            xPark -= 1.5;
+                        }
+                        if (circle) {
+                            xPark += 1.5;
+                        }
+                    }
+                    else {
+                        if (triangle) {
+                            yPark -= 1.5;
+                        }
+                        if (cross) {
+                            yPark += 1.5;
+                        }
+                        if (square) {
+                            xPark += 1.5;
+                        }
+                        if (circle) {
+                            xPark -= 1.5;
+                        }
+                    }
+                    if (triangle || cross || square || circle) {
+                        if (robot.getAlliance() == Alliance.BLUE) {
+                            robot.follower.followPath(robot.follower.pathBuilder()
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28 + xPark, 38 + yPark, Math.toRadians(robot.chassis.parkHeading))))
+                                    .setConstantHeadingInterpolation( Math.toRadians(robot.chassis.parkHeading + robot.chassis.parkHeadingOffset))
+                                    .build());
+                            parkStarted = true;
+                        } else {
+                            robot.follower.followPath(robot.follower.pathBuilder()
+                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28 + xPark, 109 + yPark,  Math.toRadians(robot.chassis.parkHeading))))
+                                    .setConstantHeadingInterpolation( Math.toRadians(robot.chassis.parkHeading + robot.chassis.parkHeadingOffset))
+                                    .build());
+                            parkStarted = true;
+                        }
+                    }
+
+
                 }
 
                 if (trigReleased) {

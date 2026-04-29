@@ -38,7 +38,7 @@ public class Chassis {
     public boolean noSticks = false;
     public boolean turnCompleted = true;
     public double targetHeading = 0;
-    public double degreeOffset = 0;
+    public double degreeOffset = 2;
     public double parkHeading = 180;
     public double parkHeadingOffset = 0;
     public ElapsedTime turnTimer = new ElapsedTime();
@@ -161,11 +161,12 @@ public class Chassis {
         double drivePower;
         double strafePower;
         double turnPower;
-        if (robot.getRobotState() == Robot.RobotState.PARK) {
+        if (robot.getRobotState() == Robot.RobotState.PARK || c1.left_trigger_pressed) {
             driveDampeneing = 0.15;
             strafeDampening = 0.2;
             turnDampening = 0.1;
         }
+
 
         double headingRad = Math.toRadians(parkHeading - 90);
         double y = -c1.left_stick_y * driveDampeneing;   // forward/back
