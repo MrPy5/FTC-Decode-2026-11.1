@@ -39,23 +39,38 @@ import java.util.function.Consumer;
 
 
 //TODO
-//Alignment on field
+
+//Battery wire
+//Color sensor wire
+//Battery cover
+//Power switch cover?
+
 //⌛ Write vision test
-//Fixed angle driving
-//Shooter edge case (shooter blocker)
-//1 inch back button
-//Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
-//Only drive when we have the motif
-//Check transition auto -> teleop
+//⌛ PREMATCH update hardware & software devices
 //⌛ Check init rules
 //⌛ Reset button for everything
-//Limelight ball detection max & min
 //✅ If statement for command scheduler
+//⌛ Shooter edge case (shooter blocker)
+//⌛ Limelight ball detection max & min
+
 //Limelight relocalization
-//⌛ PREMATCH update hardware & software devices
-//Remove telemetry, logging, dashboard
+//Turret heading in auto
+//Auto timeout
 //Drive into balls slowly (auto)
+//Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
+//Check transition auto -> teleop
+//Only drive when we have the motif
 //Better drive to balls
+
+
+//Fixed angle driving
+
+//1 inch back button
+//1 inch buttons park
+
+//Remove telemetry, logging, dashboard
+//Alignment on field
+
 
 
 

@@ -165,7 +165,7 @@ public class ConfigConstants {
 
     public static final Map<Double, Double> RPM_MAP = new HashMap<Double, Double>() {{
         put(0.0, 2300.0);
-        put(50.0, 2300.0);
+        put(50.0, 2250.0);
         put(70.0, 2350.0);
         put(85.0, 2400.0);
         put(95.0, 2450.0);

@@ -89,7 +89,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-               // new Wait(200),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -113,7 +113,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                //new Wait(200),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -136,7 +136,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-                //new Wait(200),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -171,7 +171,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
-               // new Wait(200),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -218,6 +218,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitParametric(robot.follower),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())

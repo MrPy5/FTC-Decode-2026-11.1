@@ -56,6 +56,8 @@ public class GameTeleop extends LinearOpMode {
             boolean motifMode = false;
             boolean startedShooting = false;
             boolean parkStarted = false;
+            boolean trigReleased = false;
+            boolean trigPressedLast = false;
 
             //reset follower back to full speed
             robot.initTeleop();
@@ -102,39 +104,38 @@ public class GameTeleop extends LinearOpMode {
                 else {
                     robot.turret.setSOTM(false);
                 }
+                if (robot.getRobotState() != RobotState.PARK) {
+                    if (robot.transfer.motorStopped && robot.getRobotState() != RobotState.SHOOT) {
+                        robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
+                        robot.setRobotState(RobotState.SHOOT);
 
-                if (((c2.leftBumperWasPressed()) && robot.getRobotState() != RobotState.SHOOT) || robot.transfer.motorStopped) {
-                    robot.scheduler.clear();
-                    robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
-                    robot.setRobotState(RobotState.SHOOT);
+                        if (motifMode) {
+                            robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
+                        } else {
+                            robot.shooter.unblock();
+                        }
 
-                    if (motifMode) {
-                        robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
+                        robot.transfer.motorStopped = false;
+
                     }
-                    else {
-                        robot.shooter.unblock();
-                    }
-
-                    robot.transfer.motorStopped = false;
-
-                }
 
                     //Intake
-                else if ((c1.rightTriggerWasReleased()) && robot.getRobotState() != RobotState.INTAKE) {
-                    robot.scheduler.clear();
-                    robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
-                    robot.setRobotState(RobotState.INTAKE);
+                    if ((trigReleased) && robot.getRobotState() != RobotState.INTAKE) {
 
-                    if (motifMode) {
-                        robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
-                        robot.lindexer.empty();
+                        robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
+                        robot.setRobotState(RobotState.INTAKE);
+
+                        if (motifMode) {
+                            robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds());
+                            robot.lindexer.empty();
+
+                        } else {
+                            robot.transfer.unblock();
+                        }
+                        robot.shooter.setShooting(false);
+                        robot.transfer.motorStopped = false;
 
                     }
-                    else {
-                        robot.transfer.unblock();
-                    }
-                    robot.shooter.setShooting(false);
-
                 }
 
                 if (c1.psWasPressed()) {
@@ -371,6 +372,20 @@ public class GameTeleop extends LinearOpMode {
                     robot.indicator.alert = false;
                     robot.follower.setPose(robot.limelightCamera.avgPose());
                     robot.chassis.degreeOffset = 0;
+                }
+
+                if (trigReleased) {
+                    trigReleased = false;
+                }
+
+                if (c1.right_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                    trigPressedLast = true;
+                }
+                else {
+                    if (trigPressedLast) {
+                        trigReleased = true;
+                        trigPressedLast = false;
+                    }
                 }
 
                 //update everything

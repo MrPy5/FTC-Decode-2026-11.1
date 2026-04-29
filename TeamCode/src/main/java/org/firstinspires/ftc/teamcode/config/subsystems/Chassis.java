@@ -108,8 +108,8 @@ public class Chassis {
             if (robot.getAlliance() == BLUE) {
                 return Math.toDegrees(Math.atan2(ConfigConstants.targetPointCloseBlue.getY() - y, ConfigConstants.targetPointCloseBlue.getX() - x));
             } else {
-                double dx = ConfigConstants.targetPointCloseRed.getX() - x; //62
-                double dy = ConfigConstants.targetPointCloseRed.getY() - y; //-65
+                double dx = ConfigConstants.targetPointCloseRed.getX() - x;
+                double dy = ConfigConstants.targetPointCloseRed.getY() - y;
                 return Math.toDegrees(Math.atan2(dy, dx));
 
             }
@@ -166,9 +166,22 @@ public class Chassis {
             strafeDampening = 0.2;
             turnDampening = 0.1;
         }
-        drivePower = -c1.left_stick_y * driveDampeneing;
-        strafePower = -c1.left_stick_x * strafeDampening;
-        turnPower = -c1.right_stick_x * turnDampening;
+
+        double headingRad = Math.toRadians(parkHeading - 90);
+        double y = -c1.left_stick_y * driveDampeneing;   // forward/back
+        double x =  -c1.left_stick_x * strafeDampening;  // left/right strafe
+        double turn = -c1.right_stick_x * turnDampening;
+
+        if (false) {
+            drivePower  =  -(y * Math.cos(headingRad) + x * Math.sin(headingRad));
+            strafePower = -(-y * Math.sin(headingRad) + x * Math.cos(headingRad));
+            turnPower   = turn;
+        }
+        else {
+            drivePower = y;
+            strafePower = x;
+            turnPower = turn;
+        }
 
         if (c1.left_stick_x == 0 && c1.left_stick_y == 0) {
             noSticks = true;

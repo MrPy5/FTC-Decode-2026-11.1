@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.constants.ConfigConstants;
 //take out reset pose button in robot
 
 @TeleOp(name="Localization Test")
-
+@Disabled
 public class LocalizationTest extends LinearOpMode {
 
         @Override

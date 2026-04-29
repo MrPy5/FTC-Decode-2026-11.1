@@ -148,7 +148,8 @@ public class PreMatch extends LinearOpMode {
         sleep(1000);
         sr.setPosition(0.5);
         sleep(1000);
-        sl.setPosition(0.3);
+        sr.getController().pwmDisable();
+        sl.setPosition(0.8);
         sleep(1000);
         sl.setPosition(0.5);
 
@@ -159,6 +160,7 @@ public class PreMatch extends LinearOpMode {
         timer.reset();
         while (timer.milliseconds() < 1000) {
             telemetry.addData("rpm", sml.getCurrentPosition());
+            telemetry.update();
         }
         sml.setPower(0);
         sleep(2000);
@@ -166,6 +168,7 @@ public class PreMatch extends LinearOpMode {
         timer.reset();
         while (timer.milliseconds() < 1000) {
             telemetry.addData("rpm", smr.getCurrentPosition());
+            telemetry.update();
         }
         smr.setPower(0);
 
@@ -224,9 +227,12 @@ public class PreMatch extends LinearOpMode {
         sleep(1000);
 
         double position = 0;
+        double direction = 1;
         while(!gamepad1.ps) {
-            position += 0.01;
+            position += (0.01);
+
             rgb.setPosition(position);
+            sleep(100);
         }
 
         sleep(1000);

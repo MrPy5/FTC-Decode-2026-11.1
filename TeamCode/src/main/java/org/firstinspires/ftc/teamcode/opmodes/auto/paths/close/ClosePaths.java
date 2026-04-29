@@ -181,7 +181,7 @@ public class ClosePaths {
                 .build();
         gatePushToShoot1 = robot.follower.pathBuilder()
                 .addPath(new BezierLine(gatePush1Pose, shootPose))
-                .setConstantHeadingInterpolation(shootPose.getHeading())
+                .setLinearHeadingInterpolation(gatePush1Pose.getHeading(), shootPose.getHeading())
                 .build();
         scanMotif = robot.follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, detectPose))

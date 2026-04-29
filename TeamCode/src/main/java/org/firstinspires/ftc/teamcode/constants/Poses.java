@@ -15,8 +15,8 @@ public class Poses {
     public static final Pose parkPoseBlueClose = new Pose(107, 85.5, Math.toRadians(0));
     public static final Pose parkPoseBlueFar = new Pose(27.7, 111, Math.toRadians(90));
 
-    public static final Pose gateTurn1Blue = new Pose(71.6, 118, Math.toRadians(0));
-    public static final Pose gatePush1Blue = new Pose(71.6, 125, Math.toRadians(0));
+    public static final Pose gateTurn1Blue = new Pose(72, 118, Math.toRadians(0));
+    public static final Pose gatePush1Blue = new Pose(72, 125, Math.toRadians(0));
     public static final Pose gateTurn2Blue = new Pose(-2, 51.5, Math.toRadians(180));
     public static final Pose gatePush2Blue = new Pose(-2, 63.5, Math.toRadians(180));
 
@@ -61,8 +61,8 @@ public class Poses {
     public static final Pose parkPoseRedClose = new Pose(107, 56.5, Math.toRadians(0));
     public static final Pose parkPoseRedFar = new Pose(27.7, 31, Math.toRadians(-90));
 
-    public static final Pose gateTurn1Red = new Pose(71.6, 24, Math.toRadians(0));
-    public static final Pose gatePush1Red = new Pose(71.6, 17, Math.toRadians(0));
+    public static final Pose gateTurn1Red = new Pose(72, 24, Math.toRadians(0));
+    public static final Pose gatePush1Red = new Pose(72, 17, Math.toRadians(0));
     public static final Pose gateTurn2Red = new Pose(-2, 90.5, Math.toRadians(-180));
     public static final Pose gatePush2Red = new Pose(-2, 78.5, Math.toRadians(-180));
 
