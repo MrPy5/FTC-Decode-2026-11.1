@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public class Poses {
     //Blue
     public static final Pose startPoseBlueFar = new Pose(8.5, 88, 1.56);
-    public static final Pose startPoseBlueClose = new Pose(126, 115, 0.92);
+    public static final Pose startPoseBlueClose = new Pose(126.7, 114.6, 0.92);
 
     public static final Pose detectPoseBlue = new Pose(86, 85, Math.toRadians(-15));
 
@@ -51,7 +51,7 @@ public class Poses {
 
     //RED
     public static final Pose startPoseRedFar = new Pose(8.5, 54, -1.56);
-    public static final Pose startPoseRedClose = new Pose(126, 27, -0.92);
+    public static final Pose startPoseRedClose = new Pose(126.7, 25.6, -0.92);
 
     public static final Pose detectPoseRed = new Pose(86, 57, Math.toRadians(15));
 

@@ -82,7 +82,7 @@ public class GameTeleop extends LinearOpMode {
             robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.OFF);
 
             while (opModeIsActive()) {
-                loopTimer.reset();
+                //loopTimer.reset();
                 //Pull new gamepad values and freeze state
                 robot.updateGamepads();
                 c1 = robot.getC1();
@@ -102,7 +102,7 @@ public class GameTeleop extends LinearOpMode {
                     robot.intake.drop();
                 }
 
-                if (c1.left_trigger > ConfigConstants.TRIGGER_SENSITIVITY) {
+                if (c1.left_bumper) {
                     robot.turret.setSOTM(true);
                 }
                 else {
@@ -142,9 +142,10 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
 
-                if (c1.psWasPressed()) {
+                if (c1.touchpadWasPressed()) {
                     if (robot.getRobotState() != RobotState.PARK) {
                         robot.setRobotState(RobotState.PARK);
+                        robot.scheduler.clear();
                         robot.shooter.stop();
                         robot.intake.stopIntake();
                         robot.transfer.stop();
@@ -152,6 +153,7 @@ public class GameTeleop extends LinearOpMode {
                         robot.turret.setAngle(90);
                         robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
                         robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
+
                         c2.touchpadWasPressed();
 
                         if (robot.getAlliance() == Alliance.BLUE) {
@@ -473,25 +475,27 @@ public class GameTeleop extends LinearOpMode {
                 //update everything
                 robot.updateHardware();
                 robot.doDashboard();
-                loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
-                /*telemetry.addData("loop", loopTimes.average());
-                telemetry.addLine();*/
-                telemetry.addData("x", robot.follower.getPose().getX());
+                /*loopTimes.add(loopTimer.milliseconds(), robot.getMilliseconds());
+                telemetry.addData("loop", loopTimes.average());
+
+                 */
+               // telemetry.addLine();
+              /*  telemetry.addData("x", robot.follower.getPose().getX());
                 telemetry.addData("y", robot.follower.getPose().getY());
                 telemetry.addLine();
                 telemetry.addData("heading", Math.toDegrees(robot.follower.getHeading()));
                 telemetry.addData("math angle", robot.chassis.degreesAwayTurret(robot.chassis.turretPose()));
                 telemetry.addData("encoder angle", robot.turret.getEncoderAngle());
                 telemetry.addData("target angle", robot.turret.getAngle());
-                telemetry.addLine();
-                telemetry.addData("distance", robot.chassis.predictedInchesAway());
+                telemetry.addLine();*/
+                //telemetry.addData("distance", robot.chassis.predictedInchesAway());
                 telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
                 telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
                 telemetry.addLine();
                 telemetry.addData("offset", robot.chassis.degreeOffset);
                 telemetry.addLine();
-                telemetry.addData("rpm", robot.shooter.shooterRPM.average());
-                telemetry.addLine();
+                //telemetry.addData("rpm", robot.shooter.shooterRPM.average());
+                //telemetry.addLine();
                 telemetry.addData("motifMode", motifMode);
                 telemetry.addData("mode", robot.getRobotState());
                 telemetry.addLine();

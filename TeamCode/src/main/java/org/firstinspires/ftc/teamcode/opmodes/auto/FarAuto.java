@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.config.Robot;
 import org.firstinspires.ftc.teamcode.config.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.config.subsystems.vision.LimelightCamera;
+import org.firstinspires.ftc.teamcode.config.util.Alliance;
 import org.firstinspires.ftc.teamcode.config.util.OpMode;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.ConditionalCommand;
 import org.firstinspires.ftc.teamcode.config.util.scheduler.InstantCommand;
@@ -57,7 +58,12 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.turret.setState(Turret.TurretState.TRACK);
         robot.limelightCamera.switchToBallDetection();
         robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.BALL);
-        robot.chassis.degreeOffset = -0.5;
+        if (robot.getAlliance() == Alliance.BLUE) {
+            robot.chassis.degreeOffset = -0.5;
+        }
+        else {
+            robot.chassis.degreeOffset = 3.5;
+        }
         SequentialCommand shootPreload = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2970)),
 
@@ -201,8 +207,15 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                                 })
                         ),
                         new SequentialCommand(
+                                new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToGateOverflow)),
+                                new WaitUntil(new BooleanSupplier() {
+                                    @Override
+                                    public boolean getAsBoolean() {
+                                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.15 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
+                                    }
+                                }),
                                 new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
-                                new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
+                                new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlow)),
                                 new WaitUntil(new BooleanSupplier() {
                                     @Override
                                     public boolean getAsBoolean() {
@@ -255,13 +268,16 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         pathSchedule.update(robot.getMilliseconds());
         robot.update();
         robot.updateHardware();
-        telemetry.addData("python", robot.limelightCamera.ballPose.getX());
-        telemetry.addData("ball", robot.limelightCamera.getPython()[0]);
-        telemetry.update();
     }
     @Override
     public void stop() {
-        robot.chassis.degreeOffset = 2;
+        if (robot.getAlliance() == Alliance.BLUE) {
+            robot.chassis.degreeOffset = -0.5;
+        }
+        else {
+            robot.chassis.degreeOffset = 2;
+        }
+
         robot.stop();
     }
 

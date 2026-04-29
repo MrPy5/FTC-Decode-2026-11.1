@@ -50,8 +50,11 @@ import java.util.function.Consumer;
 //⌛ Check init rules
 //⌛ Reset button for everything
 //✅ If statement for command scheduler
+//✅ Alignment on field
+//✅ 1 inch buttons park
 //⌛ Shooter edge case (shooter blocker)
 //⌛ Limelight ball detection max & min
+//✅ Remove telemetry, logging, dashboard
 
 //Limelight relocalization
 //Turret heading in auto
@@ -62,14 +65,14 @@ import java.util.function.Consumer;
 //Only drive when we have the motif
 //Better drive to balls
 
+//REMAKE CONTROL SHEET
 
 //Fixed angle driving
 
 //1 inch back button
-//✅ 1 inch buttons park
 
-//Remove telemetry, logging, dashboard
-//Alignment on field
+
+
 
 
 
