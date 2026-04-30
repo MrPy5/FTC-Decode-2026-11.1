@@ -67,7 +67,6 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         );
         SequentialCommand shootPreload = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2350)),
-                new InstantCommand(() -> robot.turret.setAngle(0)),
                 new InstantCommand(() -> robot.intake.intake()),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -86,13 +85,12 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         );
         SequentialCommand spike1 = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2300)),
-                new InstantCommand(() -> robot.turret.setAngle(-40)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike1)),
                 new WaitParametric(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.5)),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.4)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike1)),
                 new WaitParametric(robot.follower),
                 new InstantCommand(() -> robot.follower.setMaxPower(0.7)),
@@ -180,10 +178,6 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.update();
         robot.updateHardware();
 
-        telemetry.addData("motif", robot.getMotif());
-        telemetry.addData("mode", robot.limelightCamera.getMode());
-        telemetry.addData("size", robot.limelightCamera.getSize());
-        telemetry.update();
 
     }
     @Override

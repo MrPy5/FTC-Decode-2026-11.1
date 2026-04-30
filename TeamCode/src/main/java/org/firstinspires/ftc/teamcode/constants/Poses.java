@@ -62,12 +62,12 @@ public class Poses {
     public static final Pose parkPoseRedFar = new Pose(27.7, 31, Math.toRadians(-90));
 
     public static final Pose gateTurn1Red = new Pose(72, 24, Math.toRadians(0));
-    public static final Pose gatePush1Red = new Pose(72, 17, Math.toRadians(0));
+    public static final Pose gatePush1Red = new Pose(72, 16, Math.toRadians(0));
     public static final Pose gateTurn2Red = new Pose(-2, 90.5, Math.toRadians(-180));
     public static final Pose gatePush2Red = new Pose(-2, 78.5, Math.toRadians(-180));
 
     public static final Pose spike1PoseRed = new Pose(82, 44, -1.56);
-    public static final Pose spike1EndPoseRed = new Pose(82, 19, -1.56);
+    public static final Pose spike1EndPoseRed = new Pose(82, 18, -1.56);
 
     public static final Pose spike2PoseRed = new Pose(58, 44, -1.56);
     public static final Pose spike2EndPoseRed = new Pose(58, 22, -1.56);

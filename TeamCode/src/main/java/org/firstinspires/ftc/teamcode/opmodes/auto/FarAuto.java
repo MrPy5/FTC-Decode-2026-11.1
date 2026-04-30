@@ -152,27 +152,12 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToHP)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                    }
-                }),
+                new WaitParametricOrThreeBalls(robot.follower, robot),
                 new Wait(200),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.backupHP)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                    }
-                }),
+                new WaitParametricOrThreeBalls(robot.follower, robot),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.returnHP)),
-                new WaitUntil(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                    }
-                }),
+                new WaitParametricOrThreeBalls(robot.follower, robot),
                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -191,37 +176,17 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                         () -> robot.limelightCamera.ball.mode() == 1,
                         new SequentialCommand(
                                 new InstantCommand(() -> robot.follower.followPath(robot.limelightCamera.getBallPath())),
-                                new WaitUntil(new BooleanSupplier() {
-                                    @Override
-                                    public boolean getAsBoolean() {
-                                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.15 && robot.follower.getVelocity().getMagnitude() < 5) || robot.intake.getArtifactSensor().hasBall();
-                                    }
-                                }),
+                                new WaitParametricOrThreeBalls(robot.follower, robot),
                                 new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
                                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
-                                new WaitUntil(new BooleanSupplier() {
-                                    @Override
-                                    public boolean getAsBoolean() {
-                                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.15 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                                    }
-                                })
+                                new WaitParametricOrThreeBalls(robot.follower, robot)
                         ),
                         new SequentialCommand(
                                 new InstantCommand(() -> robot.follower.followPath(FarPaths.driveToGateOverflow)),
-                                new WaitUntil(new BooleanSupplier() {
-                                    @Override
-                                    public boolean getAsBoolean() {
-                                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.15 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                                    }
-                                }),
+                                new WaitParametricOrThreeBalls(robot.follower, robot),
                                 new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
                                 new InstantCommand(() -> robot.follower.followPath(FarPaths.gateOverFlow)),
-                                new WaitUntil(new BooleanSupplier() {
-                                    @Override
-                                    public boolean getAsBoolean() {
-                                        return robot.follower.isRobotStuck() || robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.15 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
-                                    }
-                                })
+                                new WaitParametricOrThreeBalls(robot.follower, robot)
                         )
                 ),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),

@@ -159,7 +159,7 @@ public class LimelightCamera {
                 return motif;
             }
             else {
-                return null;
+                return Motif.GPP;
             }
 
         }

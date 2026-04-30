@@ -46,26 +46,29 @@ import java.util.function.Consumer;
 //Power switch cover?
 
 //⌛ Write vision test
-//⌛ PREMATCH update hardware & software devices
-//⌛ Check init rules
+//✅ PREMATCH update hardware & software devices
+//✅ Check init rules
 //⌛ Reset button for everything
 //✅ If statement for command scheduler
 //✅ Alignment on field
 //✅ 1 inch buttons park
-//⌛ Shooter edge case (shooter blocker)
-//⌛ Limelight ball detection max & min
+//✅ Shooter edge case (shooter blocker)
+//✅ Limelight ball detection max & min
 //✅ Remove telemetry, logging, dashboard
+//⌛ REMAKE CONTROL SHEET
+//⌛ Turret heading in auto
+//⌛ Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
 
 //Limelight relocalization
-//Turret heading in auto
+
 //Auto timeout
 //Drive into balls slowly (auto)
-//Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
+
 //Check transition auto -> teleop
 //Only drive when we have the motif
 //Better drive to balls
 
-//REMAKE CONTROL SHEET
+
 
 //Fixed angle driving
 

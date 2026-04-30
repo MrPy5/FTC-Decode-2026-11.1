@@ -124,7 +124,7 @@ public class GameTeleop extends LinearOpMode {
                     }
 
                     //Intake
-                    if ((trigReleased) && robot.getRobotState() != RobotState.INTAKE) {
+                    if (trigReleased /*c2.rightTriggerWasPressed()*/ && robot.getRobotState() != RobotState.INTAKE) {
 
                         robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                         robot.setRobotState(RobotState.INTAKE);
@@ -136,13 +136,14 @@ public class GameTeleop extends LinearOpMode {
                         } else {
                             robot.transfer.unblock();
                         }
+                      //  robot.shooter.block(); // change trig released
                         robot.shooter.setShooting(false);
                         robot.transfer.motorStopped = false;
 
                     }
                 }
 
-                if (c1.touchpadWasPressed()) {
+                if (c1.psWasPressed()) {
                     if (robot.getRobotState() != RobotState.PARK) {
                         robot.setRobotState(RobotState.PARK);
                         robot.scheduler.clear();
@@ -154,9 +155,9 @@ public class GameTeleop extends LinearOpMode {
                         robot.ascent.getAscentLeft().setPosition(ConfigConstants.DOWN_LEFT);
                         robot.ascent.getAscentRight().setPosition(ConfigConstants.DOWN_RIGHT);
 
-                        c2.touchpadWasPressed();
+                        c1.touchpadWasPressed();
 
-                        if (robot.getAlliance() == Alliance.BLUE) {
+                       /* if (robot.getAlliance() == Alliance.BLUE) {
                             robot.follower.followPath(robot.follower.pathBuilder()
                                     .addPath(new BezierLine(robot.follower.getPose(), new Pose(28, 38, 3.13)))
                                     .setConstantHeadingInterpolation(3.14)
@@ -169,7 +170,7 @@ public class GameTeleop extends LinearOpMode {
                                     .setConstantHeadingInterpolation(3.14)
                                     .build());
                             parkStarted = true;
-                        }
+                        }*/
                     }
                     else {
                         robot.scheduler.clear();
@@ -192,7 +193,7 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() == RobotState.PARK) {
-                    if (c2.touchpadWasPressed()) {
+                    if (c1.touchpadWasPressed()) {
                         robot.follower.breakFollowing();
                         robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         if (robot.ascent.getAscentState() == Ascent.AscentState.NOTASCENDED) {
@@ -231,45 +232,45 @@ public class GameTeleop extends LinearOpMode {
                 //RPM addition
                 if (robot.getRobotState() == RobotState.PARK) {
                     if (robot.getAlliance() == Alliance.BLUE) {
-                        if (c2.dpadLeftWasPressed()) {
+                        if (c1.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 180;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c2.dpadDownWasPressed()) {
+                        if (c1.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 270;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
 
                         }
-                        if (c2.dpadUpWasPressed()) {
+                        if (c1.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 90;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c2.dpadRightWasPressed()) {
+                        if (c1.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 0;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
                     }
                     else {
-                        if (c2.dpadLeftWasPressed()) {
+                        if (c1.dpadLeftWasPressed()) {
                             robot.chassis.parkHeading = 0;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c2.dpadDownWasPressed()) {
+                        if (c1.dpadDownWasPressed()) {
                             robot.chassis.parkHeading = 90;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c2.dpadUpWasPressed()) {
+                        if (c1.dpadUpWasPressed()) {
                             robot.chassis.parkHeading = 270;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
                         }
-                        if (c2.dpadRightWasPressed()) {
+                        if (c1.dpadRightWasPressed()) {
                             robot.chassis.parkHeading = 180;
                             robot.follower.breakFollowing();
                             robot.follower.startTeleopDrive(ConfigConstants.USE_BRAKE_MODE);
@@ -359,11 +360,11 @@ public class GameTeleop extends LinearOpMode {
                 }
 
                 if (robot.getRobotState() == RobotState.PARK) {
-                    if (c1.dpadRightWasPressed()) {
+                    if (c2.dpadRightWasPressed()) {
                         robot.chassis.parkHeadingOffset += 3;
                         gamepad2.rumble(0, 1, 200);
                     }
-                    if (c1.dpadLeftWasPressed()) {
+                    if (c2.dpadLeftWasPressed()) {
                         robot.chassis.parkHeadingOffset -= 3;
                         gamepad2.rumble(1, 0, 200);
                     }
@@ -379,7 +380,7 @@ public class GameTeleop extends LinearOpMode {
                     }
                 }
 
-                if (c2.leftTriggerWasPressed()) {
+                if (c2.psWasPressed()) {
                     if (robot.getAlliance() == Alliance.RED) {
                         robot.follower.setPose(ConfigConstants.RED_FIELD_RESET);
                     }
@@ -393,20 +394,20 @@ public class GameTeleop extends LinearOpMode {
                     robot.setRobotState(RobotState.INTAKE);
                     robot.scheduler.schedule(robot.commands.resetEverything, robot.getMilliseconds());
                 }
-                if (c2.right_trigger_pressed && robot.getRobotState() != RobotState.PARK) {
+                if (c2.right_bumper && robot.getRobotState() != RobotState.PARK) {
                     if (robot.limelightCamera.getTagCount() != 0) {
                         robot.limelightCamera.recordPosition();
                         robot.indicator.alert = true;
                     }
 
                 }
-                if (c2.rightTriggerWasReleased() && robot.getRobotState() != RobotState.PARK) {
+                if (c2.rightBumperWasReleased() && robot.getRobotState() != RobotState.PARK) {
                     robot.indicator.alert = false;
                     robot.follower.setPose(robot.limelightCamera.avgPose());
                     robot.chassis.degreeOffset = 2;
                 }
 
-                if (robot.getRobotState() == RobotState.PARK) {
+               /* if (robot.getRobotState() == RobotState.PARK) {
                     boolean triangle = c2Triangle;
                     boolean cross = c2Cross;
                     boolean square = c2.squareWasPressed();
@@ -440,23 +441,16 @@ public class GameTeleop extends LinearOpMode {
                         }
                     }
                     if (triangle || cross || square || circle) {
-                        if (robot.getAlliance() == Alliance.BLUE) {
-                            robot.follower.followPath(robot.follower.pathBuilder()
-                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28 + xPark, 38 + yPark, Math.toRadians(robot.chassis.parkHeading))))
-                                    .setConstantHeadingInterpolation( Math.toRadians(robot.chassis.parkHeading + robot.chassis.parkHeadingOffset))
-                                    .build());
-                            parkStarted = true;
-                        } else {
-                            robot.follower.followPath(robot.follower.pathBuilder()
-                                    .addPath(new BezierLine(robot.follower.getPose(), new Pose(28 + xPark, 109 + yPark,  Math.toRadians(robot.chassis.parkHeading))))
-                                    .setConstantHeadingInterpolation( Math.toRadians(robot.chassis.parkHeading + robot.chassis.parkHeadingOffset))
-                                    .build());
-                            parkStarted = true;
-                        }
+                        robot.follower.followPath(robot.follower.pathBuilder()
+                                .addPath(new BezierLine(robot.follower.getPose(), new Pose(robot.follower.getPose().getX() + xPark, robot.follower.getPose().getY()  + yPark, Math.toRadians(robot.chassis.parkHeading))))
+                                .setConstantHeadingInterpolation( Math.toRadians(robot.chassis.parkHeading + robot.chassis.parkHeadingOffset))
+                                .build());
+                        parkStarted = true;
+
                     }
 
 
-                }
+                }*/
 
                 if (trigReleased) {
                     trigReleased = false;
@@ -489,6 +483,7 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("target angle", robot.turret.getAngle());
                 telemetry.addLine();*/
                 //telemetry.addData("distance", robot.chassis.predictedInchesAway());
+                telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
                 telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
                 telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());
                 telemetry.addLine();

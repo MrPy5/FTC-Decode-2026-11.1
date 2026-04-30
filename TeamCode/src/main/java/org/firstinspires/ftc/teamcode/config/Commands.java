@@ -23,6 +23,7 @@ public class Commands {
 
 
         stopIntaking = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.motorStopped = false),
                 new InstantCommand(() -> robot.transfer.stop()));
 
         startIntaking = new SequentialCommand(

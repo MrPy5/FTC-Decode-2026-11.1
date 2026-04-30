@@ -16,7 +16,7 @@ public class WaitParametric extends Command {
 
     @Override
     public void update(double time) {
-        if (follower.isRobotStuck() || follower.atParametricEnd() || (follower.getCurrentTValue() > 0.3 && follower.getVelocity().getMagnitude() < 2)) finished = true;
+        if (follower.isRobotStuck() || follower.atParametricEnd() || (follower.getCurrentTValue() > 0.3 && follower.getVelocity().getMagnitude() < 5)) finished = true;
     }
 
     @Override

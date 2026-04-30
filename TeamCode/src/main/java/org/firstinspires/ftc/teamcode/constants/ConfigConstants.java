@@ -153,7 +153,7 @@ public class ConfigConstants {
 
         //Shooter Blocker
     public static final double SHOOTER_BLOCK = 0.715;
-    public static final double SHOOTER_UNBLOCK = 0.475;
+    public static final double SHOOTER_UNBLOCK = 0.47;
 
         //Ascent
     public static final double ASCEND_RIGHT = 0.5; // 53
