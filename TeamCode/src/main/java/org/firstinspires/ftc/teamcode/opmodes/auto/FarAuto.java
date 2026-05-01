@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.config.Robot;
@@ -35,6 +36,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
     Robot robot;
     SequentialCommand pathSchedule;
 
+    boolean park = false;
 
     @Override
     public void init() {
@@ -178,6 +180,10 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                         new SequentialCommand(
                                 new InstantCommand(() -> robot.follower.followPath(robot.limelightCamera.getBallPath())),
                                 new WaitParametricOrThreeBalls(robot.follower, robot),
+                                new InstantCommand(() -> robot.follower.followPath(robot.follower.pathBuilder().addPath(new BezierLine(robot.follower.getPose(), robot.getAlliance() == Alliance.BLUE ? new Pose(robot.follower.getPose().getX(), 129) : new Pose(robot.follower.getPose().getX(), 14)))
+                                        .setLinearHeadingInterpolation(FarPaths.shootPose.getHeading(), FarPaths.shootPose.getHeading())
+                                        .build())),
+                                new WaitParametricOrThreeBalls(robot.follower, robot),
                                 new InstantCommand(() -> robot.follower.setMaxPower(0.8)),
                                 new InstantCommand(() -> robot.follower.followPath(FarPaths.hpToGateOverFlow)),
                                 new WaitParametricOrThreeBalls(robot.follower, robot)
@@ -237,7 +243,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.update();
         robot.updateHardware();
 
-        if (robot.getMilliseconds() / 1000 > 29.5 && !pathSchedule.finished) {
+        if (robot.getMilliseconds() / 1000 > 29.5 && !pathSchedule.finished && !park) {
             pathSchedule.stop();
             robot.follower.breakFollowing();
             robot.follower.followPath(robot.follower.pathBuilder()
@@ -246,6 +252,7 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                     .build());
             robot.setRobotState(Robot.RobotState.SHOOT);
             robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
+            park = true;
 
         }
     }

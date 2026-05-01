@@ -207,7 +207,7 @@ public class LimelightCamera {
         double x = robot.follower.getPose().getX() + ((Math.sin(Math.toRadians(angle)) * 45) * (robot.getAlliance() == Alliance.RED ? -1 : 1));
         x = Math.max(x, 9.5);
         x = Math.min(x, 32.85);
-        ballPose = new Pose(x, robot.getAlliance() == Alliance.RED ? 12 : 131);
+        ballPose = new Pose(x, robot.getAlliance() == Alliance.RED ? 11 : 132);
         if (ball.mode() == 1) {
             if (x == 9.5) {
                 PathChain pathChain = robot.follower.pathBuilder()
