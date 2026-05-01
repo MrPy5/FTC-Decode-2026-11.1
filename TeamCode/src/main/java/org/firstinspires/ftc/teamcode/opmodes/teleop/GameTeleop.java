@@ -109,12 +109,18 @@ public class GameTeleop extends LinearOpMode {
                     robot.turret.setSOTM(false);
                 }
                 if (robot.getRobotState() != RobotState.PARK) {
-                    if (robot.transfer.motorStopped && robot.getRobotState() != RobotState.SHOOT) {
-                        robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
+                    if ((robot.transfer.motorStopped && robot.getRobotState() != RobotState.SHOOT) || c2.leftBumperWasPressed()) {
+                        robot.transfer.startChecking = false;
+                        robot.scheduler.clear();
+                        if (!motifMode) {
+                            robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
+                        }
+
                         robot.setRobotState(RobotState.SHOOT);
 
                         if (motifMode) {
                             robot.scheduler.schedule(robot.commands.stopLindexing, robot.getMilliseconds());
+                            robot.transfer.intakeTransfer();
                         } else {
                             robot.shooter.unblock();
                         }
@@ -125,7 +131,7 @@ public class GameTeleop extends LinearOpMode {
 
                     //Intake
                     if (trigReleased /*c2.rightTriggerWasPressed()*/ && robot.getRobotState() != RobotState.INTAKE) {
-
+                        robot.scheduler.clear();
                         robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds());
                         robot.setRobotState(RobotState.INTAKE);
 
@@ -310,7 +316,7 @@ public class GameTeleop extends LinearOpMode {
                         startedShooting = true;
                         if (robot.scheduler.isIdle()) {
                             if (motifMode && robot.lindexer.numOfBalls() > 0) {
-                                robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds());
+                                robot.scheduler.schedule(robot.commands.shoot3Teleop, robot.getMilliseconds());
                             }
                             if (!motifMode) {
                                 robot.transfer.shoot();
@@ -483,6 +489,9 @@ public class GameTeleop extends LinearOpMode {
                 telemetry.addData("target angle", robot.turret.getAngle());
                 telemetry.addLine();*/
                 //telemetry.addData("distance", robot.chassis.predictedInchesAway());
+                telemetry.addData("left", robot.lindexer.getLeftBall());
+                telemetry.addData("right", robot.lindexer.getRightBall());
+                telemetry.addData("center", robot.lindexer.getCenterBall());
                 telemetry.addData("rpm", robot.shooter.getTargetShooterRPM());
                 telemetry.addData("rpm increase front", robot.shooter.getManualAdjustmentFront());
                 telemetry.addData("rpm increase back", robot.shooter.getManualAdjustmentBack());

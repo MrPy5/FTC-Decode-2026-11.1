@@ -220,6 +220,9 @@ public class Lindexer {
         rightBall = lindexerColorCenter.getBall();
         centerBall = assignCenterBall(leftBall, rightBall);
 
+       /* robot.log("COLOR", leftBall.toString());
+        robot.log("COLOR", rightBall.toString());
+        robot.log("COLOR", centerBall.toString());*/
 
         Color nextBall = robot.classifier.getNextColor(robot.getMotif());
         robot.transfer.intakeTransfer();

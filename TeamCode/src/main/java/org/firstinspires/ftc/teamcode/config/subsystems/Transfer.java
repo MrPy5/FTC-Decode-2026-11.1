@@ -42,7 +42,7 @@ public class Transfer {
 
     }
     public void update() {
-        if (transferMotor.getVelocity() < 1700 && robot.getRobotState() == Robot.RobotState.INTAKE && startChecking) {
+       if (transferMotor.getVelocity() < 1700 && robot.getRobotState() == Robot.RobotState.INTAKE && startChecking) {
             stop();
             motorStopped = true; // for transfer to shooting mode;
             startChecking = false;

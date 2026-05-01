@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -59,10 +60,10 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         robot.limelightCamera.switchToBallDetection();
         robot.limelightCamera.setCurrentMode(LimelightCamera.TagMode.BALL);
         if (robot.getAlliance() == Alliance.BLUE) {
-            robot.chassis.degreeOffset = -0.5;
+            robot.chassis.degreeOffset = 0;
         }
         else {
-            robot.chassis.degreeOffset = 3.5;
+            robot.chassis.degreeOffset = 2;
         }
         SequentialCommand shootPreload = new SequentialCommand(
                 new InstantCommand(() -> robot.shooter.setRPM(2970)),
@@ -206,12 +207,14 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
 
 
         SequentialCommand park = new SequentialCommand(
-                new InstantCommand(() -> robot.follower.followPath(FarPaths.parkPath)),
-                new WaitFollower(robot.follower)
+                new InstantCommand(() -> robot.follower.followPath(FarPaths.parkPath))
+
         );
 
         pathSchedule = new SequentialCommand(
                 shootPreload,
+                new InstantCommand(() -> robot.intake.stopIntake()),
+                new InstantCommand(() -> robot.shooter.setRPM(2950)),
                 humanPlayer2,
                 spike3,
                 /*getGateBall,
@@ -233,11 +236,23 @@ public class FarAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
         pathSchedule.update(robot.getMilliseconds());
         robot.update();
         robot.updateHardware();
+
+        if (robot.getMilliseconds() / 1000 > 29.5 && !pathSchedule.finished) {
+            pathSchedule.stop();
+            robot.follower.breakFollowing();
+            robot.follower.followPath(robot.follower.pathBuilder()
+                    .addPath(new BezierLine(robot.follower.getPose(), FarPaths.parkPath.endPose()))
+                    .setConstantHeadingInterpolation(FarPaths.parkPath.endPose().getHeading())
+                    .build());
+            robot.setRobotState(Robot.RobotState.SHOOT);
+            robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds());
+
+        }
     }
     @Override
     public void stop() {
         if (robot.getAlliance() == Alliance.BLUE) {
-            robot.chassis.degreeOffset = -0.5;
+            robot.chassis.degreeOffset = 0;
         }
         else {
             robot.chassis.degreeOffset = 2;

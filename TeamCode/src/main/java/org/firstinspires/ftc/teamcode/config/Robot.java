@@ -45,7 +45,7 @@ import java.util.function.Consumer;
 //Battery cover
 //Power switch cover?
 
-//⌛ Write vision test
+//✅ Write vision test
 //✅ PREMATCH update hardware & software devices
 //✅ Check init rules
 //⌛ Reset button for everything
@@ -55,9 +55,10 @@ import java.util.function.Consumer;
 //✅ Shooter edge case (shooter blocker)
 //✅ Limelight ball detection max & min
 //✅ Remove telemetry, logging, dashboard
-//⌛ REMAKE CONTROL SHEET
+//✅ REMAKE CONTROL SHEET
 //⌛ Turret heading in auto
-//⌛ Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
+//✅ Make cyclinglist in artifact sensor less for auto? Detect 3 balls sooner?
+//⌛ Test timeout
 
 //Limelight relocalization
 

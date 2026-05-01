@@ -16,12 +16,12 @@ public class Poses {
     public static final Pose parkPoseBlueFar = new Pose(27.7, 111, Math.toRadians(90));
 
     public static final Pose gateTurn1Blue = new Pose(72, 118, Math.toRadians(0));
-    public static final Pose gatePush1Blue = new Pose(72, 125, Math.toRadians(0));
+    public static final Pose gatePush1Blue = new Pose(72, 126, Math.toRadians(0));
     public static final Pose gateTurn2Blue = new Pose(-2, 51.5, Math.toRadians(180));
     public static final Pose gatePush2Blue = new Pose(-2, 63.5, Math.toRadians(180));
 
     public static final Pose spike1PoseBlue = new Pose(82, 100, 1.56);
-    public static final Pose spike1EndPoseBlue = new Pose(82, 123, 1.56);
+    public static final Pose spike1EndPoseBlue = new Pose(82, 124, 1.56);
 
     public static final Pose spike2PoseBlue = new Pose(58, 100, 1.56);
     public static final Pose spike2EndPoseBlue = new Pose(58, 120, 1.56);
@@ -33,9 +33,9 @@ public class Poses {
 
     public static final Pose tunnelPoseBlue = new Pose(-22, 67.5, Math.toRadians(90));
 
-    public static final Pose gatePushAngleBlue = new Pose(59, 127, 1.1);
+    public static final Pose gatePushAngleBlue = new Pose(60, 132, 1.1);
     public static final Pose gatePushAngleBezierBlue = new Pose(62, 80, Math.toRadians(62));
-    public static final Pose gateBackupAngleBlue = new Pose(48, 130, 0.6);
+    public static final Pose gateBackupAngleBlue = new Pose(48, 132, 0.6);
     //Not updated
     public static final Pose gatePoseSpikeBlue = new Pose(-17, 61.0, Math.toRadians(58));
     //Not updated

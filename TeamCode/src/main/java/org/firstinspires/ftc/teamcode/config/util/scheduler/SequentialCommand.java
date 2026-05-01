@@ -6,6 +6,7 @@ import java.util.List;
 public class SequentialCommand extends Command {
     private final List<Command> commands;
     private int current = 0;
+    boolean stopped = false;
 
     public SequentialCommand(Command... cmds) {
         commands = Arrays.asList(cmds);
@@ -21,22 +22,24 @@ public class SequentialCommand extends Command {
 
     @Override
     public void update(double time) {
-        if (current >= commands.size()) {
-            finished = true;
-            return;
-        }
-
-        Command cmd = commands.get(current);
-        cmd.update(time);
-
-        if (cmd.isFinished()) {
-            cmd.reset();
-            current++;
-            if (current < commands.size()) {
-                commands.get(current).start();
-                commands.get(current).started = true;
-            } else {
+        if (!stopped) {
+            if (current >= commands.size()) {
                 finished = true;
+                return;
+            }
+
+            Command cmd = commands.get(current);
+            cmd.update(time);
+
+            if (cmd.isFinished()) {
+                cmd.reset();
+                current++;
+                if (current < commands.size()) {
+                    commands.get(current).start();
+                    commands.get(current).started = true;
+                } else {
+                    finished = true;
+                }
             }
         }
     }
@@ -49,5 +52,9 @@ public class SequentialCommand extends Command {
         }
         current = 0;
         finished = false;
+    }
+
+    public void stop() {
+        stopped = true;
     }
 }

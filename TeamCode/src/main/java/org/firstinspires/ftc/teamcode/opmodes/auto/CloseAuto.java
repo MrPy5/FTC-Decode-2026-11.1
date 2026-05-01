@@ -103,7 +103,7 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateTurnToGatePush1)),
                 new InstantCommand(() -> robot.follower.setMaxPower(1)),
                 new WaitParametric(robot.follower),
-                new Wait(500),
+                new Wait(1000),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gatePushToShoot1)),
 
                 new WaitParametric(robot.follower),
@@ -117,7 +117,7 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike2)),
                 new WaitParametric(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.3)),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.4)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike2)),
                 new WaitParametric(robot.follower),
                // new Wait(0),
@@ -141,7 +141,7 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.driveToSpike3)),
                 new WaitParametric(robot.follower),
-                new InstantCommand(() -> robot.follower.setMaxPower(0.3)),
+                new InstantCommand(() -> robot.follower.setMaxPower(0.4)),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.spike3)),
                 new WaitParametric(robot.follower),
 

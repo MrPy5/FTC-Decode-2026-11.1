@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.config.util.scheduler.WaitTillLindexerRead
 
 public class Commands {
 
-    public final SequentialCommand stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing, resetEverything, teleopMotif, acceptCenterBall, acceptLeftBall, acceptRightBall;
+    public final SequentialCommand shoot3Teleop, stopEverything, stopIntaking, startIntaking, shootLindexing, startLindexing, stopLindexing, resetEverything, teleopMotif, acceptCenterBall, acceptLeftBall, acceptRightBall;
 
 
     public Commands(Robot robot) {
@@ -50,6 +50,17 @@ public class Commands {
 
                 new InstantCommand(() -> robot.classifier.addBall())
         );
+         shoot3Teleop = new SequentialCommand(
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
+                // new WaitShooterNotReady(robot.shooter),
+                new Wait(700),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
+                // new WaitShooterNotReady(robot.shooter),
+                new Wait(700),
+                new InstantCommand(() -> robot.scheduler.schedule(robot.commands.shootLindexing, robot.getMilliseconds())),
+                // new WaitShooterNotReady(robot.shooter),
+                new Wait(700)
+        );
 
         resetEverything = new SequentialCommand(
                 new InstantCommand(() -> robot.transfer.motorStopped = false),
@@ -84,6 +95,7 @@ public class Commands {
               shootLindexing
         );
         acceptCenterBall = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new InstantCommand(() -> robot.lindexer.clear()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.unblock()),
@@ -94,6 +106,7 @@ public class Commands {
 
         );
         acceptLeftBall = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new InstantCommand(() -> robot.lindexer.leftCenter()),
                 new Wait(500),
                 new InstantCommand(() -> robot.transfer.unblock()),
@@ -105,6 +118,7 @@ public class Commands {
                 new InstantCommand(() -> robot.lindexer.leftBallToCenter(robot.lindexer.getLeftBall()))
         );
         acceptRightBall = new SequentialCommand(
+                new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new InstantCommand(() -> robot.transfer.unblock()),
                 new Wait(500),
                 new InstantCommand(() -> robot.lindexer.clear()),
