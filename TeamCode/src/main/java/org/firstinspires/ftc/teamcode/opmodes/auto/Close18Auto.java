@@ -58,6 +58,7 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.shooter.unblock()),
                 new WaitShooter(robot.shooter),
+                new Wait(200),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
                 new InstantCommand(() -> robot.transfer.stop())
@@ -161,7 +162,7 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
                         return robot.follower.atParametricEnd() || (robot.follower.getCurrentTValue() > 0.5 && robot.follower.getVelocity().getMagnitude() < 2) || robot.intake.getArtifactSensor().hasBall();
                     }
                 }),
-                new Wait(0),
+                new Wait(200),
                 new InstantCommand(() -> robot.follower.followPath(ClosePaths.gateAngleToShoot)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.SHOOT)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.stopIntaking, robot.getMilliseconds())),
@@ -186,7 +187,6 @@ public class Close18Auto extends com.qualcomm.robotcore.eventloop.opmode.OpMode 
         pathSchedule = new SequentialCommand(
                 shootPreload,
                 spike2,
-                gateBall,
                 gateBall,
                 gateBall,
                 gateBall,

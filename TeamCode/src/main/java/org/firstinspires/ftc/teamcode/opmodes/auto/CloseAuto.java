@@ -76,15 +76,15 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
                 new WaitParametric(robot.follower),
                 new InstantCommand(() -> robot.transfer.intakeTransfer()),
                 new Wait(300),
-                new InstantCommand(() -> robot.transfer.stop()),
-                new InstantCommand(() -> robot.follower.followPath(ClosePaths.scanMotif)),
+                new InstantCommand(() -> robot.transfer.stop())
+                /*new InstantCommand(() -> robot.follower.followPath(ClosePaths.scanMotif)),
                 new WaitParametric(robot.follower),
                 new Wait(500),
                 new InstantCommand(() -> robot.setMotif(robot.limelightCamera.getMotif())),
-                new InstantCommand(() -> robot.lindexer.setIndex(true))
+                new InstantCommand(() -> robot.lindexer.setIndex(true))*/
         );
         SequentialCommand spike1 = new SequentialCommand(
-                new InstantCommand(() -> robot.shooter.setRPM(2300)),
+                new InstantCommand(() -> robot.shooter.setRPM(2350)),
                 new InstantCommand(() -> robot.setRobotState(Robot.RobotState.INTAKE)),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startIntaking, robot.getMilliseconds())),
                 new InstantCommand(() -> robot.scheduler.schedule(robot.commands.startLindexing, robot.getMilliseconds())),
@@ -164,9 +164,9 @@ public class CloseAuto extends com.qualcomm.robotcore.eventloop.opmode.OpMode {
 
         pathSchedule = new SequentialCommand(
                 shootPreload,
-                spike1,
-                spike2,
-                spike3,
+              //  spike1,
+              //  spike2,
+              //  spike3,
                 park
         );
         pathSchedule.start();

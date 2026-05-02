@@ -12,7 +12,7 @@ public class Poses {
     public static final Pose shootPoseBlueFar = new Pose(14, 87, 1.56);
     public static final Pose shootPoseBlueClose = new Pose(86, 84, Math.toRadians(115));
 
-    public static final Pose parkPoseBlueClose = new Pose(107, 85.5, Math.toRadians(0));
+    public static final Pose parkPoseBlueClose = new Pose(120, 100, Math.toRadians(0));
     public static final Pose parkPoseBlueFar = new Pose(27.7, 111, Math.toRadians(90));
 
     public static final Pose gateTurn1Blue = new Pose(72, 118, Math.toRadians(0));
